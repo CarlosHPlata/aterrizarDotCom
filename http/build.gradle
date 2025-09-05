@@ -24,6 +24,7 @@ jar {
     enabled = false
 }
 
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor

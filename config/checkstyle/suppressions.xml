@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<suppressions>
+    <!-- Suppress checks for generated files -->
+
+    <!-- Suppress empty line checks between import groups -->
+    <suppress files=".*" checks="EmptyLineSeparator" message="Extra separation in import group before"/>
+    <suppress files=".*" checks="CustomImportOrder" message="Extra separation in import group before"/>
+</suppressions>

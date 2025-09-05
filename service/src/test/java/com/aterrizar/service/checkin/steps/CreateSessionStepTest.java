@@ -1,68 +1,61 @@
 package com.aterrizar.service.checkin.steps;
 
-import com.aterrizar.service.core.model.Context;
-import com.aterrizar.service.core.model.InitContext;
-import com.aterrizar.service.core.model.initData.SessionRequest;
-import com.aterrizar.service.core.model.session.Status;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.aterrizar.service.core.model.Context;
+import com.aterrizar.service.core.model.InitContext;
+import com.aterrizar.service.core.model.init.SessionRequest;
+import com.aterrizar.service.core.model.session.Status;
 
 class CreateSessionStepTest {
-    private CreateBaseSessionStep createSessionStep;
+  private CreateBaseSessionStep createSessionStep;
 
-    @BeforeEach
-    void setUp() {
-        createSessionStep = new CreateBaseSessionStep();
-    }
+  @BeforeEach
+  void setUp() {
+    createSessionStep = new CreateBaseSessionStep();
+  }
 
-    @Test
-    void testStepShouldBeExecutedWhenIsInitContextAndIsInitRequest() {
-        var sessionRequest = SessionRequest.builder()
-                .build();
-        var context = InitContext.builder()
-                .sessionRequest(Optional.of(sessionRequest))
-                .build();
+  @Test
+  void testStepShouldBeExecutedWhenIsInitContextAndIsInitRequest() {
+    var sessionRequest = SessionRequest.builder().build();
+    var context = InitContext.builder().sessionRequest(Optional.of(sessionRequest)).build();
 
-        assertTrue(createSessionStep.when(context));
-    }
+    assertTrue(createSessionStep.when(context));
+  }
 
-    @Test
-    void stepShouldNotExecuteWhenIsNotInitContext() {
-        var context = Context.builder().build();
+  @Test
+  void stepShouldNotExecuteWhenIsNotInitContext() {
+    var context = Context.builder().build();
 
-        assertFalse(createSessionStep.when(context));
-    }
+    assertFalse(createSessionStep.when(context));
+  }
 
-    @Test
-    void stepShouldNotExecuteWhenIsInitContextButIsNotInitRequest() {
-        var context = InitContext.builder()
-                .build();
+  @Test
+  void stepShouldNotExecuteWhenIsInitContextButIsNotInitRequest() {
+    var context = InitContext.builder().build();
 
-        assertFalse(createSessionStep.when(context));
-    }
+    assertFalse(createSessionStep.when(context));
+  }
 
-    @Test
-    void testOnExecuteShouldCreatedANewValidSession() {
-        var userId = UUID.randomUUID();
-        var sessionRequest = SessionRequest.builder()
-                .userId(userId)
-                .build();
-        var context = InitContext.builder()
-                .sessionRequest(Optional.of(sessionRequest))
-                .build();
+  @Test
+  void testOnExecuteShouldCreatedANewValidSession() {
+    var userId = UUID.randomUUID();
+    var sessionRequest = SessionRequest.builder().userId(userId).build();
+    var context = InitContext.builder().sessionRequest(Optional.of(sessionRequest)).build();
 
-        var result  = createSessionStep.onExecute(context);
-        var updatedContext = result.context();
+    var result = createSessionStep.onExecute(context);
+    var updatedContext = result.context();
 
-        assertTrue(result.isSuccess());
-        assertNotNull(updatedContext.session().userInformation());
-        assertEquals(userId, updatedContext.session().userInformation().userId());
-        assertEquals(Status.INITIALIZED, updatedContext.session().status());
-        assertNotNull(updatedContext.session().sessionId());
-    }
+    assertTrue(result.isSuccess());
+    assertNotNull(updatedContext.session().userInformation());
+    assertEquals(userId, updatedContext.session().userInformation().userId());
+    assertEquals(Status.INITIALIZED, updatedContext.session().status());
+    assertNotNull(updatedContext.session().sessionId());
+  }
 }
