@@ -1,0 +1,50 @@
+openapi: 3.0.4
+
+info:
+  title: Aterrizar punto com
+  version: 1.0.0
+  description:
+    Aterrizar punto com es una plataforma de gestión de viajes que permite a los usuarios planificar, reservar y gestionar sus viajes de manera eficiente.
+    Ofrecemos una amplia gama de servicios, incluyendo reservas de vuelos, hoteles, alquiler de coches y actividades turísticas.
+    Nuestra misión es facilitar la experiencia de viaje para nuestros usuarios, proporcionando herramientas intuitivas y un servicio al cliente excepcional.
+
+paths:
+  /v1/checkin/init:
+    post:
+      tags:
+        - Checkin
+      summary: Initialize check-in
+      operationId: initCheckin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/InitRequestData.yaml#/components/schemas/InitRequestData'
+      responses:
+        "200":
+          description: Check-in initialized successfully
+          content:
+            application/json:
+              schema:
+                $ref: './components/InitResponseData.yaml#/components/schemas/InitResponseData'
+
+  /v1/checkin/continue:
+    post:
+      tags:
+        - Checkin
+      summary: Continue check-in process until is completed
+      operationId: continueCheckin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/CheckinRequestData.yaml#/components/schemas/CheckinRequestData'
+      responses:
+        "200":
+          description: Check-in continued successfully
+          content:
+            application/json:
+              schema:
+                $ref: './components/CheckinResponseData.yaml#/components/schemas/CheckinResponseData'

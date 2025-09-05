@@ -1,0 +1,13 @@
+
+plugins {
+	id 'java'
+}
+
+group = 'com.aterrizar'
+version = '0.0.1-SNAPSHOT'
+
+allprojects {
+	repositories {
+		mavenCentral()
+	}
+}

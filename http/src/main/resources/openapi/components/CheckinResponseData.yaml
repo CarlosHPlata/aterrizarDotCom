@@ -1,0 +1,22 @@
+openapi: 3.1.0
+info:
+  title: Country Code Schema
+  version: 1.0.0
+components:
+  schemas:
+    CheckinResponseData:
+      type: object
+      properties:
+        status:
+          required: true
+          $ref: './shared.yaml#/components/schemas/StatusCode'
+
+        inputRequiredFields:
+          type: array
+          nullable: true
+          items:
+            $ref: './shared.yaml#/components/schemas/CheckinResponseDataRequiredFieldsInner'
+
+        errorMessage:
+            type: string
+            nullable: true

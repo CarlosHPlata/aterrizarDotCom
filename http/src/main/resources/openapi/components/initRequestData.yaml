@@ -1,0 +1,22 @@
+openapi: 3.1.0
+info:
+  title: Country Code Schema
+  version: 1.0.0
+components:
+  schemas:
+    InitRequestData:
+      type: object
+      properties:
+        country:
+          $ref: './shared.yaml#/components/schemas/CountryCode'
+        userId:
+          type: string
+          format: uuid
+        passengers:
+          type: integer
+        flightNumbers:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          minItems: 1

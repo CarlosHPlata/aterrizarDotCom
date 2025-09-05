@@ -1,0 +1,14 @@
+package com.aterrizar.service.core.model.session;
+
+import lombok.Builder;
+
+@Builder
+public record FlightData(
+        String flightNumber,
+        long price,
+        Airport departure,
+        Airport destination
+
+) {
+
+}

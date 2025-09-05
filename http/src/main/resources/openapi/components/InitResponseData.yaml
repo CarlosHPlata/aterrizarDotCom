@@ -1,0 +1,14 @@
+openapi: 3.1.0
+info:
+  title: Country Code Schema
+  version: 1.0.0
+components:
+  schemas:
+    InitResponseData:
+      type: object
+      properties:
+        status:
+            $ref: './shared.yaml#/components/schemas/StatusCode'
+        sessionId:
+          type: string
+          format: uuid

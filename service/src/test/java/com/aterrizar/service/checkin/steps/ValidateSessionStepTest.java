@@ -1,0 +1,71 @@
+package com.aterrizar.service.checkin.steps;
+
+import com.aterrizar.service.core.model.Context;
+import com.aterrizar.service.core.model.request.CheckinRequest;
+import com.aterrizar.service.core.model.session.Session;
+import com.aterrizar.service.core.model.session.UserInformation;
+import com.neovisionaries.i18n.CountryCode;
+import mocks.MockContext;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+class ValidateSessionStepTest {
+    private ValidateSessionStep validateSessionStep;
+
+    @BeforeEach
+    void setUp() {
+        validateSessionStep = new ValidateSessionStep();
+    }
+
+
+    @Test
+    void shouldRejectIfUserDontMatch() {
+        var context = MockContext.initializedMock(CountryCode.US)
+                .withCheckinRequest(builder -> builder
+                        .countryCode(CountryCode.US)
+                        .userId(UUID.randomUUID()))
+                .withUserInformation(builder -> builder
+                        .userId(UUID.randomUUID()));
+
+        var result = validateSessionStep.onExecute(context);
+
+        assertFalse(result.isSuccess());
+        assertTrue(result.isTerminal());
+        assertEquals("User ID does not match session", result.message());
+    }
+
+    @Test
+    void shouldRejectIfCountryDontMatch() {
+        var context = MockContext.initializedMock(CountryCode.US)
+                .withCheckinRequest(builder -> builder
+                        .countryCode(CountryCode.AR));
+
+        var result = validateSessionStep.onExecute(context);
+        assertFalse(result.isSuccess());
+        assertTrue(result.isTerminal());
+        assertEquals("Country code does not match session", result.message());
+    }
+
+    @Test
+    void shouldPassIfAllMatch() {
+        var userId = UUID.randomUUID();
+        var country = CountryCode.US;
+
+        var context = MockContext.initializedMock(country)
+                .withCheckinRequest(builder -> builder
+                        .countryCode(country)
+                        .userId(userId))
+                .withUserInformation(builder -> builder
+                        .userId(userId));
+
+        var result = validateSessionStep.onExecute(context);
+        assertTrue(result.isSuccess());
+        assertFalse(result.isTerminal());
+    }
+}
