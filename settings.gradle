@@ -2,6 +2,4 @@ rootProject.name = 'aterrizar'
 
 include 'http'
 include 'service'
-include 'sessionManager'
-include 'flow'
 
