@@ -38,14 +38,13 @@ class GeneralCheckinFlowTest {
         generalCheckinFlow.flow(flowExecutor)
                 .execute(context);
 
-        assertEquals(6, flowExecutor.getExecutedSteps().size());
+        assertEquals(5, flowExecutor.getExecutedSteps().size());
         assertEquals(
                 List.of(
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
                         "AgreementSignStep",
-                        "SaveSessionStep",
                         "CompleteCheckinStep"
                 ),
                 flowExecutor.getExecutedSteps()
