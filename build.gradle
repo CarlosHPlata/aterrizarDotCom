@@ -1,10 +1,40 @@
-
 plugins {
 	id 'java'
+	id 'checkstyle'
+	id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = 'com.aterrizar'
 version = '0.0.1-SNAPSHOT'
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'checkstyle'
+	apply plugin: 'com.diffplug.spotless'
+
+	checkstyle {
+		toolVersion = '11.0.1'
+		configFile = new File(rootDir, 'config/checkstyle/checkstyle.xml')
+		configDirectory = new File(rootDir, 'config/checkstyle')
+		configProperties = [
+				'baseDir': rootDir.absolutePath,
+				'suppressionFile': new File(rootDir, 'config/checkstyle/suppressions.xml').absolutePath
+		]
+		checkstyleMain {
+			source = 'src/main/java'
+		}
+	}
+
+	spotless {
+		java {
+			targetExclude 'build/generated/**/'
+			googleJavaFormat('1.28.0')
+			removeUnusedImports()
+			importOrder('java', 'javax', 'org', 'com', '')
+			formatAnnotations()
+		}
+	}
+}
 
 allprojects {
 	repositories {

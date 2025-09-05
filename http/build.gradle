@@ -15,6 +15,16 @@ java {
     }
 }
 
+bootJar {
+    mainClass = 'com.aterrizar.http.ServiceApplication'
+    enabled = true
+}
+
+jar {
+    enabled = false
+}
+
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
