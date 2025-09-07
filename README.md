@@ -78,6 +78,18 @@ Additionally, use **Conventional Commits** for your commit messages. This ensure
 
 Once your work is complete, open a PR to the `main` branch, providing a clear description of the changes and linking any relevant issues.
 
+#### Template for PR
+```markdown
+### Description
+Please include a summary of the change and which issue is fixed. Also include relevant motivation and context. List any dependencies that are required for this change.
+
+### Technical Details
+- **Module Affected**
+- **Key Changes**:
+  - Change 1
+  - Change 2
+```
+
 ### Unit Testing
 
 Before pushing your changes, ensure that you have written unit tests for all new functionality. Run the test suite locally to verify that all tests pass:
