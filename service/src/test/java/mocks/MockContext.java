@@ -7,7 +7,11 @@ import java.util.function.Consumer;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.request.CheckinRequest;
 import com.aterrizar.service.core.model.request.CheckinResponse;
-import com.aterrizar.service.core.model.session.*;
+import com.aterrizar.service.core.model.session.Airport;
+import com.aterrizar.service.core.model.session.FlightData;
+import com.aterrizar.service.core.model.session.Session;
+import com.aterrizar.service.core.model.session.SessionData;
+import com.aterrizar.service.core.model.session.UserInformation;
 import com.neovisionaries.i18n.CountryCode;
 
 public class MockContext extends Context {

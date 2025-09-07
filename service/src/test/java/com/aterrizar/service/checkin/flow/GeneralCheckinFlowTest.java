@@ -1,6 +1,6 @@
 package com.aterrizar.service.checkin.flow;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
@@ -10,7 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.aterrizar.service.checkin.steps.*;
+import com.aterrizar.service.checkin.steps.AgreementSignStep;
+import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
+import com.aterrizar.service.checkin.steps.GetSessionStep;
+import com.aterrizar.service.checkin.steps.PassportInformationStep;
+import com.aterrizar.service.checkin.steps.SaveSessionStep;
+import com.aterrizar.service.checkin.steps.ValidateSessionStep;
 import com.neovisionaries.i18n.CountryCode;
 
 import mocks.MockContext;
