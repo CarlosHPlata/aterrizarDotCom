@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.aterrizar.http.external.gateway.aviator.model.AirportDto;
-import com.aterrizar.http.external.gateway.aviator.model.FlightDto;
 import com.aterrizar.service.core.model.session.Airport;
 import com.aterrizar.service.core.model.session.FlightData;
 import com.aterrizar.service.external.FlightGateway;
@@ -17,10 +16,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AviatorGatewayAdapter implements FlightGateway {
     private final AviatorHttpClient client;
-
-    public List<FlightDto> getFlights() {
-        return this.client.getFlights();
-    }
 
     @Override
     public List<FlightData> getFlightData(List<String> flightNumbers) {
