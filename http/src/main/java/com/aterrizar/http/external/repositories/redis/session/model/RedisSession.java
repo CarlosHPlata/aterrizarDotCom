@@ -14,6 +14,6 @@ import lombok.Getter;
 @RedisHash(value = "Session", timeToLive = 3600) // 1 hour
 @AllArgsConstructor
 public class RedisSession implements Serializable {
-  @Id private final String redisId;
-  private final Session session;
+    @Id private final String redisId;
+    private final Session session;
 }

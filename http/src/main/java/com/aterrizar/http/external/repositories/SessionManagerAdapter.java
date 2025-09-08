@@ -14,19 +14,19 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class SessionManagerAdapter implements SessionManager {
-  private final CheckinSessionRepository checkinRepository;
+    private final CheckinSessionRepository checkinRepository;
 
-  @Override
-  public Session getSessionById(UUID sessionId) {
-    return checkinRepository
-        .findById(sessionId.toString())
-        .map(RedisSession::getSession)
-        .orElseThrow(() -> new IllegalArgumentException("Session not found"));
-  }
+    @Override
+    public Session getSessionById(UUID sessionId) {
+        return checkinRepository
+                .findById(sessionId.toString())
+                .map(RedisSession::getSession)
+                .orElseThrow(() -> new IllegalArgumentException("Session not found"));
+    }
 
-  @Override
-  public void saveSession(Session session) {
-    var redisSession = new RedisSession(session.sessionId().toString(), session);
-    checkinRepository.save(redisSession);
-  }
+    @Override
+    public void saveSession(Session session) {
+        var redisSession = new RedisSession(session.sessionId().toString(), session);
+        checkinRepository.save(redisSession);
+    }
 }

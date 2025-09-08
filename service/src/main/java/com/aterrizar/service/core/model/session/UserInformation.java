@@ -8,9 +8,12 @@ import lombok.Builder;
 
 @Builder(toBuilder = true)
 public record UserInformation(
-    UUID userId, @Nullable String email, @Nullable String passportNumber, @Nullable String fullName)
-    implements Serializable {
-  public UserInformation withPassportNumber(String passportNumber) {
-    return this.toBuilder().passportNumber(passportNumber).build();
-  }
+        UUID userId,
+        @Nullable String email,
+        @Nullable String passportNumber,
+        @Nullable String fullName)
+        implements Serializable {
+    public UserInformation withPassportNumber(String passportNumber) {
+        return this.toBuilder().passportNumber(passportNumber).build();
+    }
 }

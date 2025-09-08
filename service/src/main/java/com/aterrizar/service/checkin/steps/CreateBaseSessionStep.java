@@ -14,27 +14,28 @@ import com.aterrizar.service.core.model.session.UserInformation;
 
 @Service
 public class CreateBaseSessionStep implements Step {
-  @Override
-  public boolean when(Context context) {
-    if (context instanceof InitContext initContext) {
-      return initContext.sessionRequest().isPresent();
+    @Override
+    public boolean when(Context context) {
+        if (context instanceof InitContext initContext) {
+            return initContext.sessionRequest().isPresent();
+        }
+        return false;
     }
-    return false;
-  }
 
-  @Override
-  public StepResult onExecute(Context context) {
-    var initContext = (InitContext) context;
-    var sessionRequest = initContext.sessionRequest().orElseThrow();
+    @Override
+    public StepResult onExecute(Context context) {
+        var initContext = (InitContext) context;
+        var sessionRequest = initContext.sessionRequest().orElseThrow();
 
-    var sessionId = UUID.randomUUID();
-    var session =
-        Session.builder()
-            .sessionId(sessionId)
-            .userInformation(UserInformation.builder().userId(sessionRequest.userId()).build())
-            .status(Status.INITIALIZED)
-            .build();
+        var sessionId = UUID.randomUUID();
+        var session =
+                Session.builder()
+                        .sessionId(sessionId)
+                        .userInformation(
+                                UserInformation.builder().userId(sessionRequest.userId()).build())
+                        .status(Status.INITIALIZED)
+                        .build();
 
-    return StepResult.success(context.withSession(session));
-  }
+        return StepResult.success(context.withSession(session));
+    }
 }

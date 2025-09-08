@@ -21,25 +21,25 @@ import mocks.MockFlowExecutor;
 
 @ExtendWith(MockitoExtension.class)
 class GeneralInitFlowTest {
-  @Mock private CreateBaseSessionStep createBaseSessionStep;
-  @Mock private CreateBaseSessionDataStep createBaseSessionDataStep;
-  @Mock private SaveSessionStep saveSessionStep;
-  @Mock private CompleteInitStep completeInitStep;
-  @InjectMocks private GeneralInitFlow generalInitFlow;
+    @Mock private CreateBaseSessionStep createBaseSessionStep;
+    @Mock private CreateBaseSessionDataStep createBaseSessionDataStep;
+    @Mock private SaveSessionStep saveSessionStep;
+    @Mock private CompleteInitStep completeInitStep;
+    @InjectMocks private GeneralInitFlow generalInitFlow;
 
-  @Test
-  void shouldReturnTheListOfValidSteps() {
-    var context = MockContext.initializedMock(CountryCode.AD);
-    var flowExecutor = new MockFlowExecutor();
-    generalInitFlow.flow(flowExecutor).execute(context);
+    @Test
+    void shouldReturnTheListOfValidSteps() {
+        var context = MockContext.initializedMock(CountryCode.AD);
+        var flowExecutor = new MockFlowExecutor();
+        generalInitFlow.flow(flowExecutor).execute(context);
 
-    assertEquals(4, flowExecutor.getExecutedSteps().size());
-    assertEquals(
-        List.of(
-            "CreateBaseSessionStep",
-            "CreateBaseSessionDataStep",
-            "SaveSessionStep",
-            "CompleteInitStep"),
-        flowExecutor.getExecutedSteps());
-  }
+        assertEquals(4, flowExecutor.getExecutedSteps().size());
+        assertEquals(
+                List.of(
+                        "CreateBaseSessionStep",
+                        "CreateBaseSessionDataStep",
+                        "SaveSessionStep",
+                        "CompleteInitStep"),
+                flowExecutor.getExecutedSteps());
+    }
 }

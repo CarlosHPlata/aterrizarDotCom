@@ -13,14 +13,14 @@ import lombok.Getter;
 @Builder(toBuilder = true)
 @lombok.experimental.Accessors(fluent = true)
 public class CheckinResponse {
-  private Set<RequiredField> providedFields;
-  @Nullable private String errorMessage;
+    private Set<RequiredField> providedFields;
+    @Nullable private String errorMessage;
 
-  public CheckinResponse addProvidedField(RequiredField field) {
-    if (providedFields == null) {
-      providedFields = new HashSet<>();
+    public CheckinResponse addProvidedField(RequiredField field) {
+        if (providedFields == null) {
+            providedFields = new HashSet<>();
+        }
+        providedFields.add(field);
+        return this;
     }
-    providedFields.add(field);
-    return this;
-  }
 }

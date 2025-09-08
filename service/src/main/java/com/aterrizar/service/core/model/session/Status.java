@@ -4,15 +4,15 @@ import lombok.Getter;
 
 @Getter
 public enum Status {
-  COMPLETED("completed"),
-  INITIALIZED("initialized"),
-  REJECTED("rejected"),
-  USER_INPUT_REQUIRED("user_input_required"),
-  ;
+    COMPLETED("completed"),
+    INITIALIZED("initialized"),
+    REJECTED("rejected"),
+    USER_INPUT_REQUIRED("user_input_required"),
+    ;
 
-  private final String value;
+    private final String value;
 
-  Status(String value) {
-    this.value = value;
-  }
+    Status(String value) {
+        this.value = value;
+    }
 }

@@ -9,10 +9,10 @@ import com.aterrizar.service.core.model.session.Status;
 
 @Service
 public class CompleteCheckinStep implements Step {
-  @Override
-  public StepResult onExecute(Context context) {
-    var updatedContext = context.withStatus(Status.COMPLETED);
+    @Override
+    public StepResult onExecute(Context context) {
+        var updatedContext = context.withStatus(Status.COMPLETED);
 
-    return StepResult.success(updatedContext);
-  }
+        return StepResult.success(updatedContext);
+    }
 }

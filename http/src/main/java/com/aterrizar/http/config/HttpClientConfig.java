@@ -17,72 +17,72 @@ import jakarta.annotation.PostConstruct;
 
 @Configuration
 public class HttpClientConfig {
-  private static final Logger log = org.slf4j.LoggerFactory.getLogger(HttpClientConfig.class);
-  private static final String BASE_PACKAGE = "com.aterrizar.http.external.gateway";
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(HttpClientConfig.class);
+    private static final String BASE_PACKAGE = "com.aterrizar.http.external.gateway";
 
-  private final GenericApplicationContext context;
-  private final Environment environment;
+    private final GenericApplicationContext context;
+    private final Environment environment;
 
-  public HttpClientConfig(GenericApplicationContext context, Environment environment) {
-    this.context = context;
-    this.environment = environment;
-  }
-
-  @PostConstruct
-  public void registerClients() {
-    var httpExchangeInterfaces = HttpExchangeScanner.findHttpExchangeInterfaces(BASE_PACKAGE);
-    for (Class<?> httpExchangeInterface : httpExchangeInterfaces) {
-      var beanDefinition = new GenericBeanDefinition();
-      beanDefinition.setBeanClass(httpExchangeInterface);
-      beanDefinition.setInstanceSupplier(() -> createClient(httpExchangeInterface));
-
-      var beanName = standardizeBeanName(httpExchangeInterface.getSimpleName());
-
-      context.registerBeanDefinition(beanName, beanDefinition);
-      log.info("Registered HTTP client bean: {}", beanName);
-    }
-  }
-
-  private <T> T createClient(Class<T> clientClass) {
-    var baseUrl = resolveBaseUrl(clientClass);
-    HttpServiceProxyFactory factory =
-        HttpServiceProxyFactory.builder()
-            .exchangeAdapter(baseUrl.map(this::client).orElseGet(this::client))
-            .build();
-
-    return factory.createClient(clientClass);
-  }
-
-  private Optional<String> resolveBaseUrl(Class<?> clientClass) {
-    var annotation = clientClass.getAnnotation(BaseUrl.class);
-    if (annotation != null) {
-      String value = annotation.value();
-      if (value.contains("${")) {
-        return Optional.of(environment.resolvePlaceholders(value));
-      }
-      return Optional.of(value);
+    public HttpClientConfig(GenericApplicationContext context, Environment environment) {
+        this.context = context;
+        this.environment = environment;
     }
 
-    return Optional.empty();
-  }
+    @PostConstruct
+    public void registerClients() {
+        var httpExchangeInterfaces = HttpExchangeScanner.findHttpExchangeInterfaces(BASE_PACKAGE);
+        for (Class<?> httpExchangeInterface : httpExchangeInterfaces) {
+            var beanDefinition = new GenericBeanDefinition();
+            beanDefinition.setBeanClass(httpExchangeInterface);
+            beanDefinition.setInstanceSupplier(() -> createClient(httpExchangeInterface));
 
-  private HttpExchangeAdapter client(String baseUrl) {
-    var client =
-        WebClient.builder()
-            .baseUrl(baseUrl)
-            .clientConnector(new ReactorClientHttpConnector())
-            .build();
+            var beanName = standardizeBeanName(httpExchangeInterface.getSimpleName());
 
-    return WebClientAdapter.create(client);
-  }
+            context.registerBeanDefinition(beanName, beanDefinition);
+            log.info("Registered HTTP client bean: {}", beanName);
+        }
+    }
 
-  private HttpExchangeAdapter client() {
-    var client = WebClient.builder().clientConnector(new ReactorClientHttpConnector()).build();
+    private <T> T createClient(Class<T> clientClass) {
+        var baseUrl = resolveBaseUrl(clientClass);
+        HttpServiceProxyFactory factory =
+                HttpServiceProxyFactory.builder()
+                        .exchangeAdapter(baseUrl.map(this::client).orElseGet(this::client))
+                        .build();
 
-    return WebClientAdapter.create(client);
-  }
+        return factory.createClient(clientClass);
+    }
 
-  private String standardizeBeanName(String className) {
-    return className.substring(0, 1).toLowerCase() + className.substring(1);
-  }
+    private Optional<String> resolveBaseUrl(Class<?> clientClass) {
+        var annotation = clientClass.getAnnotation(BaseUrl.class);
+        if (annotation != null) {
+            String value = annotation.value();
+            if (value.contains("${")) {
+                return Optional.of(environment.resolvePlaceholders(value));
+            }
+            return Optional.of(value);
+        }
+
+        return Optional.empty();
+    }
+
+    private HttpExchangeAdapter client(String baseUrl) {
+        var client =
+                WebClient.builder()
+                        .baseUrl(baseUrl)
+                        .clientConnector(new ReactorClientHttpConnector())
+                        .build();
+
+        return WebClientAdapter.create(client);
+    }
+
+    private HttpExchangeAdapter client() {
+        var client = WebClient.builder().clientConnector(new ReactorClientHttpConnector()).build();
+
+        return WebClientAdapter.create(client);
+    }
+
+    private String standardizeBeanName(String className) {
+        return className.substring(0, 1).toLowerCase() + className.substring(1);
+    }
 }

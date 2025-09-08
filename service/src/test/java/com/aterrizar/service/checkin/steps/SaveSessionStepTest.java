@@ -20,19 +20,19 @@ import com.aterrizar.service.external.SessionManager;
 
 @ExtendWith(MockitoExtension.class)
 class SaveSessionStepTest {
-  @Mock private SessionManager sessionManager;
+    @Mock private SessionManager sessionManager;
 
-  @InjectMocks private SaveSessionStep saveSessionStep;
+    @InjectMocks private SaveSessionStep saveSessionStep;
 
-  @Test
-  void onExecute_shouldSaveSessionAndReturnSuccess() {
-    var session = Session.builder().sessionId(UUID.randomUUID()).build();
-    Context mockContext = mock(Context.class);
-    when(mockContext.session()).thenReturn(session);
+    @Test
+    void onExecute_shouldSaveSessionAndReturnSuccess() {
+        var session = Session.builder().sessionId(UUID.randomUUID()).build();
+        Context mockContext = mock(Context.class);
+        when(mockContext.session()).thenReturn(session);
 
-    StepResult result = saveSessionStep.onExecute(mockContext);
+        StepResult result = saveSessionStep.onExecute(mockContext);
 
-    verify(sessionManager).saveSession(session);
-    assertTrue(result.isSuccess());
-  }
+        verify(sessionManager).saveSession(session);
+        assertTrue(result.isSuccess());
+    }
 }

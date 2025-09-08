@@ -14,69 +14,74 @@ import com.neovisionaries.i18n.CountryCode;
 import mocks.MockContext;
 
 class AgreementSignStepTest {
-  private AgreementSignStep agreementSignStep;
+    private AgreementSignStep agreementSignStep;
 
-  @BeforeEach
-  void setUp() {
-    agreementSignStep = new AgreementSignStep();
-  }
+    @BeforeEach
+    void setUp() {
+        agreementSignStep = new AgreementSignStep();
+    }
 
-  @Test
-  void shouldExecuteWhenNoAgreementIsSignedYet() {
-    var context =
-        MockContext.initializedMock(CountryCode.AD)
-            .withSessionData(builder -> builder.agreementSigned(false));
-    var result = agreementSignStep.when(context);
+    @Test
+    void shouldExecuteWhenNoAgreementIsSignedYet() {
+        var context =
+                MockContext.initializedMock(CountryCode.AD)
+                        .withSessionData(builder -> builder.agreementSigned(false));
+        var result = agreementSignStep.when(context);
 
-    assertTrue(result);
-  }
+        assertTrue(result);
+    }
 
-  @Test
-  void shouldExecuteWhenAgreementIsNotSet() {
-    var context = MockContext.initializedMock(CountryCode.AD);
-    var result = agreementSignStep.when(context);
+    @Test
+    void shouldExecuteWhenAgreementIsNotSet() {
+        var context = MockContext.initializedMock(CountryCode.AD);
+        var result = agreementSignStep.when(context);
 
-    assertTrue(result);
-  }
+        assertTrue(result);
+    }
 
-  @Test
-  void shouldNotExecuteWhenAgreementIsAlreadySigned() {
-    var context =
-        MockContext.initializedMock(CountryCode.AD)
-            .withSessionData(builder -> builder.agreementSigned(true));
-    var result = agreementSignStep.when(context);
+    @Test
+    void shouldNotExecuteWhenAgreementIsAlreadySigned() {
+        var context =
+                MockContext.initializedMock(CountryCode.AD)
+                        .withSessionData(builder -> builder.agreementSigned(true));
+        var result = agreementSignStep.when(context);
 
-    assertFalse(result);
-  }
+        assertFalse(result);
+    }
 
-  @Test
-  void shouldRequestAgreementSignedFieldWhenNotProvided() {
-    var context =
-        MockContext.initializedMock(CountryCode.US)
-            .withSessionData(builder -> builder.agreementSigned(false));
+    @Test
+    void shouldRequestAgreementSignedFieldWhenNotProvided() {
+        var context =
+                MockContext.initializedMock(CountryCode.US)
+                        .withSessionData(builder -> builder.agreementSigned(false));
 
-    var stepResult = agreementSignStep.onExecute(context);
-    var updatedContext = stepResult.context();
+        var stepResult = agreementSignStep.onExecute(context);
+        var updatedContext = stepResult.context();
 
-    assertTrue(stepResult.isTerminal());
-    assertTrue(stepResult.isSuccess());
-    assertTrue(
-        updatedContext.checkinResponse().providedFields().contains(RequiredField.AGREEMENT_SIGNED));
-  }
+        assertTrue(stepResult.isTerminal());
+        assertTrue(stepResult.isSuccess());
+        assertTrue(
+                updatedContext
+                        .checkinResponse()
+                        .providedFields()
+                        .contains(RequiredField.AGREEMENT_SIGNED));
+    }
 
-  @Test
-  void shouldCaptureAgreementSignedFieldWhenProvided() {
-    var context =
-        MockContext.initializedMock(CountryCode.US)
-            .withSessionData(builder -> builder.agreementSigned(false))
-            .withCheckinRequest(
-                builder -> builder.providedFields(Map.of(RequiredField.AGREEMENT_SIGNED, "true")));
+    @Test
+    void shouldCaptureAgreementSignedFieldWhenProvided() {
+        var context =
+                MockContext.initializedMock(CountryCode.US)
+                        .withSessionData(builder -> builder.agreementSigned(false))
+                        .withCheckinRequest(
+                                builder ->
+                                        builder.providedFields(
+                                                Map.of(RequiredField.AGREEMENT_SIGNED, "true")));
 
-    var stepResult = agreementSignStep.onExecute(context);
-    var updatedContext = stepResult.context();
+        var stepResult = agreementSignStep.onExecute(context);
+        var updatedContext = stepResult.context();
 
-    assertTrue(stepResult.isSuccess());
-    assertFalse(stepResult.isTerminal());
-    assertTrue(updatedContext.session().sessionData().agreementSigned());
-  }
+        assertTrue(stepResult.isSuccess());
+        assertFalse(stepResult.isTerminal());
+        assertTrue(updatedContext.session().sessionData().agreementSigned());
+    }
 }

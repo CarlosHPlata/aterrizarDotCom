@@ -12,15 +12,15 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class CheckinService {
-  private final CheckinStrategyFactory checkinStrategyFactory;
+    private final CheckinStrategyFactory checkinStrategyFactory;
 
-  public InitContext init(Context context, CountryCode countryCode) {
-    var strategy = checkinStrategyFactory.getService(countryCode);
-    return strategy.init(context);
-  }
+    public InitContext init(Context context, CountryCode countryCode) {
+        var strategy = checkinStrategyFactory.getService(countryCode);
+        return strategy.init(context);
+    }
 
-  public Context checkin(Context context, CountryCode countryCode) {
-    var strategy = checkinStrategyFactory.getService(countryCode);
-    return strategy.checkin(context);
-  }
+    public Context checkin(Context context, CountryCode countryCode) {
+        var strategy = checkinStrategyFactory.getService(countryCode);
+        return strategy.checkin(context);
+    }
 }

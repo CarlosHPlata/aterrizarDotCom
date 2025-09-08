@@ -16,30 +16,30 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class AviatorGatewayAdapter implements FlightGateway {
-  private final AviatorHttpClient client;
+    private final AviatorHttpClient client;
 
-  public List<FlightDto> getFlights() {
-    return this.client.getFlights();
-  }
+    public List<FlightDto> getFlights() {
+        return this.client.getFlights();
+    }
 
-  @Override
-  public List<FlightData> getFlightData(List<String> flightNumbers) {
-    return this.client.getFlights().stream()
-        .map(
-            flightDto ->
-                FlightData.builder()
-                    .flightNumber(flightDto.flightNumber())
-                    .price(flightDto.price())
-                    .departure(mapToAirport(flightDto.from()))
-                    .destination(mapToAirport(flightDto.to()))
-                    .build())
-        .toList();
-  }
+    @Override
+    public List<FlightData> getFlightData(List<String> flightNumbers) {
+        return this.client.getFlights().stream()
+                .map(
+                        flightDto ->
+                                FlightData.builder()
+                                        .flightNumber(flightDto.flightNumber())
+                                        .price(flightDto.price())
+                                        .departure(mapToAirport(flightDto.from()))
+                                        .destination(mapToAirport(flightDto.to()))
+                                        .build())
+                .toList();
+    }
 
-  private Airport mapToAirport(AirportDto airportDto) {
-    return Airport.builder()
-        .countryCode(CountryCode.getByCode(airportDto.country()))
-        .airportCode(airportDto.name())
-        .build();
-  }
+    private Airport mapToAirport(AirportDto airportDto) {
+        return Airport.builder()
+                .countryCode(CountryCode.getByCode(airportDto.country()))
+                .airportCode(airportDto.name())
+                .build();
+    }
 }

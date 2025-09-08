@@ -7,19 +7,19 @@ import com.aterrizar.http.dto.StatusCode;
 import com.aterrizar.service.core.model.Context;
 
 public class Rejected implements StatusMapperTemplate {
-  @Override
-  public StatusCode getStatus() {
-    return StatusCode.REJECTED;
-  }
+    @Override
+    public StatusCode getStatus() {
+        return StatusCode.REJECTED;
+    }
 
-  @Override
-  public CheckinResponseData build(
-      Context context, CheckinResponseData.CheckinResponseDataBuilder builder) {
-    return builder.errorMessage(context.checkinResponse().errorMessage()).build();
-  }
+    @Override
+    public CheckinResponseData build(
+            Context context, CheckinResponseData.CheckinResponseDataBuilder builder) {
+        return builder.errorMessage(context.checkinResponse().errorMessage()).build();
+    }
 
-  @Override
-  public HttpStatus getHttpStatus() {
-    return HttpStatus.BAD_REQUEST;
-  }
+    @Override
+    public HttpStatus getHttpStatus() {
+        return HttpStatus.BAD_REQUEST;
+    }
 }

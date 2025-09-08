@@ -23,28 +23,28 @@ import mocks.MockFlowExecutor;
 
 @ExtendWith(MockitoExtension.class)
 class GeneralCheckinFlowTest {
-  @Mock private GetSessionStep getSessionStep;
-  @Mock private ValidateSessionStep validateSessionStep;
-  @Mock private PassportInformationStep passportInformationStep;
-  @Mock private AgreementSignStep agreementSignStep;
-  @Mock private SaveSessionStep saveSessionStep;
-  @Mock private CompleteCheckinStep completeCheckinStep;
-  @InjectMocks private GeneralCheckinFlow generalCheckinFlow;
+    @Mock private GetSessionStep getSessionStep;
+    @Mock private ValidateSessionStep validateSessionStep;
+    @Mock private PassportInformationStep passportInformationStep;
+    @Mock private AgreementSignStep agreementSignStep;
+    @Mock private SaveSessionStep saveSessionStep;
+    @Mock private CompleteCheckinStep completeCheckinStep;
+    @InjectMocks private GeneralCheckinFlow generalCheckinFlow;
 
-  @Test
-  void shouldReturnTheListOfValidSteps() {
-    var context = MockContext.initializedMock(CountryCode.AD);
-    var flowExecutor = new MockFlowExecutor();
-    generalCheckinFlow.flow(flowExecutor).execute(context);
+    @Test
+    void shouldReturnTheListOfValidSteps() {
+        var context = MockContext.initializedMock(CountryCode.AD);
+        var flowExecutor = new MockFlowExecutor();
+        generalCheckinFlow.flow(flowExecutor).execute(context);
 
-    assertEquals(5, flowExecutor.getExecutedSteps().size());
-    assertEquals(
-        List.of(
-            "GetSessionStep",
-            "ValidateSessionStep",
-            "PassportInformationStep",
-            "AgreementSignStep",
-            "CompleteCheckinStep"),
-        flowExecutor.getExecutedSteps());
-  }
+        assertEquals(5, flowExecutor.getExecutedSteps().size());
+        assertEquals(
+                List.of(
+                        "GetSessionStep",
+                        "ValidateSessionStep",
+                        "PassportInformationStep",
+                        "AgreementSignStep",
+                        "CompleteCheckinStep"),
+                flowExecutor.getExecutedSteps());
+    }
 }

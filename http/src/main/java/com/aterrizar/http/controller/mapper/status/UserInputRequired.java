@@ -11,31 +11,31 @@ import com.aterrizar.http.dto.StatusCode;
 import com.aterrizar.service.core.model.Context;
 
 public class UserInputRequired implements StatusMapperTemplate {
-  @Override
-  public CheckinResponseData build(
-      Context context, CheckinResponseData.CheckinResponseDataBuilder builder) {
-    return builder.inputRequiredFields(inputFields(context)).build();
-  }
+    @Override
+    public CheckinResponseData build(
+            Context context, CheckinResponseData.CheckinResponseDataBuilder builder) {
+        return builder.inputRequiredFields(inputFields(context)).build();
+    }
 
-  @Override
-  public StatusCode getStatus() {
-    return StatusCode.USER_INPUT_REQUIRED;
-  }
+    @Override
+    public StatusCode getStatus() {
+        return StatusCode.USER_INPUT_REQUIRED;
+    }
 
-  private List<CheckinResponseDataRequiredFieldsInner> inputFields(Context context) {
-    return context.checkinResponse().providedFields().stream()
-        .map(
-            field ->
-                CheckinResponseDataRequiredFieldsInner.builder()
-                    .id(field.getId())
-                    .name(field.getValue())
-                    .type(field.getFieldType().name())
-                    .build())
-        .collect(Collectors.toList());
-  }
+    private List<CheckinResponseDataRequiredFieldsInner> inputFields(Context context) {
+        return context.checkinResponse().providedFields().stream()
+                .map(
+                        field ->
+                                CheckinResponseDataRequiredFieldsInner.builder()
+                                        .id(field.getId())
+                                        .name(field.getValue())
+                                        .type(field.getFieldType().name())
+                                        .build())
+                .collect(Collectors.toList());
+    }
 
-  @Override
-  public HttpStatus getHttpStatus() {
-    return HttpStatus.PARTIAL_CONTENT;
-  }
+    @Override
+    public HttpStatus getHttpStatus() {
+        return HttpStatus.PARTIAL_CONTENT;
+    }
 }

@@ -28,11 +28,10 @@ subprojects {
 	spotless {
 		java {
 			targetExclude 'build/generated/**/'
-			googleJavaFormat('1.28.0')
+			googleJavaFormat('1.28.0').aosp()
 			removeUnusedImports()
 			importOrder('java', 'javax', 'org', 'com', '')
 			formatAnnotations()
-			indentWithSpaces(4)
 		}
 	}
 }

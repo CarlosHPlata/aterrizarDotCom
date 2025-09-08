@@ -11,13 +11,13 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @lombok.experimental.Accessors(fluent = true)
 public class InitContext extends Context {
-  private final Optional<SessionRequest> sessionRequest;
+    private final Optional<SessionRequest> sessionRequest;
 
-  public Optional<SessionRequest> sessionRequest() {
-    if (this.sessionRequest == null) {
-      return Optional.empty();
-    } else {
-      return sessionRequest;
+    public Optional<SessionRequest> sessionRequest() {
+        if (this.sessionRequest == null) {
+            return Optional.empty();
+        } else {
+            return sessionRequest;
+        }
     }
-  }
 }

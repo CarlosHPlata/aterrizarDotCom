@@ -10,13 +10,13 @@ import lombok.AllArgsConstructor;
 @RestController
 @AllArgsConstructor
 public class TestController {
-  private final AviatorGatewayAdapter aviatorHttpClient;
+    private final AviatorGatewayAdapter aviatorHttpClient;
 
-  @GetMapping("/test")
-  public String testEndpoint() {
-    var flights = aviatorHttpClient.getFlights();
-    System.out.println(flights);
+    @GetMapping("/test")
+    public String testEndpoint() {
+        var flights = aviatorHttpClient.getFlights();
+        System.out.println(flights);
 
-    return "Request made to Aviator service";
-  }
+        return "Request made to Aviator service";
+    }
 }

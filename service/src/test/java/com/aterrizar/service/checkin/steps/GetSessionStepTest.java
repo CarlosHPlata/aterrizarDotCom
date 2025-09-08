@@ -22,54 +22,54 @@ import com.aterrizar.service.external.SessionManager;
 
 @ExtendWith(MockitoExtension.class)
 class GetSessionStepTest {
-  @Mock private SessionManager sessionManager;
+    @Mock private SessionManager sessionManager;
 
-  @InjectMocks private GetSessionStep getSessionStep;
+    @InjectMocks private GetSessionStep getSessionStep;
 
-  @Test
-  void onExecuteShouldGetTheSession() {
-    var context = mock(Context.class);
-    var sessionId = UUID.randomUUID();
-    var checkinRequest = CheckinRequest.builder().sessionId(sessionId).build();
-    var session = Session.builder().sessionId(sessionId).build();
+    @Test
+    void onExecuteShouldGetTheSession() {
+        var context = mock(Context.class);
+        var sessionId = UUID.randomUUID();
+        var checkinRequest = CheckinRequest.builder().sessionId(sessionId).build();
+        var session = Session.builder().sessionId(sessionId).build();
 
-    when(context.checkinRequest()).thenReturn(checkinRequest);
-    when(sessionManager.getSessionById(sessionId)).thenReturn(session);
-    when(context.withSession(session)).thenReturn(context);
+        when(context.checkinRequest()).thenReturn(checkinRequest);
+        when(sessionManager.getSessionById(sessionId)).thenReturn(session);
+        when(context.withSession(session)).thenReturn(context);
 
-    var result = getSessionStep.onExecute(context);
+        var result = getSessionStep.onExecute(context);
 
-    assertTrue(result.isSuccess());
-    assertEquals(context, result.context());
-    verify(sessionManager).getSessionById(sessionId);
-  }
+        assertTrue(result.isSuccess());
+        assertEquals(context, result.context());
+        verify(sessionManager).getSessionById(sessionId);
+    }
 
-  @Test
-  void onExecuteShouldEndWithFailureIfSessionIdIsNull() {
-    var context = mock(Context.class);
-    var checkinRequest = CheckinRequest.builder().sessionId(null).build();
+    @Test
+    void onExecuteShouldEndWithFailureIfSessionIdIsNull() {
+        var context = mock(Context.class);
+        var checkinRequest = CheckinRequest.builder().sessionId(null).build();
 
-    when(context.checkinRequest()).thenReturn(checkinRequest);
-    when(sessionManager.getSessionById(null)).thenThrow(new IllegalArgumentException());
+        when(context.checkinRequest()).thenReturn(checkinRequest);
+        when(sessionManager.getSessionById(null)).thenThrow(new IllegalArgumentException());
 
-    var result = getSessionStep.onExecute(context);
+        var result = getSessionStep.onExecute(context);
 
-    assertFalse(result.isSuccess());
-    assertEquals("Invalid session ID", result.message());
-  }
+        assertFalse(result.isSuccess());
+        assertEquals("Invalid session ID", result.message());
+    }
 
-  @Test
-  void onExecuteShouldEndWithFailureIfSessionDoesNotExists() {
-    var context = mock(Context.class);
-    var sessionId = UUID.randomUUID();
-    var checkinRequest = CheckinRequest.builder().sessionId(sessionId).build();
+    @Test
+    void onExecuteShouldEndWithFailureIfSessionDoesNotExists() {
+        var context = mock(Context.class);
+        var sessionId = UUID.randomUUID();
+        var checkinRequest = CheckinRequest.builder().sessionId(sessionId).build();
 
-    when(context.checkinRequest()).thenReturn(checkinRequest);
-    when(sessionManager.getSessionById(sessionId)).thenThrow(new IllegalArgumentException());
+        when(context.checkinRequest()).thenReturn(checkinRequest);
+        when(sessionManager.getSessionById(sessionId)).thenThrow(new IllegalArgumentException());
 
-    var result = getSessionStep.onExecute(context);
+        var result = getSessionStep.onExecute(context);
 
-    assertFalse(result.isSuccess());
-    assertEquals("Invalid session ID", result.message());
-  }
+        assertFalse(result.isSuccess());
+        assertEquals("Invalid session ID", result.message());
+    }
 }
