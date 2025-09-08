@@ -14,52 +14,54 @@ import com.neovisionaries.i18n.CountryCode;
 import mocks.MockContext;
 
 class ValidateSessionStepTest {
-  private ValidateSessionStep validateSessionStep;
+    private ValidateSessionStep validateSessionStep;
 
-  @BeforeEach
-  void setUp() {
-    validateSessionStep = new ValidateSessionStep();
-  }
+    @BeforeEach
+    void setUp() {
+        validateSessionStep = new ValidateSessionStep();
+    }
 
-  @Test
-  void shouldRejectIfUserDontMatch() {
-    var context =
-        MockContext.initializedMock(CountryCode.US)
-            .withCheckinRequest(
-                builder -> builder.countryCode(CountryCode.US).userId(UUID.randomUUID()))
-            .withUserInformation(builder -> builder.userId(UUID.randomUUID()));
+    @Test
+    void shouldRejectIfUserDontMatch() {
+        var context =
+                MockContext.initializedMock(CountryCode.US)
+                        .withCheckinRequest(
+                                builder ->
+                                        builder.countryCode(CountryCode.US)
+                                                .userId(UUID.randomUUID()))
+                        .withUserInformation(builder -> builder.userId(UUID.randomUUID()));
 
-    var result = validateSessionStep.onExecute(context);
+        var result = validateSessionStep.onExecute(context);
 
-    assertFalse(result.isSuccess());
-    assertTrue(result.isTerminal());
-    assertEquals("User ID does not match session", result.message());
-  }
+        assertFalse(result.isSuccess());
+        assertTrue(result.isTerminal());
+        assertEquals("User ID does not match session", result.message());
+    }
 
-  @Test
-  void shouldRejectIfCountryDontMatch() {
-    var context =
-        MockContext.initializedMock(CountryCode.US)
-            .withCheckinRequest(builder -> builder.countryCode(CountryCode.AR));
+    @Test
+    void shouldRejectIfCountryDontMatch() {
+        var context =
+                MockContext.initializedMock(CountryCode.US)
+                        .withCheckinRequest(builder -> builder.countryCode(CountryCode.AR));
 
-    var result = validateSessionStep.onExecute(context);
-    assertFalse(result.isSuccess());
-    assertTrue(result.isTerminal());
-    assertEquals("Country code does not match session", result.message());
-  }
+        var result = validateSessionStep.onExecute(context);
+        assertFalse(result.isSuccess());
+        assertTrue(result.isTerminal());
+        assertEquals("Country code does not match session", result.message());
+    }
 
-  @Test
-  void shouldPassIfAllMatch() {
-    var userId = UUID.randomUUID();
-    var country = CountryCode.US;
+    @Test
+    void shouldPassIfAllMatch() {
+        var userId = UUID.randomUUID();
+        var country = CountryCode.US;
 
-    var context =
-        MockContext.initializedMock(country)
-            .withCheckinRequest(builder -> builder.countryCode(country).userId(userId))
-            .withUserInformation(builder -> builder.userId(userId));
+        var context =
+                MockContext.initializedMock(country)
+                        .withCheckinRequest(builder -> builder.countryCode(country).userId(userId))
+                        .withUserInformation(builder -> builder.userId(userId));
 
-    var result = validateSessionStep.onExecute(context);
-    assertTrue(result.isSuccess());
-    assertFalse(result.isTerminal());
-  }
+        var result = validateSessionStep.onExecute(context);
+        assertTrue(result.isSuccess());
+        assertFalse(result.isTerminal());
+    }
 }

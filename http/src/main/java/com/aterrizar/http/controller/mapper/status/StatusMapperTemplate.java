@@ -7,17 +7,17 @@ import com.aterrizar.http.dto.StatusCode;
 import com.aterrizar.service.core.model.Context;
 
 public interface StatusMapperTemplate {
-  default CheckinResponseData map(Context context) {
-    var builder = CheckinResponseData.builder().status(getStatus());
-    return build(context, builder);
-  }
+    default CheckinResponseData map(Context context) {
+        var builder = CheckinResponseData.builder().status(getStatus());
+        return build(context, builder);
+    }
 
-  default CheckinResponseData build(
-      Context context, CheckinResponseData.CheckinResponseDataBuilder builder) {
-    return builder.build();
-  }
+    default CheckinResponseData build(
+            Context context, CheckinResponseData.CheckinResponseDataBuilder builder) {
+        return builder.build();
+    }
 
-  StatusCode getStatus();
+    StatusCode getStatus();
 
-  HttpStatus getHttpStatus();
+    HttpStatus getHttpStatus();
 }

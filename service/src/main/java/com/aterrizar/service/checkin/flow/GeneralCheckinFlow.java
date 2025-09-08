@@ -16,21 +16,21 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class GeneralCheckinFlow implements FlowStrategy {
-  private final GetSessionStep getSessionStep;
-  private final ValidateSessionStep validateSessionStep;
-  private final PassportInformationStep passportInformationStep;
-  private final AgreementSignStep agreementSignStep;
-  private final SaveSessionStep saveSessionStep;
-  private final CompleteCheckinStep completeCheckinStep;
+    private final GetSessionStep getSessionStep;
+    private final ValidateSessionStep validateSessionStep;
+    private final PassportInformationStep passportInformationStep;
+    private final AgreementSignStep agreementSignStep;
+    private final SaveSessionStep saveSessionStep;
+    private final CompleteCheckinStep completeCheckinStep;
 
-  @Override
-  public FlowExecutor flow(FlowExecutor baseExecutor) {
-    return baseExecutor
-        .and(getSessionStep)
-        .and(validateSessionStep)
-        .and(passportInformationStep)
-        .and(agreementSignStep)
-        .and(completeCheckinStep)
-        .andFinally(saveSessionStep);
-  }
+    @Override
+    public FlowExecutor flow(FlowExecutor baseExecutor) {
+        return baseExecutor
+                .and(getSessionStep)
+                .and(validateSessionStep)
+                .and(passportInformationStep)
+                .and(agreementSignStep)
+                .and(completeCheckinStep)
+                .andFinally(saveSessionStep);
+    }
 }

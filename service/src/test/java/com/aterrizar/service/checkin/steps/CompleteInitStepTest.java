@@ -11,21 +11,21 @@ import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.session.Status;
 
 class CompleteInitStepTest {
-  private CompleteInitStep completeInitStep;
+    private CompleteInitStep completeInitStep;
 
-  @BeforeEach
-  void setUp() {
-    completeInitStep = new CompleteInitStep();
-  }
+    @BeforeEach
+    void setUp() {
+        completeInitStep = new CompleteInitStep();
+    }
 
-  @Test
-  void testOnExecute() {
-    Context initialContext = mock(Context.class);
+    @Test
+    void testOnExecute() {
+        Context initialContext = mock(Context.class);
 
-    var result = completeInitStep.onExecute(initialContext);
-    when(initialContext.withStatus(Status.INITIALIZED)).thenReturn(initialContext);
+        var result = completeInitStep.onExecute(initialContext);
+        when(initialContext.withStatus(Status.INITIALIZED)).thenReturn(initialContext);
 
-    assertTrue(result.isTerminal());
-    assertTrue(result.isSuccess());
-  }
+        assertTrue(result.isTerminal());
+        assertTrue(result.isSuccess());
+    }
 }

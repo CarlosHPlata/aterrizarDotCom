@@ -13,21 +13,21 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class GeneralCheckin extends CheckinCountryStrategy {
-  private final GeneralInitFlow generalInitFlow;
-  private final GeneralCheckinFlow generalCheckinFlow;
+    private final GeneralInitFlow generalInitFlow;
+    private final GeneralCheckinFlow generalCheckinFlow;
 
-  @Override
-  protected FlowStrategy getInitFlow() {
-    return generalInitFlow;
-  }
+    @Override
+    protected FlowStrategy getInitFlow() {
+        return generalInitFlow;
+    }
 
-  @Override
-  protected FlowStrategy getCheckinFlow() {
-    return generalCheckinFlow;
-  }
+    @Override
+    protected FlowStrategy getCheckinFlow() {
+        return generalCheckinFlow;
+    }
 
-  @Override
-  public CountryCode getCountryCode() {
-    return CountryCode.UNDEFINED;
-  }
+    @Override
+    public CountryCode getCountryCode() {
+        return CountryCode.UNDEFINED;
+    }
 }

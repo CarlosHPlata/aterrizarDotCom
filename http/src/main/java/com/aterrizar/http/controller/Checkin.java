@@ -17,27 +17,27 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class Checkin implements CheckinApi {
-  private final CheckinService checkinService;
+    private final CheckinService checkinService;
 
-  @Override
-  public ResponseEntity<InitResponseData> initCheckin(InitRequestData initRequestData)
-      throws Exception {
-    var initMapper = new InitMapper();
-    var context = initMapper.mapRequestToContext(initRequestData);
-    var updatedContext =
-        checkinService.init(context, initMapper.mapCountry((initRequestData.getCountry())));
+    @Override
+    public ResponseEntity<InitResponseData> initCheckin(InitRequestData initRequestData)
+            throws Exception {
+        var initMapper = new InitMapper();
+        var context = initMapper.mapRequestToContext(initRequestData);
+        var updatedContext =
+                checkinService.init(context, initMapper.mapCountry((initRequestData.getCountry())));
 
-    return initMapper.mapContextToResponse(updatedContext);
-  }
+        return initMapper.mapContextToResponse(updatedContext);
+    }
 
-  @Override
-  public ResponseEntity<CheckinResponseData> continueCheckin(CheckinRequestData checkinRequestData)
-      throws Exception {
-    var mapper = new CheckinMapper();
-    var context = mapper.mapRequestToContext(checkinRequestData);
-    var updatedContext =
-        checkinService.checkin(context, mapper.mapCountry(checkinRequestData.getCountry()));
+    @Override
+    public ResponseEntity<CheckinResponseData> continueCheckin(
+            CheckinRequestData checkinRequestData) throws Exception {
+        var mapper = new CheckinMapper();
+        var context = mapper.mapRequestToContext(checkinRequestData);
+        var updatedContext =
+                checkinService.checkin(context, mapper.mapCountry(checkinRequestData.getCountry()));
 
-    return mapper.mapContextToResponse(updatedContext);
-  }
+        return mapper.mapContextToResponse(updatedContext);
+    }
 }

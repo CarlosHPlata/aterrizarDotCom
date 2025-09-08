@@ -6,4 +6,4 @@ import lombok.Builder;
 
 @Builder
 public record FlightData(String flightNumber, long price, Airport departure, Airport destination)
-    implements Serializable {}
+        implements Serializable {}

@@ -14,8 +14,8 @@ import lombok.Getter;
 @Builder(toBuilder = true)
 @lombok.experimental.Accessors(fluent = true)
 public class CheckinRequest {
-  private final UUID sessionId;
-  private final UUID userId;
-  private final CountryCode countryCode;
-  @Builder.Default private Map<RequiredField, String> providedFields = new HashMap<>();
+    private final UUID sessionId;
+    private final UUID userId;
+    private final CountryCode countryCode;
+    @Builder.Default private Map<RequiredField, String> providedFields = new HashMap<>();
 }

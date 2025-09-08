@@ -12,12 +12,12 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class SaveSessionStep implements Step {
-  private final SessionManager sessionManager;
+    private final SessionManager sessionManager;
 
-  @Override
-  public StepResult onExecute(Context context) {
-    sessionManager.saveSession(context.session());
+    @Override
+    public StepResult onExecute(Context context) {
+        sessionManager.saveSession(context.session());
 
-    return StepResult.success(context);
-  }
+        return StepResult.success(context);
+    }
 }

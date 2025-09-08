@@ -15,17 +15,17 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GeneralInitFlow implements FlowStrategy {
 
-  private final CreateBaseSessionStep createBaseSessionStep;
-  private final CreateBaseSessionDataStep createBaseSessionDataStep;
-  private final SaveSessionStep saveSessionStep;
-  private final CompleteInitStep completeInitStep;
+    private final CreateBaseSessionStep createBaseSessionStep;
+    private final CreateBaseSessionDataStep createBaseSessionDataStep;
+    private final SaveSessionStep saveSessionStep;
+    private final CompleteInitStep completeInitStep;
 
-  @Override
-  public FlowExecutor flow(FlowExecutor baseExecutor) {
-    return baseExecutor
-        .and(createBaseSessionStep)
-        .and(createBaseSessionDataStep)
-        .and(saveSessionStep)
-        .and(completeInitStep);
-  }
+    @Override
+    public FlowExecutor flow(FlowExecutor baseExecutor) {
+        return baseExecutor
+                .and(createBaseSessionStep)
+                .and(createBaseSessionDataStep)
+                .and(saveSessionStep)
+                .and(completeInitStep);
+    }
 }

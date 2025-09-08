@@ -9,9 +9,9 @@ import com.aterrizar.service.core.model.session.Status;
 
 @Service
 public class CompleteInitStep implements Step {
-  @Override
-  public StepResult onExecute(Context context) {
-    var updatedContext = context.withStatus(Status.INITIALIZED);
-    return StepResult.terminal(updatedContext);
-  }
+    @Override
+    public StepResult onExecute(Context context) {
+        var updatedContext = context.withStatus(Status.INITIALIZED);
+        return StepResult.terminal(updatedContext);
+    }
 }

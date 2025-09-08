@@ -12,48 +12,52 @@ import com.aterrizar.service.core.model.request.CheckinRequest;
 
 @Service
 public class AgreementSignStep implements Step {
-  @Override
-  public StepResult onExecute(Context context) {
-    if (isFieldFilled(context)) {
-      var updatedContext = captureAgreementSignedField(context);
-      return StepResult.success(updatedContext);
+    @Override
+    public StepResult onExecute(Context context) {
+        if (isFieldFilled(context)) {
+            var updatedContext = captureAgreementSignedField(context);
+            return StepResult.success(updatedContext);
+        }
+
+        var updatedContext = requestAgreementSignedField(context);
+        return StepResult.terminal(updatedContext);
     }
 
-    var updatedContext = requestAgreementSignedField(context);
-    return StepResult.terminal(updatedContext);
-  }
+    @Override
+    public boolean when(Context context) {
+        if (context.session().sessionData() != null) {
+            return !context.session().sessionData().agreementSigned();
+        }
 
-  @Override
-  public boolean when(Context context) {
-    if (context.session().sessionData() != null) {
-      return !context.session().sessionData().agreementSigned();
+        return false;
     }
 
-    return false;
-  }
+    private Context requestAgreementSignedField(Context context) {
+        return context.withRequiredField(RequiredField.AGREEMENT_SIGNED);
+    }
 
-  private Context requestAgreementSignedField(Context context) {
-    return context.withRequiredField(RequiredField.AGREEMENT_SIGNED);
-  }
+    private Context captureAgreementSignedField(Context context) {
+        var optionalRequest = Optional.ofNullable(context.checkinRequest());
 
-  private Context captureAgreementSignedField(Context context) {
-    var optionalRequest = Optional.ofNullable(context.checkinRequest());
+        return optionalRequest
+                .map(CheckinRequest::providedFields)
+                .map(fields -> fields.get(RequiredField.AGREEMENT_SIGNED))
+                .map(
+                        agreementSigned -> {
+                            var fieldValue = agreementSigned.equalsIgnoreCase("true");
+                            return context.withSessionData(
+                                    builder -> builder.agreementSigned(fieldValue));
+                        })
+                .orElseThrow(
+                        () ->
+                                new IllegalStateException(
+                                        "Agreement Signed is missing in the request."));
+    }
 
-    return optionalRequest
-        .map(CheckinRequest::providedFields)
-        .map(fields -> fields.get(RequiredField.AGREEMENT_SIGNED))
-        .map(
-            agreementSigned -> {
-              var fieldValue = agreementSigned.equalsIgnoreCase("true");
-              return context.withSessionData(builder -> builder.agreementSigned(fieldValue));
-            })
-        .orElseThrow(
-            () -> new IllegalStateException("Agreement Signed is missing in the request."));
-  }
-
-  private boolean isFieldFilled(Context context) {
-    var optionalRequest = Optional.ofNullable(context.checkinRequest());
-    return optionalRequest.isPresent()
-        && optionalRequest.get().providedFields().get(RequiredField.AGREEMENT_SIGNED) != null;
-  }
+    private boolean isFieldFilled(Context context) {
+        var optionalRequest = Optional.ofNullable(context.checkinRequest());
+        return optionalRequest.isPresent()
+                && optionalRequest.get().providedFields().get(RequiredField.AGREEMENT_SIGNED)
+                        != null;
+    }
 }
