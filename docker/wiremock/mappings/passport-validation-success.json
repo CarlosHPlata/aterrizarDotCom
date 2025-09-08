@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/personagov/api/v1/passport",
+    "queryParameters": {
+      "p": {
+        "matches": "G.*"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "personagov/passport-success.json"
+  }
+}

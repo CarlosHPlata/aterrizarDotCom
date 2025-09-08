@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/experimentation/api/v1",
+    "queryParameters": {
+      "mail": {
+        "matches": ".*__([A-Za-z]+)@checkin.com"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "experiments": [
+        "{{regexExtract (regexExtract request.query.mail '__(.*?)@') '([A-Za-z]+)'}}"
+      ]
+    }
+  }
+}
