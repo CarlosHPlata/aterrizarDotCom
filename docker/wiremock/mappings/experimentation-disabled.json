@@ -12,6 +12,9 @@
     "status": 200,
     "jsonBody": {
       "experiments": []
+    },
+    "headers": {
+      "Content-Type": "application/json"
     }
   }
 }

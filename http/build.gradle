@@ -49,6 +49,8 @@ dependencies {
     implementation 'com.neovisionaries:nv-i18n:1.28'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'redis.clients:jedis:6.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.reflections:reflections:0.10.2'
 }
 
 openApiGenerate {

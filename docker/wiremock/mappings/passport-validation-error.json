@@ -10,6 +10,9 @@
   },
   "response": {
     "status": 406,
-    "bodyFileName": "personagov/passport-failed.json"
+    "bodyFileName": "personagov/passport-failed.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
   }
 }

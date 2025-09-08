@@ -1,11 +1,11 @@
-package com.aterrizar.http.external;
+package com.aterrizar.http.external.repositories;
 
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.aterrizar.http.external.model.RedisSession;
-import com.aterrizar.http.external.repository.CheckinSessionRepository;
+import com.aterrizar.http.external.repositories.redis.session.model.RedisSession;
+import com.aterrizar.http.external.repositories.redis.session.repository.CheckinSessionRepository;
 import com.aterrizar.service.core.model.session.Session;
 import com.aterrizar.service.external.SessionManager;
 
@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class SessionManagerFacade implements SessionManager {
+public class SessionManagerAdapter implements SessionManager {
   private final CheckinSessionRepository checkinRepository;
 
   @Override

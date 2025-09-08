@@ -1,4 +1,4 @@
-package com.aterrizar.http.external.model;
+package com.aterrizar.http.external.repositories.redis.session.model;
 
 import java.io.Serializable;
 

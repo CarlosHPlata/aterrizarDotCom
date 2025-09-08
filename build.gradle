@@ -32,6 +32,7 @@ subprojects {
 			removeUnusedImports()
 			importOrder('java', 'javax', 'org', 'com', '')
 			formatAnnotations()
+			indentWithSpaces(4)
 		}
 	}
 }

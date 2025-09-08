@@ -5,6 +5,9 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "aviator/flights-success.json"
+    "bodyFileName": "aviator/flights-success.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
   }
 }

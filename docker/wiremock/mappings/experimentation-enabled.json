@@ -14,6 +14,9 @@
       "experiments": [
         "{{regexExtract (regexExtract request.query.mail '__(.*?)@') '([A-Za-z]+)'}}"
       ]
+    },
+    "headers": {
+      "Content-Type": "application/json"
     }
   }
 }
