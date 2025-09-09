@@ -13,6 +13,6 @@ class InitFlowTest extends Specification {
         def result = checkin.initSession("MX")
 
         then:
-        InitVerifier.verity(result)
+        InitVerifier.verify(result)
     }
 }

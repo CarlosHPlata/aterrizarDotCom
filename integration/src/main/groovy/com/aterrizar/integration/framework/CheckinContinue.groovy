@@ -42,7 +42,7 @@ class CheckinContinue {
 
     Map fillUserInput(Map<UserInput, String> userInput) {
         def mappedInput = userInput.collectEntries { key, value ->
-            [(key["id"]): value]
+            [(key.getId()): value]
         }
         return continueCheckin([providedFields: mappedInput])
     }

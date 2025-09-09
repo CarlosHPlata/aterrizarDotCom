@@ -14,7 +14,7 @@ class ContinueFlowTest extends Specification {
 
         when:
         def session = checkin.initSession("MX")
-        InitVerifier.verity(session)
+        InitVerifier.verify(session)
 
         and:
         session.setUserId(UUID.randomUUID().toString())
@@ -31,7 +31,7 @@ class ContinueFlowTest extends Specification {
 
         when:
         def session = checkin.initSession("MX")
-        InitVerifier.verity(session)
+        InitVerifier.verify(session)
 
         and: // continue without filling anything
         def continueResponse = session.proceed()
@@ -52,7 +52,7 @@ class ContinueFlowTest extends Specification {
 
         when:
         def session = checkin.initSession("MX")
-        InitVerifier.verity(session)
+        InitVerifier.verify(session)
 
         and: // continue but filling passport
         def continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
@@ -67,14 +67,14 @@ class ContinueFlowTest extends Specification {
         ContinueVerifier.completed(continueResponse)
     }
 
-    def "should complete the entire flor"() {
+    def "should complete the entire flow"() {
 
         setup:
         def checkin = Checkin.create()
 
         when:
         def session = checkin.initSession("MX")
-        InitVerifier.verity(session)
+        InitVerifier.verify(session)
 
         and: // continue without filling anything
         def continueResponse = session.proceed()

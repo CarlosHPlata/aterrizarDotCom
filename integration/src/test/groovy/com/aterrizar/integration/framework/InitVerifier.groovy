@@ -10,7 +10,7 @@ class InitVerifier {
         this.session = session
     }
 
-    static InitVerifier verity(CheckinContinue session) {
+    static InitVerifier verify(CheckinContinue session) {
         return new InitVerifier(session.getInitResponse())
                 .hasStatus(INITIALIZED_STATUS)
                 .hasValidSessionId()
