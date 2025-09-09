@@ -24,7 +24,7 @@ test {
     exclude '**/test/**'
     useJUnitPlatform()
     testLogging {
-        events "started", "passed", "skipped", "failed"
+        events  "passed", "skipped", "failed"
     }
 }
 
@@ -32,6 +32,6 @@ tasks.register('integrationTest', Test) {
     include '**/test/**'
     useJUnitPlatform()
     testLogging {
-        events "started", "passed", "skipped", "failed"
+        events  "passed", "skipped", "failed"
     }
 }
