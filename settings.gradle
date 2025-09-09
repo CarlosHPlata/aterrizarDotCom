@@ -2,4 +2,5 @@ rootProject.name = 'aterrizar'
 
 include 'http'
 include 'service'
+include 'integration'
 

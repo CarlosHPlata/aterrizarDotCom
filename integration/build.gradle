@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'groovy'
+}
+
+group = 'com.aterrizar.integration'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.19.2"
+    implementation 'org.apache.groovy:groovy:4.0.14'
+    implementation 'org.springframework:spring-web:6.2.10'
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.spockframework:spock-core:2.4-M6-groovy-4.0'
+}
+
+test {
+    exclude '**/test/**'
+    useJUnitPlatform()
+    testLogging {
+        events "started", "passed", "skipped", "failed"
+    }
+}
+
+tasks.register('integrationTest', Test) {
+    include '**/test/**'
+    useJUnitPlatform()
+    testLogging {
+        events "started", "passed", "skipped", "failed"
+    }
+}
