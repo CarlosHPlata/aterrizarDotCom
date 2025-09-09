@@ -37,15 +37,42 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
+    - name: Build with Gradle Wrapper
+      run: ./gradlew build -x check -x test
+
     - name: Run code quality checks
-      run: ./gradlew check
+      run: ./gradlew check -x test
 
     - name: Run tests
       run: ./gradlew test
 
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build
+    - name: Start Docker services
+      run: docker compose -f docker-compose.yml up -d
 
+    - name: Start Application
+      run: nohup ./gradlew bootRun > bootRun.log 2>&1 &
+
+    - name: Wait for application to be ready
+      run: |
+        timeout=60
+        while ! curl -s http://localhost:8080/health > /dev/null; do
+          if [ $timeout -le 0 ]; then
+            echo "Application failed to start"
+            exit 1
+          fi
+          echo "Waiting for application to start..."
+          timeout=$((timeout-1))
+          sleep 1
+        done
+
+    - name: Run Integration Tests
+      run: ./gradlew integration:integrationTest
+
+    - name: Stop Application and Docker
+      if: always()
+      run: |
+        pkill -f 'java.*bootRun' || true
+        docker compose -f docker-compose.yml down
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
     #
