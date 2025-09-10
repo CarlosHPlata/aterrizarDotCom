@@ -37,7 +37,7 @@ class Checkin {
                 country      : country,
                 userId       : userIdToUse,
                 passengers   : 2,
-                flightNumbers: ["AR1234", "AR5678"]
+                flightNumbers: ["USJFKGBLHF", "GBLHRMXMID"]
         ]
         def mergedBody = defaultBody + partialBody
 
@@ -49,6 +49,10 @@ class Checkin {
                 .body(Map.class)
 
         new CheckinContinue(this.client, country, userIdToUse, response)
+    }
+
+    CheckinContinue initSession(String country, List<String> flightNumbers) {
+        initSession(country, [flightNumbers: flightNumbers])
     }
 
     CheckinContinue initSession(String country) {

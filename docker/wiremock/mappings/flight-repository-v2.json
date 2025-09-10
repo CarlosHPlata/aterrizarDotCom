@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/aviator/api/v2/flights/([A-Za-z]{2}[A-Za-z]{3}[A-Za-z]{2}[A-Za-z]{3})"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "price": "{{randomValue length=4 type='NUMERIC'}}00",
+      "flightNumber": "{{request.pathSegments.[4]}}",
+      "from": {
+        "country": "{{regexExtract request.pathSegments.[4] '^[A-Za-z]{2}'}}",
+        "airport": "{{regexExtract request.pathSegments.[4] '(?<=^[A-Za-z]{2})[A-Za-z]{3}'}}"
+      },
+      "to": {
+        "country": "{{regexExtract request.pathSegments.[4] '(?<=^[A-Za-z]{2}[A-Za-z]{3})[A-Za-z]{2}'}}",
+        "airport": "{{regexExtract request.pathSegments.[4] '(?<=^[A-Za-z]{2}[A-Za-z]{3}[A-Za-z]{2})[A-Za-z]{3}'}}"
+      }
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformers": ["response-template"]
+  }
+}
