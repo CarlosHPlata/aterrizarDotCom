@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class GeneralCheckinFlow implements FlowStrategy {
+public class GeneralContinueFlow implements FlowStrategy {
     private final GetSessionStep getSessionStep;
     private final ValidateSessionStep validateSessionStep;
     private final PassportInformationStep passportInformationStep;

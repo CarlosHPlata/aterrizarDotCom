@@ -2,7 +2,7 @@ package com.aterrizar.service.checkin.country;
 
 import org.springframework.stereotype.Service;
 
-import com.aterrizar.service.checkin.flow.GeneralCheckinFlow;
+import com.aterrizar.service.checkin.flow.GeneralContinueFlow;
 import com.aterrizar.service.checkin.flow.GeneralInitFlow;
 import com.aterrizar.service.core.framework.flow.FlowStrategy;
 import com.aterrizar.service.core.framework.strategy.CheckinCountryStrategy;
@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GeneralCheckin extends CheckinCountryStrategy {
     private final GeneralInitFlow generalInitFlow;
-    private final GeneralCheckinFlow generalCheckinFlow;
+    private final GeneralContinueFlow generalContinueFlow;
 
     @Override
     protected FlowStrategy getInitFlow() {
@@ -22,8 +22,8 @@ public class GeneralCheckin extends CheckinCountryStrategy {
     }
 
     @Override
-    protected FlowStrategy getCheckinFlow() {
-        return generalCheckinFlow;
+    protected FlowStrategy getContinueFlow() {
+        return generalContinueFlow;
     }
 
     @Override

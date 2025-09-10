@@ -31,9 +31,9 @@ public abstract class CheckinCountryStrategy {
      * @param initialContext the initial {@link Context} for the check-in process
      * @return the resulting {@link Context} after executing the check-in flow
      */
-    public Context checkin(Context initialContext) {
-        var baseExecutor = getCheckinBaseExecutor();
-        return this.getCheckinFlow().flow(baseExecutor).execute(initialContext);
+    public Context checkinContinue(Context initialContext) {
+        var baseExecutor = getContinueBaseExecutor();
+        return this.getContinueFlow().flow(baseExecutor).execute(initialContext);
     }
 
     /**
@@ -48,7 +48,7 @@ public abstract class CheckinCountryStrategy {
      *
      * @return the {@link FlowStrategy} for check-in
      */
-    protected abstract FlowStrategy getCheckinFlow();
+    protected abstract FlowStrategy getContinueFlow();
 
     /**
      * Provides the base executor for the initialization process.
@@ -64,7 +64,7 @@ public abstract class CheckinCountryStrategy {
      *
      * @return the {@link FlowExecutor} for check-in
      */
-    protected FlowExecutor getCheckinBaseExecutor() {
+    protected FlowExecutor getContinueBaseExecutor() {
         return new FlowExecutor();
     }
 

@@ -22,20 +22,20 @@ import mocks.MockContext;
 import mocks.MockFlowExecutor;
 
 @ExtendWith(MockitoExtension.class)
-class GeneralCheckinFlowTest {
+class GeneralContinueFlowTest {
     @Mock private GetSessionStep getSessionStep;
     @Mock private ValidateSessionStep validateSessionStep;
     @Mock private PassportInformationStep passportInformationStep;
     @Mock private AgreementSignStep agreementSignStep;
     @Mock private SaveSessionStep saveSessionStep;
     @Mock private CompleteCheckinStep completeCheckinStep;
-    @InjectMocks private GeneralCheckinFlow generalCheckinFlow;
+    @InjectMocks private GeneralContinueFlow generalContinueFlow;
 
     @Test
     void shouldReturnTheListOfValidSteps() {
         var context = MockContext.initializedMock(CountryCode.AD);
         var flowExecutor = new MockFlowExecutor();
-        generalCheckinFlow.flow(flowExecutor).execute(context);
+        generalContinueFlow.flow(flowExecutor).execute(context);
 
         assertEquals(5, flowExecutor.getExecutedSteps().size());
         assertEquals(

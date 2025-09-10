@@ -21,6 +21,6 @@ public class CheckinService {
 
     public Context checkin(Context context, CountryCode countryCode) {
         var strategy = checkinStrategyFactory.getService(countryCode);
-        return strategy.checkin(context);
+        return strategy.checkinContinue(context);
     }
 }
