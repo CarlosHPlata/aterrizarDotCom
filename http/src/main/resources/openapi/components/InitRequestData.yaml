@@ -14,9 +14,13 @@ components:
           format: uuid
         passengers:
           type: integer
+          example: 2
         flightNumbers:
           type: array
           items:
             type: string
             minLength: 1
           minItems: 1
+          example:
+            - "USJFKGBLHF"
+            - "GBLHRMXMID"

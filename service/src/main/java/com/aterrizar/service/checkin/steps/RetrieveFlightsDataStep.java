@@ -1,25 +1,26 @@
 package com.aterrizar.service.checkin.steps;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.InitContext;
-import com.aterrizar.service.core.model.session.SessionData;
+import com.aterrizar.service.external.FlightGateway;
 
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class CreateBaseSessionDataStep implements Step {
+public class RetrieveFlightsDataStep implements Step {
+    private final FlightGateway flightGateway;
+
     @Override
     public boolean when(Context context) {
         if (context instanceof InitContext initContext) {
             return initContext.sessionRequest().isPresent();
         }
+
         return false;
     }
 
@@ -28,18 +29,17 @@ public class CreateBaseSessionDataStep implements Step {
         var initContext = (InitContext) context;
         var sessionRequest = initContext.sessionRequest().orElseThrow();
 
-        if (sessionRequest.passengers() < 1) {
-            return StepResult.failure(context, "Passengers.");
+        if (sessionRequest.flights() == null || sessionRequest.flights().isEmpty()) {
+            return StepResult.failure(context, "No flight codes provided.");
         }
 
-        var sessionData =
-                SessionData.builder()
-                        .countryCode(sessionRequest.countryCode())
-                        .passengers(sessionRequest.passengers())
-                        .flights(List.of())
-                        .build();
+        if (sessionRequest.flights().stream().anyMatch(flightCode -> flightCode.length() != 10)) {
+            return StepResult.failure(context, "Invalid flight codes.");
+        }
 
-        return StepResult.success(
-                context.withSession(context.session().withSessionData(sessionData)));
+        var flights = flightGateway.getFlightData(sessionRequest.flights());
+        var updatedContext = context.withSessionData(builder -> builder.flights(flights));
+
+        return StepResult.success(updatedContext);
     }
 }

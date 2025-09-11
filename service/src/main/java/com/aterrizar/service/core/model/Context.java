@@ -70,7 +70,7 @@ public class Context {
      */
     public Context withSessionData(Consumer<SessionData.SessionDataBuilder> customizer) {
         var sessionDataBuilder =
-                this.session.sessionData() != null
+                this.session != null && this.session.sessionData() != null
                         ? this.session.sessionData().toBuilder()
                         : SessionData.builder();
         customizer.accept(sessionDataBuilder);
