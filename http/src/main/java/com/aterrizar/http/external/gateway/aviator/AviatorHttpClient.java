@@ -6,11 +6,11 @@ import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
 
 import com.aterrizar.http.config.BaseUrl;
-import com.aterrizar.http.external.gateway.aviator.model.FlightDto;
+import com.aterrizar.http.external.gateway.aviator.model.v1.FlightDto;
 
 @BaseUrl("${http.client.aviator.base.url}")
 @HttpExchange(value = "v1/", accept = "application/json", contentType = "application/json")
 interface AviatorHttpClient {
     @GetExchange("flights")
-    public List<FlightDto> getFlights();
+    List<FlightDto> getFlights();
 }
