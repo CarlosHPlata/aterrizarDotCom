@@ -7,7 +7,9 @@ public enum RequiredField {
     PASSPORT_NUMBER("PASSPORT_NUMBER", "Passport Number", FieldType.TEXT),
     FULL_NAME("FULL_NAME", "Full Name", FieldType.TEXT),
     EMAIL("EMAIL", "Email", FieldType.EMAIL),
-    AGREEMENT_SIGNED("AGREEMENT_SIGNED", "Agreement Signed", FieldType.BOOLEAN);
+    AGREEMENT_SIGNED("AGREEMENT_SIGNED", "Agreement Signed", FieldType.BOOLEAN),
+    HEALTH_CLEAR_ACKNOWLEDGEMENT(
+            "HEALTH_CLEAR_ACKNOWLEDGEMENT", "Health Clear Acknowledgement", FieldType.BOOLEAN);
 
     private final String value;
     private final String id;
