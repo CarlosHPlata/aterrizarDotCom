@@ -67,6 +67,56 @@ class ContinueFlowTest extends Specification {
         ContinueVerifier.completed(continueResponse)
     }
 
+    def "should be asked to sign health clear acknowledgment if destination requires it"() {
+        setup:
+        def checkin = Checkin.create()
+
+        when:
+        def session = checkin.initSession("MX", List.of("USXXXCNYYY"))
+        InitVerifier.verify(session)
+
+        and: // continue but filling passport
+        def continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
+
+        and: // continue but signing agreement
+        continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
+
+        and: // be asked to sign health clear acknowledgment
+        ContinueVerifier.requiredField(continueResponse, UserInput.HEALTH_CLEAR_ACKNOWLEDGEMENT)
+
+        and: // fill health clear acknowledgment
+        continueResponse = session.fillUserInput([(UserInput.HEALTH_CLEAR_ACKNOWLEDGEMENT): "true"])
+
+        then: // be able to continue
+        ContinueVerifier.completed(continueResponse)
+    }
+
+    def "should not continue if health clear acknowledgment is false and destination requires it"() {
+        setup:
+        def checkin = Checkin.create()
+
+        when:
+        // init session with a destination that requires health clearance
+        def session = checkin.initSession("MX", List.of("USXXXCNYYY"))
+        InitVerifier.verify(session)
+
+        and: // continue but filling passport
+        def continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
+
+        and: // continue but signing agreement
+        continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
+
+        and: // be asked to sign health clear acknowledgment
+        ContinueVerifier.requiredField(continueResponse, UserInput.HEALTH_CLEAR_ACKNOWLEDGEMENT)
+
+        and: // fill health acknowledgment as false
+        continueResponse = session.fillUserInput([(UserInput.HEALTH_CLEAR_ACKNOWLEDGEMENT): "false"])
+
+        then: // be rejected
+        def e = thrown(HttpClientErrorException.BadRequest)
+        ContinueVerifier.rejected(e, "Health clear acknowledgement is required")
+    }
+
     def "should complete the entire flow"() {
 
         setup:
