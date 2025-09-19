@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.aterrizar.service.checkin.steps.AgreementSignStep;
 import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
+import com.aterrizar.service.checkin.steps.HealthDeclarationStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
 import com.aterrizar.service.checkin.steps.ValidateSessionStep;
@@ -20,6 +21,7 @@ public class GeneralContinueFlow implements FlowStrategy {
     private final ValidateSessionStep validateSessionStep;
     private final PassportInformationStep passportInformationStep;
     private final AgreementSignStep agreementSignStep;
+    private final HealthDeclarationStep healthDeclarationStep;
     private final SaveSessionStep saveSessionStep;
     private final CompleteCheckinStep completeCheckinStep;
 
@@ -30,6 +32,7 @@ public class GeneralContinueFlow implements FlowStrategy {
                 .and(validateSessionStep)
                 .and(passportInformationStep)
                 .and(agreementSignStep)
+                .and(healthDeclarationStep)
                 .and(completeCheckinStep)
                 .andFinally(saveSessionStep);
     }
