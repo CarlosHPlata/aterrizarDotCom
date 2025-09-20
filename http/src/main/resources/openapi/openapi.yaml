@@ -2,7 +2,7 @@ openapi: 3.0.4
 
 info:
   title: Aterrizar punto com
-  version: 1.0.0
+  version: 1.0.1
   description:
     Aterrizar punto com es una plataforma de gestión de viajes que permite a los usuarios planificar, reservar y gestionar sus viajes de manera eficiente.
     Ofrecemos una amplia gama de servicios, incluyendo reservas de vuelos, hoteles, alquiler de coches y actividades turísticas.
