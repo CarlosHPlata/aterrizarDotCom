@@ -7,10 +7,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.Data;
 
-/**
- * Configuration properties for Digital Visa feature. 
- * Bean para leer la propiedad feature.digital.visa.enabled-countries del application.properties
- */
+/** Configuration properties for Digital Visa feature. */
 @Data
 @Component
 @ConfigurationProperties(prefix = "feature.digital.visa")

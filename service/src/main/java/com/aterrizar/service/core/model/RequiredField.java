@@ -8,7 +8,7 @@ public enum RequiredField {
     FULL_NAME("FULL_NAME", "Full Name", FieldType.TEXT),
     EMAIL("EMAIL", "Email", FieldType.EMAIL),
     AGREEMENT_SIGNED("AGREEMENT_SIGNED", "Agreement Signed", FieldType.BOOLEAN),
-    VISA_NUMBER("VISA_NUMBER", "Digital Visa Number", FieldType.VISA_NUMBER);
+    VISA_NUMBER("VISA_NUMBER", "Digital Visa Number", FieldType.TEXT);
 
     private final String value;
     private final String id;

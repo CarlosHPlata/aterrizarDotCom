@@ -29,7 +29,7 @@ public class DigitalVisaValidationStep implements Step {
     public StepResult onExecute(Context context) {
         var optionalRequest = Optional.ofNullable(context.checkinRequest());
 
-        if (isVisaNumberProvided(optionalRequest)) {
+        if (isFieldFilled(optionalRequest)) {
             var updatedContext = captureVisaNumber(context);
             return StepResult.success(updatedContext);
         }
@@ -44,12 +44,10 @@ public class DigitalVisaValidationStep implements Step {
         var userInfo = session.userInformation();
         var sessionData = session.sessionData();
 
-        // Skip if user already has visa number
         if (Optional.ofNullable(userInfo).map(user -> user.visaNumber()).isPresent()) {
             return false;
         }
 
-        // Check if any flight destination requires digital visa
         return requiresDigitalVisa(sessionData);
     }
 
@@ -98,7 +96,7 @@ public class DigitalVisaValidationStep implements Step {
      * @param optionalRequest the optional checkin request
      * @return true if visa number is provided
      */
-    private static boolean isVisaNumberProvided(Optional<CheckinRequest> optionalRequest) {
+    private static boolean isFieldFilled(Optional<CheckinRequest> optionalRequest) {
         return optionalRequest.isPresent()
                 && optionalRequest.get().providedFields().get(RequiredField.VISA_NUMBER) != null;
     }

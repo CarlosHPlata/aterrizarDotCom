@@ -4,5 +4,4 @@ public enum FieldType {
     TEXT,
     EMAIL,
     BOOLEAN,
-    VISA_NUMBER,
 }
