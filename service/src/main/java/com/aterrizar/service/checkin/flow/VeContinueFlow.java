@@ -30,8 +30,8 @@ public class VEContinueFlow implements FlowStrategy {
         return baseExecutor
                 .and(getSessionStep)
                 .and(validateSessionStep)
-                .and(passportInformationStep)
                 .and(fundsCheckStep)
+                .and(passportInformationStep)
                 .and(agreementSignStep)
                 .and(completeCheckinStep)
                 .andFinally(saveSessionStep);

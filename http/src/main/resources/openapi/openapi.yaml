@@ -9,27 +9,6 @@ info:
     Nuestra misión es facilitar la experiencia de viaje para nuestros usuarios, proporcionando herramientas intuitivas y un servicio al cliente excepcional.
 
 paths:
-
-  /v1/vecheckin/init:
-    post:
-      tags:
-        - Venezuelan Checkin
-      summary: Initialize check-in for venezuelan passengers
-      operationId: initCheckinVE
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: './components/VEInitRequestData.yaml#/components/schemas/VEInitRequestData'
-      responses:
-        "200":
-          description: Check-in initialized successfully
-          content:
-            application/json:
-              schema:
-                $ref: './components/InitResponseData.yaml#/components/schemas/InitResponseData'
-
   /v1/checkin/init:
     post:
       tags:
@@ -65,26 +44,6 @@ paths:
       responses:
         "200":
           description: Check-in continued successfully
-          content:
-            application/json:
-              schema:
-                $ref: './components/CheckinResponseData.yaml#/components/schemas/CheckinResponseData'
-
-  /v1/vecheckin/continue:
-    post:
-      tags:
-        - Venezuelan Checkin 
-      summary: Continue Venezuelan check-in process until is completed
-      operationId: continueCheckinVE
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: './components/VeCheckinRequestData.yaml#/components/schemas/VeCheckinRequestData'
-      responses:
-        "200":
-          description: Check-in for Venezuela continued successfully
           content:
             application/json:
               schema:

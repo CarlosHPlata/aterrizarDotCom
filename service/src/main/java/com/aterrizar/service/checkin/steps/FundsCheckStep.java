@@ -41,22 +41,18 @@ public class FundsCheckStep implements Step {
         return optionalRequest
                 .map(CheckinRequest::providedFields)
                 .map(fields -> fields.get(RequiredField.FUNDS_AMOUNT_US))
-                .map(Object::toString)
                 .map(this::validateFunds)
                 .map(funds -> context.withUserInformation(builder -> builder.usFunds(funds)))
                 .orElseThrow(
                         () -> new IllegalStateException("US funds are missing in the request."));
     }
 
-    private int validateFunds(String fundsStr) {
-        if (fundsStr == null || fundsStr.isBlank()) {
-            throw new IllegalArgumentException("Funds amount cannot be empty");
+    private double validateFunds(String fundsStr) {
+        Double funds = Double.parseDouble(fundsStr);
+        if (funds < 0) {
+            throw new IllegalArgumentException("Funds amount must be a positive number");
         }
-        try {
-            return Integer.parseInt(fundsStr);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Funds amount must be numeric", e);
-        }
+        return funds;
     }
 
     private static boolean isFieldFilled(Optional<CheckinRequest> optionalRequest) {

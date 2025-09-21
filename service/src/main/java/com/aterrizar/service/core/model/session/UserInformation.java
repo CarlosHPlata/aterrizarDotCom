@@ -12,7 +12,7 @@ public record UserInformation(
         @Nullable String email,
         @Nullable String passportNumber,
         @Nullable String fullName,
-        @Nullable Integer usFunds)
+        @Nullable Double usFunds)
         implements Serializable {
     public UserInformation withPassportNumber(String passportNumber) {
         return this.toBuilder().passportNumber(passportNumber).build();
