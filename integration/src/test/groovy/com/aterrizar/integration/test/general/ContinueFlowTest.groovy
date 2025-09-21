@@ -30,7 +30,7 @@ class ContinueFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when:
-        def session = checkin.initSession("MX")
+        def session = checkin.initSession("MX", [email: "test__agreementdrop@checkin.com"])
         InitVerifier.verify(session)
 
         and: // continue without filling anything
@@ -51,7 +51,7 @@ class ContinueFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when:
-        def session = checkin.initSession("MX")
+        def session = checkin.initSession("MX", [email: "test__agreementdrop@checkin.com"])
         InitVerifier.verify(session)
 
         and: // continue but filling passport
@@ -73,7 +73,7 @@ class ContinueFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when:
-        def session = checkin.initSession("MX")
+        def session = checkin.initSession("MX", [email: "test__agreementdrop@checkin.com"])
         InitVerifier.verify(session)
 
         and: // continue without filling anything
@@ -92,4 +92,21 @@ class ContinueFlowTest extends Specification {
         then: // be completed
         ContinueVerifier.completed(continueResponse)
     }
+
+    def "should SKIP agreement when agreementdrop is DISABLED"() {
+        setup:
+        def checkin = Checkin.create()
+
+        when:
+        def session = checkin.initSession("MX")
+        InitVerifier.verify(session)
+
+        and:
+        def continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
+
+        then:
+        ContinueVerifier.completed(continueResponse)
+    }
+
+
 }

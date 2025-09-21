@@ -37,6 +37,7 @@ class Checkin {
                 country      : country,
                 userId       : userIdToUse,
                 passengers   : 2,
+                email        : "example@example.com",
                 flightNumbers: ["USJFKGBLHF", "GBLHRMXMID"]
         ]
         def mergedBody = defaultBody + partialBody
