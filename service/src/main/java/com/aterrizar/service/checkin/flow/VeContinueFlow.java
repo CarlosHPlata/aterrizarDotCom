@@ -16,7 +16,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class VEContinueFlow implements FlowStrategy {
+public class VeContinueFlow implements FlowStrategy {
     private final GetSessionStep getSessionStep;
     private final ValidateSessionStep validateSessionStep;
     private final PassportInformationStep passportInformationStep;

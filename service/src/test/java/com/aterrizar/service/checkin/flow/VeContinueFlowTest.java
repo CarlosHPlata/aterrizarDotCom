@@ -23,7 +23,7 @@ import mocks.MockContext;
 import mocks.MockFlowExecutor;
 
 @ExtendWith(MockitoExtension.class)
-public class VEContinueFlowTest {
+public class VeContinueFlowTest {
     @Mock private GetSessionStep getSessionStep;
     @Mock private ValidateSessionStep validateSessionStep;
     @Mock private FundsCheckStep fundsCheckStep;
@@ -31,8 +31,8 @@ public class VEContinueFlowTest {
     @Mock private AgreementSignStep agreementSignStep;
     @Mock private SaveSessionStep saveSessionStep;
     @Mock private CompleteCheckinStep completeCheckinStep;
-    
-    @InjectMocks private VEContinueFlow veContinueFlow;
+
+    @InjectMocks private VeContinueFlow veContinueFlow;
 
     @Test
     void shouldReturnTheListOfValidSteps() {
@@ -51,11 +51,4 @@ public class VEContinueFlowTest {
                         "CompleteCheckinStep"),
                 flowExecutor.getExecutedSteps());
     }
-
-
-
-
-
-
-    
 }
