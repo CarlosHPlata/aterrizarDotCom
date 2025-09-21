@@ -3,7 +3,7 @@ package com.aterrizar.service.checkin.country;
 import org.springframework.stereotype.Service;
 
 import com.aterrizar.service.checkin.flow.GeneralInitFlow;
-import com.aterrizar.service.checkin.flow.VeContinueFlow;
+import com.aterrizar.service.checkin.flow.VEContinueFlow;
 import com.aterrizar.service.core.framework.flow.FlowStrategy;
 import com.aterrizar.service.core.framework.strategy.CheckinCountryStrategy;
 import com.neovisionaries.i18n.CountryCode;
@@ -12,10 +12,10 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class VeCheckin extends CheckinCountryStrategy {
+public class VECheckin extends CheckinCountryStrategy {
 
     private final GeneralInitFlow generalInitFlow;
-    private final VeContinueFlow veContinueFlow;
+    private final VEContinueFlow veContinueFlow;
 
     @Override
     protected FlowStrategy getInitFlow() {
