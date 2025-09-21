@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 import com.aterrizar.service.core.model.request.CheckinRequest;
 import com.aterrizar.service.core.model.request.CheckinResponse;
+import com.aterrizar.service.core.model.session.ExperimentalData;
 import com.aterrizar.service.core.model.session.Session;
 import com.aterrizar.service.core.model.session.SessionData;
 import com.aterrizar.service.core.model.session.Status;
@@ -198,5 +199,14 @@ public class Context {
         customizer.accept(userInfoBuilder);
         return this.withSession(
                 sessionBuilder -> sessionBuilder.userInformation(userInfoBuilder.build()));
+    }
+
+    public Context withExperimentalData(ExperimentalData experimentalData) {
+        return this.withSession(
+                sessionBuilder -> sessionBuilder.experimentalData(experimentalData));
+    }
+
+    public Optional<ExperimentalData> experimentalData() {
+        return Optional.ofNullable(this.session.experimentalData());
     }
 }
