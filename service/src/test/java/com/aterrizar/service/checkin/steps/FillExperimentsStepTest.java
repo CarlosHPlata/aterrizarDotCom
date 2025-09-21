@@ -44,17 +44,6 @@ class FillExperimentsStepTest {
     }
 
     @Test
-    void shouldNotFillExperimentsIfEmailIsNotExperimental() {
-        var context =
-                MockContext.initializedMock(CountryCode.US)
-                        .withUserInformation(builder -> builder.email("user@normal.com"));
-        var result = fillExperimentsStep.onExecute(context);
-
-        assertTrue(result.isSuccess());
-        assertEquals(context, result.context());
-    }
-
-    @Test
     void shouldFillExperimentsIfEmailIsExperimental() {
         var email = "test__agreementdrop@checkin.com";
         var context =

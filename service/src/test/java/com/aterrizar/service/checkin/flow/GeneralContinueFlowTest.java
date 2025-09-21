@@ -1,6 +1,7 @@
 package com.aterrizar.service.checkin.flow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import com.aterrizar.service.checkin.steps.PassportInformationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
 import com.aterrizar.service.checkin.steps.ValidateSessionStep;
 import com.aterrizar.service.core.model.ExperimentalStepKey;
+import com.aterrizar.service.core.model.session.ExperimentalData;
 import com.neovisionaries.i18n.CountryCode;
 
 import mocks.MockContext;
@@ -35,7 +37,16 @@ class GeneralContinueFlowTest {
 
     @Test
     void shouldReturnTheListOfValidSteps() {
-        var context = MockContext.initializedMock(CountryCode.AD);
+        var experimentalSteps =
+                ExperimentalData.builder()
+                        .experiments(List.of(ExperimentalStepKey.AGREEMENT_SIGN.value()))
+                        .build();
+
+        var context =
+                MockContext.initializedMock(CountryCode.AD).withExperimentalData(experimentalSteps);
+
+        when(agreementSignStep.when(context)).thenReturn(true);
+
         var flowExecutor = new MockFlowExecutor();
         generalContinueFlow.flow(flowExecutor).execute(context);
 
@@ -49,6 +60,22 @@ class GeneralContinueFlowTest {
                                         agreementSignStep, ExperimentalStepKey.AGREEMENT_SIGN)
                                 .getClass()
                                 .getSimpleName(),
+                        "CompleteCheckinStep"),
+                flowExecutor.getExecutedSteps());
+    }
+
+    @Test
+    void shouldSkipExperimentalStepIfNotActive() {
+        var context = MockContext.initializedMock(CountryCode.AD);
+        var flowExecutor = new MockFlowExecutor();
+        generalContinueFlow.flow(flowExecutor).execute(context);
+
+        assertEquals(4, flowExecutor.getExecutedSteps().size());
+        assertEquals(
+                List.of(
+                        "GetSessionStep",
+                        "ValidateSessionStep",
+                        "PassportInformationStep",
                         "CompleteCheckinStep"),
                 flowExecutor.getExecutedSteps());
     }

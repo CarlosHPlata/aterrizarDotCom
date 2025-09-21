@@ -58,7 +58,7 @@ class ExperimentalStepDecoratorTest {
     @Test
     void shouldRunWhenExperimentActiveAndDelegateWhenTrue() {
         var expData =
-                ExperimentalData.builder().experiments(List.of(experimentKey.toString())).build();
+                ExperimentalData.builder().experiments(List.of(experimentKey.value())).build();
         var context = MockContext.initializedMock(CountryCode.US).withExperimentalData(expData);
         when(delegate.when(any())).thenReturn(true);
 
@@ -72,7 +72,7 @@ class ExperimentalStepDecoratorTest {
     void shouldNotRunWhenExperimentActiveButDelegateWhenFalse() {
 
         var expData =
-                ExperimentalData.builder().experiments(List.of(experimentKey.toString())).build();
+                ExperimentalData.builder().experiments(List.of(experimentKey.value())).build();
         var context = MockContext.initializedMock(CountryCode.US).withExperimentalData(expData);
 
         when(delegate.when(context)).thenReturn(false);
