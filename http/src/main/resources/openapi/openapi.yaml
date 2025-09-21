@@ -48,3 +48,23 @@ paths:
             application/json:
               schema:
                 $ref: './components/CheckinResponseData.yaml#/components/schemas/CheckinResponseData'
+
+  /v1/veCheckin/continue:
+    post:
+      tags:
+        - Checkin
+      summary: Continue check-in process until is completed
+      operationId: continueCheckinVE
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/VeCheckinRequestData.yaml#/components/schemas/VeCheckinRequestData'
+      responses:
+        "200":
+          description: Check-in for Venezuela continued successfully
+          content:
+            application/json:
+              schema:
+                $ref: './components/CheckinResponseData.yaml#/components/schemas/CheckinResponseData'
