@@ -49,7 +49,8 @@ class CreateSessionStepTest {
     @Test
     void testOnExecuteShouldCreatedANewValidSession() {
         var userId = UUID.randomUUID();
-        var sessionRequest = SessionRequest.builder().userId(userId).build();
+        var email = "example@example.com";
+        var sessionRequest = SessionRequest.builder().userId(userId).email(email).build();
         var context = InitContext.builder().sessionRequest(Optional.of(sessionRequest)).build();
 
         var result = createSessionStep.onExecute(context);
@@ -58,6 +59,7 @@ class CreateSessionStepTest {
         assertTrue(result.isSuccess());
         assertNotNull(updatedContext.session().userInformation());
         assertEquals(userId, updatedContext.session().userInformation().userId());
+        assertEquals(email, updatedContext.session().userInformation().email());
         assertEquals(Status.INITIALIZED, updatedContext.session().status());
         assertNotNull(updatedContext.session().sessionId());
     }
