@@ -13,7 +13,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.aterrizar.service.checkin.config.HealthDeclarationProperties;
 import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.RequiredField;
@@ -21,6 +20,7 @@ import com.aterrizar.service.core.model.session.Airport;
 import com.aterrizar.service.core.model.session.FlightData;
 import com.neovisionaries.i18n.CountryCode;
 
+import mocks.HealthDeclarationCountryCheckerMock;
 import mocks.MockContext;
 
 public class HealthDeclarationStepTest {
@@ -126,7 +126,7 @@ public class HealthDeclarationStepTest {
     private Step createStepWithTargets(CountryCode... targetCountries) {
         assertTrue(targetCountries.length > 0, "Target countries should not be empty");
 
-        var properties = new HealthDeclarationProperties(targetCountries);
+        var properties = new HealthDeclarationCountryCheckerMock(targetCountries);
         return new HealthDeclarationStep(properties);
     }
 

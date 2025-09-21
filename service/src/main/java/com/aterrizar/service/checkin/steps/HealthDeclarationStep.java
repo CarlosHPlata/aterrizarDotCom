@@ -4,20 +4,19 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.aterrizar.service.checkin.config.HealthDeclarationProperties;
+import com.aterrizar.service.checkin.feature.HealthDeclarationCountryChecker;
 import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.RequiredField;
 import com.aterrizar.service.core.model.request.CheckinRequest;
-import com.aterrizar.service.core.model.session.SessionData;
 
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class HealthDeclarationStep implements Step {
-    private final HealthDeclarationProperties properties;
+    private final HealthDeclarationCountryChecker countryChecker;
 
     @Override
     public StepResult onExecute(Context context) {
@@ -36,7 +35,8 @@ public class HealthDeclarationStep implements Step {
 
     @Override
     public boolean when(Context context) {
-        return hasFlightsRequiringHealthDeclaration(context.session().sessionData());
+        var flights = context.session().sessionData().flights();
+        return countryChecker.hasFlightsRequiringHealthDeclaration(flights);
     }
 
     private Context requestHealthClearAcknowledgementField(Context context) {
@@ -69,14 +69,5 @@ public class HealthDeclarationStep implements Step {
                                 .providedFields()
                                 .get(RequiredField.HEALTH_CLEAR_ACKNOWLEDGEMENT)
                         != null;
-    }
-
-    private boolean hasFlightsRequiringHealthDeclaration(SessionData sessionData) {
-        return sessionData.flights().stream()
-                .anyMatch(
-                        flight ->
-                                properties
-                                        .getCountries()
-                                        .contains(flight.destination().countryCode()));
     }
 }
