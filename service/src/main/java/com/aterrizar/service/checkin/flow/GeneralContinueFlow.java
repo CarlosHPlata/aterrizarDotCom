@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import com.aterrizar.service.checkin.steps.AgreementSignStep;
 import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
-import com.aterrizar.service.checkin.steps.ExperimentalStepDecorator;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
@@ -31,9 +30,7 @@ public class GeneralContinueFlow implements FlowStrategy {
                 .and(getSessionStep)
                 .and(validateSessionStep)
                 .and(passportInformationStep)
-                .and(
-                        ExperimentalStepDecorator.of(
-                                agreementSignStep, ExperimentalStepKey.AGREEMENT_SIGN))
+                .andExperimental(agreementSignStep, ExperimentalStepKey.AGREEMENT_SIGN)
                 .and(completeCheckinStep)
                 .andFinally(saveSessionStep);
     }

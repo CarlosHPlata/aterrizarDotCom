@@ -10,6 +10,6 @@ import lombok.Builder;
 @Builder(toBuilder = true)
 public record ExperimentalData(List<String> experiments) implements Serializable {
     public boolean isExperimentActive(ExperimentalStepKey experimentName) {
-        return experiments != null && experiments.contains(experimentName.toString());
+        return experiments != null && experiments.contains(experimentName.value());
     }
 }

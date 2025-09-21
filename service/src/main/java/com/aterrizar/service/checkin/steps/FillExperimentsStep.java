@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 public class FillExperimentsStep implements Step {
 
     private final ExperimentalGateway experimentalGateway;
-    private final String EXPERIMENTAL_EMAIL_DOMAIN = "@checkin.com";
 
     private final Logger logger = LoggerFactory.getLogger(FillExperimentsStep.class);
 
@@ -37,10 +36,6 @@ public class FillExperimentsStep implements Step {
         var userInfo = session.userInformation();
         var email = userInfo.email();
 
-        if (!isExperimentalEmail(email)) {
-            return StepResult.success(context);
-        }
-
         var experimentalData = experimentalGateway.getActiveExperiments(email);
         logger.info(
                 "Session [{}] - Email [{}] - Experiments: {}",
@@ -49,9 +44,5 @@ public class FillExperimentsStep implements Step {
                 experimentalData);
         var updatedContext = context.withExperimentalData(experimentalData);
         return StepResult.success(updatedContext);
-    }
-
-    private boolean isExperimentalEmail(String email) {
-        return email != null && email.endsWith(EXPERIMENTAL_EMAIL_DOMAIN);
     }
 }
