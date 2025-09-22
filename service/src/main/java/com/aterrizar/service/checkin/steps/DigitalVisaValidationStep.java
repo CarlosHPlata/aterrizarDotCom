@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.aterrizar.service.checkin.config.DigitalVisaProperties;
+import com.aterrizar.service.checkin.feature.DigitalVisaFeature;
 import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DigitalVisaValidationStep implements Step {
 
-    private final DigitalVisaProperties digitalVisaProperties;
+    private final DigitalVisaFeature digitalVisaFeature;
 
     @Override
     public StepResult onExecute(Context context) {
@@ -66,7 +66,7 @@ public class DigitalVisaValidationStep implements Step {
         return sessionData.flights().stream()
                 .anyMatch(
                         flight ->
-                                digitalVisaProperties.isDigitalVisaRequired(
+                                digitalVisaFeature.isCountryAvailable(
                                         flight.destination().countryCode().name()));
     }
 

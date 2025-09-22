@@ -1,23 +1,24 @@
-package com.aterrizar.service.checkin.config;
+package com.aterrizar.http.config.feature;
 
 import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import com.aterrizar.service.checkin.feature.DigitalVisaFeature;
 import lombok.Data;
 
 /** Configuration properties for Digital Visa feature. */
 @Data
 @Component
 @ConfigurationProperties(prefix = "feature.digital.visa")
-public class DigitalVisaProperties {
+public class DigitalVisaProperties implements DigitalVisaFeature {
 
     /**
      * List of country codes that require digital visa validation. Default: IN (India), AU
      * (Australia)
      */
-    private List<String> enabledCountries = List.of("IN", "AU");
+    private List<String> enabledCountries;
 
     /**
      * Checks if a country requires digital visa validation.
@@ -25,7 +26,7 @@ public class DigitalVisaProperties {
      * @param countryCode the country code to check
      * @return true if the country requires digital visa validation
      */
-    public boolean isDigitalVisaRequired(String countryCode) {
+    public boolean isCountryAvailable(String countryCode) {
         if (countryCode == null || countryCode.trim().isEmpty()) {
             return false;
         }
