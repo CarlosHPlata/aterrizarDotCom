@@ -26,6 +26,9 @@ public class DigitalVisaProperties {
      * @return true if the country requires digital visa validation
      */
     public boolean isDigitalVisaRequired(String countryCode) {
+        if (countryCode == null || countryCode.trim().isEmpty()) {
+            return false;
+        }
         return enabledCountries.contains(countryCode);
     }
 
