@@ -4,7 +4,8 @@ enum UserInput {
     PASSPORT_NUMBER("PASSPORT_NUMBER", "Passport Number"),
     FULL_NAME("FULL_NAME", "Full Name"),
     EMAIL("EMAIL", "Email"),
-    AGREEMENT_SIGNED("AGREEMENT_SIGNED", "Agreement Signed")
+    AGREEMENT_SIGNED("AGREEMENT_SIGNED", "Agreement Signed"),
+    FUNDS_AMOUNT_US("FUNDS_AMOUNT_US", "Funds Amount (US)")
 
     private final String value
     private final String id
