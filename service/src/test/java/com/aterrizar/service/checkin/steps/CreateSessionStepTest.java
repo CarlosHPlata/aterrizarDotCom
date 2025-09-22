@@ -47,7 +47,7 @@ class CreateSessionStepTest {
     }
 
     @Test
-    void testOnExecuteShouldCreatedNewValidSession() {
+    void testOnExecuteShouldCreateNewValidSession() {
         var userId = UUID.randomUUID();
         var sessionRequest = SessionRequest.builder().userId(userId).build();
         var context = InitContext.builder().sessionRequest(Optional.of(sessionRequest)).build();

@@ -48,7 +48,13 @@ public class FundsCheckStep implements Step {
     }
 
     private double validateFunds(String fundsStr) {
-        Double funds = Double.parseDouble(fundsStr);
+        Double funds;
+        try {
+            funds = Double.parseDouble(fundsStr);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Funds amount must be a valid number", e);
+        }
+
         if (funds < 0) {
             throw new IllegalArgumentException("Funds amount must be a positive number");
         }
