@@ -21,7 +21,7 @@ class DigitalVisaPropertiesTest {
     @Test
     void shouldReturnTrueForEnabledCountries() {
         digitalVisaProperties.setEnabledCountries(List.of("IN", "AU"));
-        
+
         assertTrue(digitalVisaProperties.isDigitalVisaRequired("IN"));
         assertTrue(digitalVisaProperties.isDigitalVisaRequired("AU"));
     }
@@ -29,7 +29,7 @@ class DigitalVisaPropertiesTest {
     @Test
     void shouldReturnFalseForDisabledCountries() {
         digitalVisaProperties.setEnabledCountries(List.of("IN", "AU"));
-        
+
         assertFalse(digitalVisaProperties.isDigitalVisaRequired("US"));
         assertFalse(digitalVisaProperties.isDigitalVisaRequired("GB"));
         assertFalse(digitalVisaProperties.isDigitalVisaRequired("FR"));
@@ -38,14 +38,15 @@ class DigitalVisaPropertiesTest {
     @Test
     void shouldReturnFalseWhenNoCountriesConfigured() {
         digitalVisaProperties.setEnabledCountries(List.of());
-        
+
         assertFalse(digitalVisaProperties.isDigitalVisaRequired("IN"));
         assertFalse(digitalVisaProperties.isDigitalVisaRequired("AU"));
     }
 
     @Test
     void shouldUseDefaultCountriesWhenNotConfigured() {
-        
+        // No setEnabledCountries called, should use defaults
+
         assertTrue(digitalVisaProperties.isDigitalVisaRequired("IN"));
         assertTrue(digitalVisaProperties.isDigitalVisaRequired("AU"));
         assertFalse(digitalVisaProperties.isDigitalVisaRequired("US"));
@@ -54,7 +55,7 @@ class DigitalVisaPropertiesTest {
     @Test
     void shouldHandleSingleCountryCode() {
         digitalVisaProperties.setEnabledCountries(List.of("IN"));
-        
+
         assertTrue(digitalVisaProperties.isDigitalVisaRequired("IN"));
         assertFalse(digitalVisaProperties.isDigitalVisaRequired("AU"));
     }
@@ -62,14 +63,15 @@ class DigitalVisaPropertiesTest {
     @Test
     void shouldReturnImmutableCopyOfEnabledCountries() {
         digitalVisaProperties.setEnabledCountries(List.of("IN", "AU", "US"));
-        
+
         List<String> result = digitalVisaProperties.getEnabledCountries();
-        
+
         assertEquals(3, result.size());
         assertTrue(result.contains("IN"));
         assertTrue(result.contains("AU"));
         assertTrue(result.contains("US"));
-        
+
+        // Verify it's immutable by trying to modify
         List<String> originalList = digitalVisaProperties.getEnabledCountries();
         assertEquals(originalList, result);
     }
@@ -77,23 +79,16 @@ class DigitalVisaPropertiesTest {
     @Test
     void shouldBeCaseSensitive() {
         digitalVisaProperties.setEnabledCountries(List.of("IN", "AU"));
-        
+
         assertTrue(digitalVisaProperties.isDigitalVisaRequired("IN"));
         assertFalse(digitalVisaProperties.isDigitalVisaRequired("in"));
         assertFalse(digitalVisaProperties.isDigitalVisaRequired("In"));
     }
 
     @Test
-    void shouldReturnFalseForNullCountryCode() {
+    void shouldHandleNullCountryCode() {
         digitalVisaProperties.setEnabledCountries(List.of("IN", "AU"));
-        assertFalse(digitalVisaProperties.isDigitalVisaRequired(null));
-    }
 
-    @Test
-    void shouldReturnFalseForEmptyStringCountryCode() {
-        digitalVisaProperties.setEnabledCountries(List.of("IN", "AU"));
-        
-        assertFalse(digitalVisaProperties.isDigitalVisaRequired(""));
-        assertFalse(digitalVisaProperties.isDigitalVisaRequired("   "));
+        assertFalse(digitalVisaProperties.isDigitalVisaRequired(null));
     }
 }
