@@ -25,7 +25,7 @@ class VeContinueFlowTest extends Specification {
         ContinueVerifier.rejected(e, "User ID does not match session")
     }
 
-    def "should be asked to provide passport number  and the fund amount when sending no information"() {
+    def "should be asked to provide passport number and the fund amount when sending no information"() {
         setup:
         def checkin = Checkin.create()
 
