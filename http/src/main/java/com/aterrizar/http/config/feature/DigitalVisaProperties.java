@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import com.aterrizar.service.checkin.feature.DigitalVisaFeature;
+
 import lombok.Data;
 
 /** Configuration properties for Digital Visa feature. */
