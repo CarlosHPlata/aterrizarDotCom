@@ -33,6 +33,13 @@ class PassportValidationStepTest {
         var mockSessionRequest = mock(SessionRequest.class);
 
         when(mockInitContext.sessionRequest()).thenReturn(Optional.of(mockSessionRequest));
+    void shouldExecuteWhenInitContextHasSessionRequest() {
+        var mockInitContext = mock(InitContext.class);
+        var mockSessionRequest = mock(SessionRequest.class);
+
+        when(mockInitContext.sessionRequest()).thenReturn(Optional.of(mockSessionRequest));
+
+        var result = passportValidationStep.when(mockInitContext);
 
         var result = passportValidationStep.when(mockInitContext);
 
@@ -74,6 +81,7 @@ class PassportValidationStepTest {
         assertFalse(stepResult.isSuccess());
         assertEquals("Passport number is required.", stepResult.message());
         verify(mockPassportGateway, never()).validate(anyString());
+        verify(mockPassportGateway, never()).validate(anyString());
     }
 
     @Test
@@ -89,6 +97,7 @@ class PassportValidationStepTest {
 
         assertFalse(stepResult.isSuccess());
         assertEquals("Invalid passport number", stepResult.message());
+        verify(mockPassportGateway).validate(invalidPassport);
         verify(mockPassportGateway).validate(invalidPassport);
     }
 
@@ -106,5 +115,8 @@ class PassportValidationStepTest {
         assertTrue(stepResult.isSuccess());
         assertFalse(stepResult.isTerminal());
         verify(mockPassportGateway).validate(validPassport);
+        assertFalse(stepResult.isTerminal());
+        verify(mockPassportGateway).validate(validPassport);
     }
+
 }
