@@ -3,75 +3,108 @@ package com.aterrizar.service.checkin.steps;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.*;
 
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.aterrizar.service.core.model.InitContext;
+import com.aterrizar.service.core.model.init.SessionRequest;
+import com.aterrizar.service.external.PassportGateway;
 import com.neovisionaries.i18n.CountryCode;
 
 import mocks.MockContext;
 
-public class PassportValidationStepTest {
+@ExtendWith(MockitoExtension.class)
+class PassportValidationStepTest {
 
-    private PassportValidationStep passportValidationStep;
+    @Mock private PassportGateway mockPassportGateway;
 
-    @BeforeEach
-    public void setUp() {
-        passportValidationStep = new PassportValidationStep(null);
-    }
+    @InjectMocks private PassportValidationStep passportValidationStep;
 
     @Test
-    void shouldExecuteWhenPassportIsSet() {
-        var context = MockContext.initializedMock(CountryCode.AD)
-                .withUserInformation(builder -> builder.passportNumber("123456789").fullName("John Doe"));
+    void shouldExecuteWhenInitContextHasSessionRequest() {
+        var mockInitContext = mock(InitContext.class);
+        var mockSessionRequest = mock(SessionRequest.class);
 
-        var result = passportValidationStep.when(context);
+        when(mockInitContext.sessionRequest()).thenReturn(Optional.of(mockSessionRequest));
+
+        var result = passportValidationStep.when(mockInitContext);
+
         assertTrue(result);
     }
 
     @Test
-    void shouldNotExecuteWhenPassportIsNotSet() {
-        var context = MockContext.initializedMock(CountryCode.AD)
-                .withUserInformation(builder -> builder.passportNumber(null));
+    void shouldNotExecuteWhenInitContextHasNoSessionRequest() {
+        var mockInitContext = mock(InitContext.class);
 
-        var result = passportValidationStep.when(context);
+        when(mockInitContext.sessionRequest()).thenReturn(Optional.empty());
+
+        var result = passportValidationStep.when(mockInitContext);
+
         assertFalse(result);
     }
 
     @Test
-    void shouldFailWhenPassportIsBlank() {
-        var context = MockContext.initializedMock(CountryCode.AD)
-                .withUserInformation(builder -> builder.passportNumber("   ").fullName("John Doe"));
+    void shouldFailWhenPassportIsNull() {
+        var context =
+                MockContext.initializedMock(CountryCode.AD)
+                        .withUserInformation(builder -> builder.passportNumber(null));
 
         var stepResult = passportValidationStep.onExecute(context);
-        var updatedContext = stepResult.context();
 
         assertFalse(stepResult.isSuccess());
         assertEquals("Passport number is required.", stepResult.message());
-        assertFalse(updatedContext.session().sessionData().passportValidationCleared());
+        verify(mockPassportGateway, never()).validate(anyString());
     }
 
     @Test
-    void shouldFailWhenPassportIsInvalid() {
-        var context = MockContext.initializedMock(CountryCode.AD)
-                .withUserInformation(builder -> builder.passportNumber("P7399").fullName("John Doe"));
+    void shouldFailWhenPassportIsBlank() {
+        var context =
+                MockContext.initializedMock(CountryCode.AD)
+                        .withUserInformation(builder -> builder.passportNumber("   "));
 
         var stepResult = passportValidationStep.onExecute(context);
-        var updatedContext = stepResult.context();
+
+        assertFalse(stepResult.isSuccess());
+        assertEquals("Passport number is required.", stepResult.message());
+        verify(mockPassportGateway, never()).validate(anyString());
+    }
+
+    @Test
+    void shouldFailWhenPassportIsInvalidAccordingToGateway() {
+        var invalidPassport = "P7399";
+        when(mockPassportGateway.validate(invalidPassport)).thenReturn(false);
+
+        var context =
+                MockContext.initializedMock(CountryCode.AD)
+                        .withUserInformation(builder -> builder.passportNumber(invalidPassport));
+
+        var stepResult = passportValidationStep.onExecute(context);
 
         assertFalse(stepResult.isSuccess());
         assertEquals("Invalid passport number", stepResult.message());
-        assertFalse(updatedContext.session().sessionData().passportValidationCleared());
+        verify(mockPassportGateway).validate(invalidPassport);
     }
 
     @Test
-    void shouldSucceedWhenPassportIsValid() {
-        var context = MockContext.initializedMock(CountryCode.AD)
-                .withUserInformation(builder -> builder.passportNumber("G3567").fullName("John Doe"));
+    void shouldSucceedWhenPassportIsValidAccordingToGateway() {
+        var validPassport = "G3567";
+        when(mockPassportGateway.validate(validPassport)).thenReturn(true);
+
+        var context =
+                MockContext.initializedMock(CountryCode.AD)
+                        .withUserInformation(builder -> builder.passportNumber(validPassport));
 
         var stepResult = passportValidationStep.onExecute(context);
-        var updatedContext = stepResult.context();
 
         assertTrue(stepResult.isSuccess());
-        assertTrue(updatedContext.session().sessionData().passportValidationCleared());
+        assertFalse(stepResult.isTerminal());
+        verify(mockPassportGateway).validate(validPassport);
     }
 }
