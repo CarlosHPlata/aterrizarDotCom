@@ -1,6 +1,5 @@
 package com.aterrizar.service.checkin.steps;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,11 +16,11 @@ public class PassportValidationStepTest {
 
     @BeforeEach
     public void setUp() {
-        passportValidationStep = new PassportValidationStep();
+        passportValidationStep = new PassportValidationStep(null);
     }
 
     @Test
-    void shouldExecuteWhenPassportIsSet(){
+    void shouldExecuteWhenPassportIsSet() {
         var context = MockContext.initializedMock(CountryCode.AD)
                 .withUserInformation(builder -> builder.passportNumber("123456789").fullName("John Doe"));
 
@@ -30,7 +29,7 @@ public class PassportValidationStepTest {
     }
 
     @Test
-    void shouldNotExecuteWhenPassportIsNotSet(){
+    void shouldNotExecuteWhenPassportIsNotSet() {
         var context = MockContext.initializedMock(CountryCode.AD)
                 .withUserInformation(builder -> builder.passportNumber(null));
 
@@ -39,7 +38,7 @@ public class PassportValidationStepTest {
     }
 
     @Test
-    void shouldFailWhenPassportIsBlank(){
+    void shouldFailWhenPassportIsBlank() {
         var context = MockContext.initializedMock(CountryCode.AD)
                 .withUserInformation(builder -> builder.passportNumber("   ").fullName("John Doe"));
 
@@ -52,7 +51,7 @@ public class PassportValidationStepTest {
     }
 
     @Test
-    void shouldFailWhenPassportIsInvalid(){
+    void shouldFailWhenPassportIsInvalid() {
         var context = MockContext.initializedMock(CountryCode.AD)
                 .withUserInformation(builder -> builder.passportNumber("P7399").fullName("John Doe"));
 
@@ -65,7 +64,7 @@ public class PassportValidationStepTest {
     }
 
     @Test
-    void shouldSucceedWhenPassportIsValid(){
+    void shouldSucceedWhenPassportIsValid() {
         var context = MockContext.initializedMock(CountryCode.AD)
                 .withUserInformation(builder -> builder.passportNumber("G3567").fullName("John Doe"));
 
