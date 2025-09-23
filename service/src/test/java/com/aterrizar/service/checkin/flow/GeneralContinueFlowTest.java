@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.aterrizar.service.checkin.steps.AgreementSignStep;
 import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
-import com.aterrizar.service.checkin.steps.ExperimentalStepDecorator;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;

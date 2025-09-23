@@ -1,15 +1,14 @@
 package com.aterrizar.service.checkin.steps;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.external.ExperimentalGateway;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
