@@ -1,5 +1,7 @@
 package com.aterrizar.service.checkin.steps;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -9,20 +11,17 @@ import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.external.ExperimentalGateway;
 
-import lombok.AllArgsConstructor;
-
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Slf4j
 public class FillExperimentsStep implements Step {
 
     private final ExperimentalGateway experimentalGateway;
 
-    private final Logger logger = LoggerFactory.getLogger(FillExperimentsStep.class);
-
     @Override
     public boolean when(Context context) {
-        var session = context.session();
-        var userInfo = session.userInformation();
+        var userInfo = context.userInformation();
+
         if (userInfo == null) {
             return false;
         }
@@ -33,11 +32,11 @@ public class FillExperimentsStep implements Step {
     @Override
     public StepResult onExecute(Context context) {
         var session = context.session();
-        var userInfo = session.userInformation();
+        var userInfo = context.userInformation();
         var email = userInfo.email();
 
         var experimentalData = experimentalGateway.getActiveExperiments(email);
-        logger.info(
+        log.info(
                 "Session [{}] - Email [{}] - Experiments: {}",
                 session.sessionId(),
                 email,

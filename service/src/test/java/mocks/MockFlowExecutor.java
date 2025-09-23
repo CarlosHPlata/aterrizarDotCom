@@ -15,12 +15,14 @@ public class MockFlowExecutor extends FlowExecutor {
     public Context execute(Context context) {
         for (Step step : this.steps) {
             System.out.println(context.experimentalData());
-            if (step instanceof ExperimentalStepDecorator) {
+            if (step instanceof ExperimentalStepDecorator decorator) {
                 if (!step.when(context)) {
                     continue;
                 }
+                executedSteps.add(decorator.getDelegate().getClass().getSimpleName());
+            } else {
+                executedSteps.add(step.getClass().getSimpleName());
             }
-            executedSteps.add(step.getClass().getSimpleName());
         }
 
         return context;

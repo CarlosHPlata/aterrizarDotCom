@@ -56,10 +56,7 @@ class GeneralContinueFlowTest {
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
-                        ExperimentalStepDecorator.of(
-                                        agreementSignStep, ExperimentalStepKey.AGREEMENT_SIGN)
-                                .getClass()
-                                .getSimpleName(),
+                        "AgreementSignStep",
                         "CompleteCheckinStep"),
                 flowExecutor.getExecutedSteps());
     }

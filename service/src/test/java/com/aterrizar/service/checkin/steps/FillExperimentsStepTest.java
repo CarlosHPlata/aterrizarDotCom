@@ -1,8 +1,6 @@
 package com.aterrizar.service.checkin.steps;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -32,7 +30,7 @@ class FillExperimentsStepTest {
         var context =
                 MockContext.initializedMock(CountryCode.US)
                         .withSession(builder -> builder.userInformation(null));
-        assertFalse(fillExperimentsStep.when(context));
+        assertThrows(NullPointerException.class, () -> fillExperimentsStep.when(context));
     }
 
     @Test

@@ -5,9 +5,11 @@ import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.ExperimentalStepKey;
 
+import lombok.Getter;
+
 public class ExperimentalStepDecorator implements Step {
 
-    private final Step delegate;
+    @Getter private final Step delegate;
     private final ExperimentalStepKey experimentKey;
 
     private ExperimentalStepDecorator(Step delegate, ExperimentalStepKey experimentKey) {
