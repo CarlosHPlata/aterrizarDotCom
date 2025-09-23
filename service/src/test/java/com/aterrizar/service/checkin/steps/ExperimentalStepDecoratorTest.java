@@ -1,19 +1,3 @@
-// Ejemplo didáctico: mockear el decorador (NO recomendado para este caso)
-// Esto solo verifica si se llama a los métodos del mock, pero no prueba la lógica real del
-// decorador.
-//
-// @Test
-// void exampleMockDecorator() {
-//     var decoratorMock = mock(ExperimentalStepDecorator.class);
-//     var context = MockContext.initializedMock(CountryCode.US);
-//     decoratorMock.when(context);
-//     verify(decoratorMock).when(context); // Esto sí funciona, pero NO prueba la lógica real
-// }
-
-// En resumen: mockear el decorador solo sirve para verificar llamadas, pero no valida la lógica
-// interna.
-// Por eso, en tests de decoradores, se debe testear la instancia real y verificar el mock del
-// delegate.
 package com.aterrizar.service.checkin.steps;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
