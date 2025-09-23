@@ -14,6 +14,7 @@ import com.aterrizar.service.checkin.steps.AgreementSignStep;
 import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
+import com.aterrizar.service.checkin.steps.PassportValidationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
 import com.aterrizar.service.checkin.steps.ValidateSessionStep;
 import com.neovisionaries.i18n.CountryCode;
@@ -26,6 +27,7 @@ class GeneralContinueFlowTest {
     @Mock private GetSessionStep getSessionStep;
     @Mock private ValidateSessionStep validateSessionStep;
     @Mock private PassportInformationStep passportInformationStep;
+    @Mock private PassportValidationStep passportValidationStep;
     @Mock private AgreementSignStep agreementSignStep;
     @Mock private SaveSessionStep saveSessionStep;
     @Mock private CompleteCheckinStep completeCheckinStep;
@@ -37,12 +39,13 @@ class GeneralContinueFlowTest {
         var flowExecutor = new MockFlowExecutor();
         generalContinueFlow.flow(flowExecutor).execute(context);
 
-        assertEquals(5, flowExecutor.getExecutedSteps().size());
+        assertEquals(6, flowExecutor.getExecutedSteps().size());
         assertEquals(
                 List.of(
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
+                        "PassportValidationStep",
                         "AgreementSignStep",
                         "CompleteCheckinStep"),
                 flowExecutor.getExecutedSteps());

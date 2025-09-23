@@ -6,6 +6,7 @@ import com.aterrizar.service.checkin.steps.AgreementSignStep;
 import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
+import com.aterrizar.service.checkin.steps.PassportValidationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
 import com.aterrizar.service.checkin.steps.ValidateSessionStep;
 import com.aterrizar.service.core.framework.flow.FlowExecutor;
@@ -22,6 +23,7 @@ public class GeneralContinueFlow implements FlowStrategy {
     private final AgreementSignStep agreementSignStep;
     private final SaveSessionStep saveSessionStep;
     private final CompleteCheckinStep completeCheckinStep;
+    private final PassportValidationStep passportValidationStep;
 
     @Override
     public FlowExecutor flow(FlowExecutor baseExecutor) {
@@ -29,6 +31,7 @@ public class GeneralContinueFlow implements FlowStrategy {
                 .and(getSessionStep)
                 .and(validateSessionStep)
                 .and(passportInformationStep)
+                .and(passportValidationStep)
                 .and(agreementSignStep)
                 .and(completeCheckinStep)
                 .andFinally(saveSessionStep);
