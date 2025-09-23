@@ -9,5 +9,9 @@ import lombok.Builder;
 
 @Builder(toBuilder = true)
 public record SessionData(
-        CountryCode countryCode, int passengers, boolean agreementSigned, List<FlightData> flights, boolean passportValidationCleared)
+        CountryCode countryCode,
+        int passengers,
+        boolean agreementSigned,
+        List<FlightData> flights,
+        boolean passportValidationCleared)
         implements Serializable {}

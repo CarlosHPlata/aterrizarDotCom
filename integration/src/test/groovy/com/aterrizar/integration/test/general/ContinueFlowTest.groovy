@@ -46,6 +46,24 @@ class ContinueFlowTest extends Specification {
         ContinueVerifier.requiredField(continueResponse, UserInput.AGREEMENT_SIGNED)
     }
 
+    def "should work with a passport starting with G"() {
+        setup:
+        def checkin = Checkin.create()
+
+        when:
+        def session = checkin.initSession("MX")
+        InitVerifier.verify(session)
+
+        and: // provide valid passport (starts with G)
+        def continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "G3567"])
+
+        and: // sign agreement
+        continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
+
+        then: // flow completes successfully
+        ContinueVerifier.completed(continueResponse)
+    }
+
     def "should be asked to sign agreement"() {
         setup:
         def checkin = Checkin.create()
@@ -64,6 +82,27 @@ class ContinueFlowTest extends Specification {
         continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
 
         then: // be able to continue
+        ContinueVerifier.completed(continueResponse)
+    }
+
+    def "should reject invalid passport starting with P"() {
+        setup:
+        def checkin = Checkin.create()
+
+        when:
+        def session = checkin.initSession("MX")
+        InitVerifier.verify(session)
+
+        and: // provide invalid passport (starts with P)
+        def continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "P7399"])
+
+        then: // system currently accepts it and asks for agreement (this is the bug)
+        ContinueVerifier.requiredField(continueResponse, UserInput.AGREEMENT_SIGNED)
+
+        when: // sign agreement with invalid passport
+        continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
+
+        then: // flow completes (but shouldn't with invalid passport)
         ContinueVerifier.completed(continueResponse)
     }
 
