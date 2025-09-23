@@ -33,13 +33,6 @@ class PassportValidationStepTest {
         var mockSessionRequest = mock(SessionRequest.class);
 
         when(mockInitContext.sessionRequest()).thenReturn(Optional.of(mockSessionRequest));
-    void shouldExecuteWhenInitContextHasSessionRequest() {
-        var mockInitContext = mock(InitContext.class);
-        var mockSessionRequest = mock(SessionRequest.class);
-
-        when(mockInitContext.sessionRequest()).thenReturn(Optional.of(mockSessionRequest));
-
-        var result = passportValidationStep.when(mockInitContext);
 
         var result = passportValidationStep.when(mockInitContext);
 
@@ -118,5 +111,4 @@ class PassportValidationStepTest {
         assertFalse(stepResult.isTerminal());
         verify(mockPassportGateway).validate(validPassport);
     }
-
 }
