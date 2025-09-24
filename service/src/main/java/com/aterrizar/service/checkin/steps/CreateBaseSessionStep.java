@@ -32,7 +32,10 @@ public class CreateBaseSessionStep implements Step {
                 Session.builder()
                         .sessionId(sessionId)
                         .userInformation(
-                                UserInformation.builder().userId(sessionRequest.userId()).build())
+                                UserInformation.builder()
+                                        .userId(sessionRequest.userId())
+                                        .email(sessionRequest.email())
+                                        .build())
                         .status(Status.INITIALIZED)
                         .build();
 

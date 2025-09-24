@@ -7,7 +7,11 @@ import lombok.Builder;
 
 @Builder(toBuilder = true)
 public record Session(
-        UUID sessionId, SessionData sessionData, Status status, UserInformation userInformation)
+        UUID sessionId,
+        SessionData sessionData,
+        Status status,
+        UserInformation userInformation,
+        ExperimentalData experimentalData)
         implements Serializable {
     public Session withStatus(Status status) {
         return this.toBuilder().status(status).build();
@@ -19,5 +23,9 @@ public record Session(
 
     public Session withUserInformation(UserInformation userInformation) {
         return this.toBuilder().userInformation(userInformation).build();
+    }
+
+    public Session withExperimentalData(ExperimentalData experimentalData) {
+        return this.toBuilder().experimentalData(experimentalData).build();
     }
 }

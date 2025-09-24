@@ -3,6 +3,7 @@ package mocks;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.aterrizar.service.checkin.steps.ExperimentalStepDecorator;
 import com.aterrizar.service.core.framework.flow.FlowExecutor;
 import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.model.Context;
@@ -13,7 +14,15 @@ public class MockFlowExecutor extends FlowExecutor {
     @Override
     public Context execute(Context context) {
         for (Step step : this.steps) {
-            executedSteps.add(step.getClass().getSimpleName());
+            System.out.println(context.experimentalData());
+            if (step instanceof ExperimentalStepDecorator decorator) {
+                if (!step.when(context)) {
+                    continue;
+                }
+                executedSteps.add(decorator.getDelegate().getClass().getSimpleName());
+            } else {
+                executedSteps.add(step.getClass().getSimpleName());
+            }
         }
 
         return context;

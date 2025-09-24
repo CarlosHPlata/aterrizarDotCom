@@ -3,7 +3,9 @@ package com.aterrizar.service.core.framework.flow;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.aterrizar.service.checkin.steps.ExperimentalStepDecorator;
 import com.aterrizar.service.core.model.Context;
+import com.aterrizar.service.core.model.ExperimentalStepKey;
 import com.aterrizar.service.core.model.session.Status;
 
 /**
@@ -32,6 +34,21 @@ public class FlowExecutor {
      */
     public FlowExecutor and(Step step) {
         this.steps.add(step);
+        return this;
+    }
+
+    /**
+     * Adds an experimental `Step` to the chain of responsibility.
+     *
+     * <p>This method wraps the provided `Step` in an `ExperimentalStepDecorator`, allowing for
+     * experimental features to be toggled based on the provided `ExperimentalStepKey`.
+     *
+     * @param step the `Step` to be added to the chain
+     * @param experimentalStepKey the key used to identify the experimental feature
+     * @return the current `FlowExecutor` instance for method chaining
+     */
+    public FlowExecutor andExperimental(Step step, ExperimentalStepKey experimentalStepKey) {
+        this.steps.add(ExperimentalStepDecorator.of(step, experimentalStepKey));
         return this;
     }
 
