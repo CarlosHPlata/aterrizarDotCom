@@ -47,7 +47,7 @@ class CreateSessionStepTest {
     }
 
     @Test
-    void testOnExecuteShouldCreatedANewValidSession() {
+    void testOnExecuteShouldCreateNewValidSession() {
         var userId = UUID.randomUUID();
         var email = "example@example.com";
         var sessionRequest = SessionRequest.builder().userId(userId).email(email).build();

@@ -4,4 +4,5 @@ public enum FieldType {
     TEXT,
     EMAIL,
     BOOLEAN,
+    NUMBER,
 }

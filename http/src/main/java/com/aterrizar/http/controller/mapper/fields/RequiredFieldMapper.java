@@ -9,6 +9,8 @@ import com.aterrizar.service.core.model.FieldType;
 import com.aterrizar.service.core.model.RequiredField;
 
 public class RequiredFieldMapper {
+    private static final String NUMBER_PATTERN = "-?\\d+(\\.\\d+)?";
+
     public static Tuple<RequiredField, String> map(String fieldName, String fieldValue) {
         var field = RequiredField.valueOf(fieldName);
         var mapper = getFieldMappersStrategies().get(field.getFieldType());
@@ -25,7 +27,8 @@ public class RequiredFieldMapper {
         return Map.of(
                 FieldType.TEXT, RequiredFieldMapper::mapTextField,
                 FieldType.EMAIL, RequiredFieldMapper::mapEmailField,
-                FieldType.BOOLEAN, RequiredFieldMapper::mapBoolean);
+                FieldType.BOOLEAN, RequiredFieldMapper::mapBoolean,
+                FieldType.NUMBER, RequiredFieldMapper::mapNumberField);
     }
 
     private static String mapTextField(String value) {
@@ -44,5 +47,12 @@ public class RequiredFieldMapper {
             throw new IllegalArgumentException("Invalid boolean format");
         }
         return value.toLowerCase();
+    }
+
+    private static String mapNumberField(String value) {
+        if (value == null || !value.matches(NUMBER_PATTERN)) {
+            throw new IllegalArgumentException("Invalid number format");
+        }
+        return value;
     }
 }

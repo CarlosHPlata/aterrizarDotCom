@@ -11,7 +11,8 @@ public record UserInformation(
         UUID userId,
         @Nullable String email,
         @Nullable String passportNumber,
-        @Nullable String fullName)
+        @Nullable String fullName,
+        @Nullable Double usFunds)
         implements Serializable {
     public UserInformation withPassportNumber(String passportNumber) {
         return this.toBuilder().passportNumber(passportNumber).build();
