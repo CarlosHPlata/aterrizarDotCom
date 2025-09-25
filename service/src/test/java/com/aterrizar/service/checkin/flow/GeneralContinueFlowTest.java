@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.aterrizar.service.checkin.steps.AgreementSignStep;
 import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
+import com.aterrizar.service.checkin.steps.HealthDeclarationStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
 import com.aterrizar.service.checkin.steps.ValidateSessionStep;
@@ -30,6 +31,7 @@ class GeneralContinueFlowTest {
     @Mock private ValidateSessionStep validateSessionStep;
     @Mock private PassportInformationStep passportInformationStep;
     @Mock private AgreementSignStep agreementSignStep;
+    @Mock private HealthDeclarationStep healthDeclarationStep;
     @Mock private SaveSessionStep saveSessionStep;
     @Mock private CompleteCheckinStep completeCheckinStep;
     @InjectMocks private GeneralContinueFlow generalContinueFlow;
@@ -49,15 +51,17 @@ class GeneralContinueFlowTest {
         var flowExecutor = new MockFlowExecutor();
         generalContinueFlow.flow(flowExecutor).execute(context);
 
-        assertEquals(5, flowExecutor.getExecutedSteps().size());
-        assertEquals(
+        var validSteps =
                 List.of(
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
                         "AgreementSignStep",
-                        "CompleteCheckinStep"),
-                flowExecutor.getExecutedSteps());
+                        "HealthDeclarationStep",
+                        "CompleteCheckinStep");
+
+        assertEquals(validSteps.size(), flowExecutor.getExecutedSteps().size());
+        assertEquals(validSteps, flowExecutor.getExecutedSteps());
     }
 
     @Test
