@@ -9,4 +9,4 @@ import lombok.Builder;
 
 @Builder(toBuilder = true)
 public record SessionRequest(
-        List<String> flights, CountryCode countryCode, int passengers, UUID userId) {}
+        List<String> flights, CountryCode countryCode, int passengers, UUID userId, String email) {}

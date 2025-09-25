@@ -11,6 +11,7 @@ import com.aterrizar.service.checkin.steps.SaveSessionStep;
 import com.aterrizar.service.checkin.steps.ValidateSessionStep;
 import com.aterrizar.service.core.framework.flow.FlowExecutor;
 import com.aterrizar.service.core.framework.flow.FlowStrategy;
+import com.aterrizar.service.core.model.ExperimentalStepKey;
 
 import lombok.AllArgsConstructor;
 
@@ -31,7 +32,7 @@ public class GeneralContinueFlow implements FlowStrategy {
                 .and(getSessionStep)
                 .and(validateSessionStep)
                 .and(passportInformationStep)
-                .and(agreementSignStep)
+                .andExperimental(agreementSignStep, ExperimentalStepKey.AGREEMENT_SIGN)
                 .and(healthDeclarationStep)
                 .and(completeCheckinStep)
                 .andFinally(saveSessionStep);
