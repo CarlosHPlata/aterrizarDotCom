@@ -43,7 +43,7 @@ class ContinueFlowTest extends Specification {
         continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
 
         then: //be able to continue
-        ContinueVerifier.requiredField(continueResponse, UserInput.AGREEMENT_SIGNED)
+        ContinueVerifier.completed(continueResponse)
     }
 
     def "should be asked to sign agreement"() {
@@ -56,12 +56,6 @@ class ContinueFlowTest extends Specification {
 
         and: // continue but filling passport
         def continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
-
-        and: // be asked to sign agreement
-        ContinueVerifier.requiredField(continueResponse, UserInput.AGREEMENT_SIGNED)
-
-        and: // fill agreement
-        continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
 
         then: // be able to continue
         ContinueVerifier.completed(continueResponse)
@@ -83,13 +77,29 @@ class ContinueFlowTest extends Specification {
         and: // fill passport
         continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
 
-        and: // be asked to sign agreement
-        ContinueVerifier.requiredField(continueResponse, UserInput.AGREEMENT_SIGNED)
-
-        and: //  fill agreement
-        continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
-
         then: // be completed
         ContinueVerifier.completed(continueResponse)
     }
+
+    def "should REQUIRE agreement when agreementdrop is ENABLED"() {
+        setup:
+        def checkin = Checkin.create()
+
+        when:
+        def session = checkin.initSession("MX", [email: "test__agreementdrop@checkin.com"])
+        InitVerifier.verify(session)
+
+        and:
+        def continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
+
+        and:
+        ContinueVerifier.requiredField(continueResponse, UserInput.AGREEMENT_SIGNED)
+
+        and:
+        continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
+
+        then:
+        ContinueVerifier.completed(continueResponse)
+    }
+
 }

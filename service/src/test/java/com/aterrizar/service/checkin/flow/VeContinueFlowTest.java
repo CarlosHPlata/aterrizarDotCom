@@ -1,7 +1,6 @@
 package com.aterrizar.service.checkin.flow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -13,68 +12,42 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.aterrizar.service.checkin.steps.AgreementSignStep;
 import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
-import com.aterrizar.service.checkin.steps.DigitalVisaValidationStep;
+import com.aterrizar.service.checkin.steps.FundsCheckStep;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
 import com.aterrizar.service.checkin.steps.ValidateSessionStep;
-import com.aterrizar.service.core.model.ExperimentalStepKey;
-import com.aterrizar.service.core.model.session.ExperimentalData;
 import com.neovisionaries.i18n.CountryCode;
 
 import mocks.MockContext;
 import mocks.MockFlowExecutor;
 
 @ExtendWith(MockitoExtension.class)
-class GeneralContinueFlowTest {
+public class VeContinueFlowTest {
     @Mock private GetSessionStep getSessionStep;
     @Mock private ValidateSessionStep validateSessionStep;
+    @Mock private FundsCheckStep fundsCheckStep;
     @Mock private PassportInformationStep passportInformationStep;
     @Mock private AgreementSignStep agreementSignStep;
     @Mock private SaveSessionStep saveSessionStep;
     @Mock private CompleteCheckinStep completeCheckinStep;
-    @Mock private DigitalVisaValidationStep digitalVisaValidationStep;
-    @InjectMocks private GeneralContinueFlow generalContinueFlow;
+
+    @InjectMocks private VeContinueFlow veContinueFlow;
 
     @Test
     void shouldReturnTheListOfValidSteps() {
-        var experimentalSteps =
-                ExperimentalData.builder()
-                        .experiments(List.of(ExperimentalStepKey.AGREEMENT_SIGN.value()))
-                        .build();
-
-        var context =
-                MockContext.initializedMock(CountryCode.AD).withExperimentalData(experimentalSteps);
-
-        when(agreementSignStep.when(context)).thenReturn(true);
-
+        var context = MockContext.initializedMock(CountryCode.AD);
         var flowExecutor = new MockFlowExecutor();
-        generalContinueFlow.flow(flowExecutor).execute(context);
+        veContinueFlow.flow(flowExecutor).execute(context);
 
         assertEquals(6, flowExecutor.getExecutedSteps().size());
         assertEquals(
                 List.of(
                         "GetSessionStep",
                         "ValidateSessionStep",
+                        "FundsCheckStep",
                         "PassportInformationStep",
-                        "DigitalVisaValidationStep",
                         "AgreementSignStep",
-                        "CompleteCheckinStep"),
-                flowExecutor.getExecutedSteps());
-    }
-
-    @Test
-    void shouldSkipExperimentalStepIfNotActive() {
-        var context = MockContext.initializedMock(CountryCode.AD);
-        var flowExecutor = new MockFlowExecutor();
-        generalContinueFlow.flow(flowExecutor).execute(context);
-
-        assertEquals(4, flowExecutor.getExecutedSteps().size());
-        assertEquals(
-                List.of(
-                        "GetSessionStep",
-                        "ValidateSessionStep",
-                        "PassportInformationStep",
                         "CompleteCheckinStep"),
                 flowExecutor.getExecutedSteps());
     }

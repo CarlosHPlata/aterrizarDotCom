@@ -15,6 +15,10 @@ components:
         passengers:
           type: integer
           example: 2
+        email:
+          type: string
+          format: email
+          example: "example@example.com"
         flightNumbers:
           type: array
           items:

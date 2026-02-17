@@ -22,6 +22,7 @@ public class InitMapper
                                         initRequestData.getCountry().name()))
                         .passengers(initRequestData.getPassengers())
                         .userId(initRequestData.getUserId())
+                        .email(initRequestData.getEmail())
                         .flights(initRequestData.getFlightNumbers())
                         .build();
 

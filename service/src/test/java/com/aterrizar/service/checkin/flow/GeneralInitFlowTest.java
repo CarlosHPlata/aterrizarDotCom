@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.aterrizar.service.checkin.steps.CompleteInitStep;
 import com.aterrizar.service.checkin.steps.CreateBaseSessionDataStep;
 import com.aterrizar.service.checkin.steps.CreateBaseSessionStep;
+import com.aterrizar.service.checkin.steps.FillExperimentsStep;
 import com.aterrizar.service.checkin.steps.RetrieveFlightsDataStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
 import com.neovisionaries.i18n.CountryCode;
@@ -27,6 +28,7 @@ class GeneralInitFlowTest {
     @Mock private RetrieveFlightsDataStep retrieveFlightsDataStep;
     @Mock private SaveSessionStep saveSessionStep;
     @Mock private CompleteInitStep completeInitStep;
+    @Mock private FillExperimentsStep fillExperimentsStep;
     @InjectMocks private GeneralInitFlow generalInitFlow;
 
     @Test
@@ -35,6 +37,7 @@ class GeneralInitFlowTest {
                 List.of(
                         "CreateBaseSessionStep",
                         "CreateBaseSessionDataStep",
+                        "FillExperimentsStep",
                         "RetrieveFlightsDataStep",
                         "SaveSessionStep",
                         "CompleteInitStep");

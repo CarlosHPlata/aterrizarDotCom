@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 import com.aterrizar.service.core.model.request.CheckinRequest;
 import com.aterrizar.service.core.model.request.CheckinResponse;
+import com.aterrizar.service.core.model.session.ExperimentalData;
 import com.aterrizar.service.core.model.session.Session;
 import com.aterrizar.service.core.model.session.SessionData;
 import com.aterrizar.service.core.model.session.Status;
@@ -198,5 +199,25 @@ public class Context {
         customizer.accept(userInfoBuilder);
         return this.withSession(
                 sessionBuilder -> sessionBuilder.userInformation(userInfoBuilder.build()));
+    }
+
+    /**
+     * Creates a new context with the specified experimental data.
+     *
+     * @param experimentalData the experimental data to set
+     * @return a new context with the updated experimental data
+     */
+    public Context withExperimentalData(ExperimentalData experimentalData) {
+        return this.withSession(
+                sessionBuilder -> sessionBuilder.experimentalData(experimentalData));
+    }
+
+    /**
+     * Retrieves the experimental data from the context, if available.
+     *
+     * @return an Optional containing the experimental data, or empty if not available
+     */
+    public Optional<ExperimentalData> experimentalData() {
+        return Optional.ofNullable(this.session.experimentalData());
     }
 }
