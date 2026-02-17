@@ -3,7 +3,7 @@ package mocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.aterrizar.service.checkin.steps.ExperimentalStepDecorator;
+import com.aterrizar.service.core.framework.flow.ExperimentalStepDecorator;
 import com.aterrizar.service.core.framework.flow.FlowExecutor;
 import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.model.Context;

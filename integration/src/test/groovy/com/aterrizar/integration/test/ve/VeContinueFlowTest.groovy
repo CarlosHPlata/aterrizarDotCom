@@ -33,22 +33,22 @@ class VeContinueFlowTest extends Specification {
         def session = checkin.initSession("VE")
         InitVerifier.verify(session)
 
-        and: // continue without filling anything
+        and: "continue without filling anything"
         def continueResponse = session.proceed()
 
-        and: // be asked to provide funds amount
+        and: "be asked to provide funds amount"
         ContinueVerifier.requiredField(continueResponse, UserInput.FUNDS_AMOUNT_US)
 
-        and: // fill funds amount
+        and: "fill funds amount"
         continueResponse = session.fillUserInput([(UserInput.FUNDS_AMOUNT_US): "100.0"])
 
-        and: // be asked to fill passport
+        and: "be asked to fill passport"
         ContinueVerifier.requiredField(continueResponse, UserInput.PASSPORT_NUMBER)
 
-        and: // fill passport
+        and: "fill passport"
         continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
 
-        then: //be able to continue
+        then: "be able to continue"
         ContinueVerifier.requiredField(continueResponse, UserInput.AGREEMENT_SIGNED)
     }
 
@@ -60,28 +60,28 @@ class VeContinueFlowTest extends Specification {
         def session = checkin.initSession("VE")
         InitVerifier.verify(session)
 
-        and: // start the flow
+        and: "start the flow"
         def continueResponse = session.proceed()
 
-        and: // be asked to provide funds amount
+        and: "be asked to provide funds amount"
         ContinueVerifier.requiredField(continueResponse, UserInput.FUNDS_AMOUNT_US)
 
-        and: // fill funds amount
+        and: "fill funds amount"
         continueResponse = session.fillUserInput([(UserInput.FUNDS_AMOUNT_US): "100.0"])
 
-        and: // be asked to fill passport
+        and: "be asked to fill passport"
         ContinueVerifier.requiredField(continueResponse, UserInput.PASSPORT_NUMBER)
 
-        and: // fill passport
+        and: "fill passport"
         continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
 
-        and: // be asked to sign agreement
+        and: "be asked to sign agreement"
         ContinueVerifier.requiredField(continueResponse, UserInput.AGREEMENT_SIGNED)
 
-        and: // fill agreement
+        and: "fill agreement"
         continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
 
-        then: // be able to continue
+        then: "be able to continue"
         ContinueVerifier.completed(continueResponse)
     }
 
@@ -93,26 +93,26 @@ class VeContinueFlowTest extends Specification {
         def session = checkin.initSession("VE")
         InitVerifier.verify(session)
 
-        and: // continue without filling anything
+        and: "continue without filling anything"
         def continueResponse = session.proceed()
         ContinueVerifier.requiredField(continueResponse, UserInput.FUNDS_AMOUNT_US)
 
-        and: // fill funds amount
+        and: "fill funds amount"
         continueResponse = session.fillUserInput([(UserInput.FUNDS_AMOUNT_US): "100.0"])
 
-        and: // be asked to fill passport
+        and: "be asked to fill passport"
         ContinueVerifier.requiredField(continueResponse, UserInput.PASSPORT_NUMBER)
 
-        and: // fill passport
+        and: "fill passport"
         continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
 
-        and: // be asked to sign agreement
+        and: "be asked to sign agreement"
         ContinueVerifier.requiredField(continueResponse, UserInput.AGREEMENT_SIGNED)
 
-        and: // fill agreement
+        and: "fill agreement"
         continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
 
-        then: // be completed
+        then: "be completed"
         ContinueVerifier.completed(continueResponse)
     }
 }

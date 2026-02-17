@@ -14,6 +14,7 @@ java {
 }
 
 configurations {
+    mockitoAgent
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -38,11 +39,13 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'com.neovisionaries:nv-i18n:1.28'
+    mockitoAgent('org.mockito:mockito-core') { transitive = false }
 }
 
 
 test {
     useJUnitPlatform()
+    jvmArgs "-javaagent:${configurations.mockitoAgent.asPath}"
     testLogging {
         events  "passed", "skipped", "failed"
     }

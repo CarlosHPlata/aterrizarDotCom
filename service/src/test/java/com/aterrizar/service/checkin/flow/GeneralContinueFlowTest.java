@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.aterrizar.service.checkin.steps.AgreementSignStep;
 import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
+import com.aterrizar.service.checkin.steps.DigitalVisaValidationStep;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
@@ -32,6 +33,7 @@ class GeneralContinueFlowTest {
     @Mock private AgreementSignStep agreementSignStep;
     @Mock private SaveSessionStep saveSessionStep;
     @Mock private CompleteCheckinStep completeCheckinStep;
+    @Mock private DigitalVisaValidationStep digitalVisaValidationStep;
     @InjectMocks private GeneralContinueFlow generalContinueFlow;
 
     @Test
@@ -40,7 +42,6 @@ class GeneralContinueFlowTest {
                 ExperimentalData.builder()
                         .experiments(List.of(ExperimentalStepKey.AGREEMENT_SIGN.value()))
                         .build();
-
         var context =
                 MockContext.initializedMock(CountryCode.AD).withExperimentalData(experimentalSteps);
 
@@ -49,15 +50,16 @@ class GeneralContinueFlowTest {
         var flowExecutor = new MockFlowExecutor();
         generalContinueFlow.flow(flowExecutor).execute(context);
 
-        assertEquals(5, flowExecutor.getExecutedSteps().size());
-        assertEquals(
+        var expectedSteps =
                 List.of(
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
+                        "DigitalVisaValidationStep",
                         "AgreementSignStep",
-                        "CompleteCheckinStep"),
-                flowExecutor.getExecutedSteps());
+                        "CompleteCheckinStep");
+        assertEquals(expectedSteps.size(), flowExecutor.getExecutedSteps().size());
+        assertEquals(expectedSteps, flowExecutor.getExecutedSteps());
     }
 
     @Test
@@ -66,13 +68,14 @@ class GeneralContinueFlowTest {
         var flowExecutor = new MockFlowExecutor();
         generalContinueFlow.flow(flowExecutor).execute(context);
 
-        assertEquals(4, flowExecutor.getExecutedSteps().size());
-        assertEquals(
+        var expectedSteps =
                 List.of(
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
-                        "CompleteCheckinStep"),
-                flowExecutor.getExecutedSteps());
+                        "DigitalVisaValidationStep",
+                        "CompleteCheckinStep");
+        assertEquals(expectedSteps.size(), flowExecutor.getExecutedSteps().size());
+        assertEquals(expectedSteps, flowExecutor.getExecutedSteps());
     }
 }

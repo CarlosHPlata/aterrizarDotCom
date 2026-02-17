@@ -33,16 +33,16 @@ class ContinueFlowTest extends Specification {
         def session = checkin.initSession("MX")
         InitVerifier.verify(session)
 
-        and: // continue without filling anything
+        and: "continue without filling anything"
         def continueResponse = session.proceed()
 
-        and: // be asked to fill passport
+        and: "be asked to fill passport"
         ContinueVerifier.requiredField(continueResponse, UserInput.PASSPORT_NUMBER)
 
-        and: // fill passport
+        and: "fill passport"
         continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
 
-        then: //be able to continue
+        then: "be able to continue"
         ContinueVerifier.completed(continueResponse)
     }
 
@@ -54,10 +54,10 @@ class ContinueFlowTest extends Specification {
         def session = checkin.initSession("MX")
         InitVerifier.verify(session)
 
-        and: // continue but filling passport
+        and: "continue but filling passport"
         def continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
 
-        then: // be able to continue
+        then: "be able to continue"
         ContinueVerifier.completed(continueResponse)
     }
 
@@ -70,14 +70,14 @@ class ContinueFlowTest extends Specification {
         def session = checkin.initSession("MX")
         InitVerifier.verify(session)
 
-        and: // continue without filling anything
+        and: "continue without filling anything"
         def continueResponse = session.proceed()
         ContinueVerifier.requiredField(continueResponse, UserInput.PASSPORT_NUMBER)
 
-        and: // fill passport
+        and: "fill passport"
         continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
 
-        then: // be completed
+        then: "be completed"
         ContinueVerifier.completed(continueResponse)
     }
 

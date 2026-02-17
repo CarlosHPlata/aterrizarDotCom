@@ -1,7 +1,5 @@
-package com.aterrizar.service.checkin.steps;
+package com.aterrizar.service.core.framework.flow;
 
-import com.aterrizar.service.core.framework.flow.Step;
-import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.ExperimentalStepKey;
 

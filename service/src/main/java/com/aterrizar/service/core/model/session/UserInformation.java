@@ -12,9 +12,14 @@ public record UserInformation(
         @Nullable String email,
         @Nullable String passportNumber,
         @Nullable String fullName,
+        @Nullable String visaNumber,
         @Nullable Double usFunds)
         implements Serializable {
     public UserInformation withPassportNumber(String passportNumber) {
         return this.toBuilder().passportNumber(passportNumber).build();
+    }
+
+    public UserInformation withVisaNumber(String visaNumber) {
+        return this.toBuilder().visaNumber(visaNumber).build();
     }
 }

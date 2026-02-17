@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.aterrizar.service.core.framework.flow.ExperimentalStepDecorator;
 import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.model.ExperimentalStepKey;
 import com.aterrizar.service.core.model.session.ExperimentalData;

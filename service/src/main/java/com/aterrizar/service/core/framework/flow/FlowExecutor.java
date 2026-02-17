@@ -3,7 +3,6 @@ package com.aterrizar.service.core.framework.flow;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.aterrizar.service.checkin.steps.ExperimentalStepDecorator;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.ExperimentalStepKey;
 import com.aterrizar.service.core.model.session.Status;
