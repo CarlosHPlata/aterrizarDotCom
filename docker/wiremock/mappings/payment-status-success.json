@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/payment-service/v1/status/.*"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "status": "SUCCESS"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

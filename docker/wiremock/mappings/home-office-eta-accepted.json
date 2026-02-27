@@ -1,0 +1,14 @@
+{
+  "priority": 10,
+  "request": {
+    "method": "POST",
+    "urlPath": "/home-office/v1/eta-validation"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "home-office/eta-accepted.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
