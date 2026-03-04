@@ -14,10 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.aterrizar.service.checkin.steps.AgreementSignStep;
 import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
 import com.aterrizar.service.checkin.steps.DigitalVisaValidationStep;
-import com.aterrizar.service.checkin.steps.GetSessionStep;
+import com.aterrizar.service.checkin.steps.InitSessionCompositeStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
-import com.aterrizar.service.checkin.steps.ValidateSessionStep;
 import com.aterrizar.service.core.model.ExperimentalStepKey;
 import com.aterrizar.service.core.model.session.ExperimentalData;
 import com.neovisionaries.i18n.CountryCode;
@@ -27,8 +26,7 @@ import mocks.MockFlowExecutor;
 
 @ExtendWith(MockitoExtension.class)
 class GeneralContinueFlowTest {
-    @Mock private GetSessionStep getSessionStep;
-    @Mock private ValidateSessionStep validateSessionStep;
+    @Mock private InitSessionCompositeStep initSessionCompositeStep;
     @Mock private PassportInformationStep passportInformationStep;
     @Mock private AgreementSignStep agreementSignStep;
     @Mock private SaveSessionStep saveSessionStep;
@@ -52,8 +50,7 @@ class GeneralContinueFlowTest {
 
         var expectedSteps =
                 List.of(
-                        "GetSessionStep",
-                        "ValidateSessionStep",
+                        "InitSessionCompositeStep",
                         "PassportInformationStep",
                         "DigitalVisaValidationStep",
                         "AgreementSignStep",
@@ -70,8 +67,7 @@ class GeneralContinueFlowTest {
 
         var expectedSteps =
                 List.of(
-                        "GetSessionStep",
-                        "ValidateSessionStep",
+                        "InitSessionCompositeStep",
                         "PassportInformationStep",
                         "DigitalVisaValidationStep",
                         "CompleteCheckinStep");
