@@ -44,6 +44,16 @@ class PassportInformationStepTest {
     }
 
     @Test
+    void shouldNotExecuteWhenBiometricAuthenticated() {
+        var context =
+                MockContext.initializedMock(CountryCode.AD)
+                        .withSession(b -> b.biometricAuthenticated(true));
+
+        var result = passportInformationStep.when(context);
+        assertFalse(result);
+    }
+
+    @Test
     void shouldRequestThePassportToTheUserWhenIsNotSet() {
         var context =
                 MockContext.initializedMock(CountryCode.AD)

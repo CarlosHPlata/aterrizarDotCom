@@ -1,7 +1,8 @@
 package com.aterrizar.service.core.model;
 
 public enum ExperimentalStepKey {
-    AGREEMENT_SIGN("agreementdrop");
+    AGREEMENT_SIGN("agreementdrop"),
+    BIOMETRIC_CHECK("biometriccheck");
 
     private final String value;
 
