@@ -9,7 +9,13 @@ public enum RequiredField {
     EMAIL("EMAIL", "Email", FieldType.EMAIL),
     AGREEMENT_SIGNED("AGREEMENT_SIGNED", "Agreement Signed", FieldType.BOOLEAN),
     FUNDS_AMOUNT_US("FUNDS_AMOUNT_US", "US Funds", FieldType.NUMBER),
-    VISA_NUMBER("VISA_NUMBER", "Digital Visa Number", FieldType.TEXT);
+    VISA_NUMBER("VISA_NUMBER", "Digital Visa Number", FieldType.TEXT),
+
+    // Nuevos campos para el feature de pagos
+    PAYMENT_METHOD("PAYMENT_METHOD", "Payment Method", FieldType.TEXT),
+    CARD_NUMBER("CARD_NUMBER", "Card Number", FieldType.TEXT),
+    LINK_IDENTIFIER("LINK_IDENTIFIER", "Link Identifier", FieldType.TEXT),
+    CURP_NUMBER("CURP_NUMBER", "CURP Number", FieldType.TEXT);
 
     private final String value;
     private final String id;
