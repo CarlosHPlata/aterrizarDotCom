@@ -26,7 +26,7 @@ public class TransactionFinalizationStep implements Step {
     public StepResult onExecute(Context context) {
         String token = context.session().sessionData().paymentToken();
 
-        //Using the Port to comply with the Mock Behavior: GET /payment-service/v1/status/{token}
+        // Using the Port to comply with the Mock Behavior: GET /payment-service/v1/status/{token}
         String status = externalPaymentPort.getPaymentStatus(token);
         boolean isSuccess = "SUCCESS".equalsIgnoreCase(status);
 
