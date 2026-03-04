@@ -149,6 +149,27 @@ public class Context {
     }
 
     /**
+     * Creates a new context with a dynamic required field added to the check-in response.
+     *
+     * @param id the identifier for the required field
+     * @param name the display name for the required field
+     * @param type the expected field type
+     * @return a new context with the updated check-in response and status
+     */
+    public Context withRequiredField(String id, String name, FieldType type) {
+        CheckinResponse currentResponse =
+                this.checkinResponse != null
+                        ? this.checkinResponse
+                        : CheckinResponse.builder().build();
+        currentResponse.addInputRequiredField(
+                InputRequiredField.builder().id(id).name(name).fieldType(type).build());
+
+        return this.withStatus(Status.USER_INPUT_REQUIRED).toBuilder()
+                .checkinResponse(currentResponse)
+                .build();
+    }
+
+    /**
      * Retrieves the session ID from the context.
      *
      * @return the session ID

@@ -3,6 +3,7 @@ package com.aterrizar.service.core.model.request;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.aterrizar.service.core.model.InputRequiredField;
 import com.aterrizar.service.core.model.RequiredField;
 
 import jakarta.annotation.Nullable;
@@ -14,6 +15,7 @@ import lombok.Getter;
 @lombok.experimental.Accessors(fluent = true)
 public class CheckinResponse {
     private Set<RequiredField> providedFields;
+    private Set<InputRequiredField> inputRequiredFields;
     @Nullable private String errorMessage;
 
     public CheckinResponse addProvidedField(RequiredField field) {
@@ -21,6 +23,14 @@ public class CheckinResponse {
             providedFields = new HashSet<>();
         }
         providedFields.add(field);
+        return this;
+    }
+
+    public CheckinResponse addInputRequiredField(InputRequiredField field) {
+        if (inputRequiredFields == null) {
+            inputRequiredFields = new HashSet<>();
+        }
+        inputRequiredFields.add(field);
         return this;
     }
 }

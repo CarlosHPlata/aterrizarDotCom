@@ -42,8 +42,20 @@ paths:
             schema:
               $ref: './components/CheckinRequestData.yaml#/components/schemas/CheckinRequestData'
       responses:
-        "200":
-          description: Check-in continued successfully
+        "202":
+          description: Check-in completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: './components/CheckinResponseData.yaml#/components/schemas/CheckinResponseData'
+        "206":
+          description: User input required to continue check-in
+          content:
+            application/json:
+              schema:
+                $ref: './components/CheckinResponseData.yaml#/components/schemas/CheckinResponseData'
+        "400":
+          description: Check-in rejected
           content:
             application/json:
               schema:
