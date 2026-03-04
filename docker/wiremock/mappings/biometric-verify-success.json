@@ -1,0 +1,21 @@
+{
+    "priority": 1,
+    "request": {
+        "method": "POST",
+        "urlPath": "/biometric-service/v1/verify",
+        "bodyPatterns": [
+            {
+                "matchesJsonPath": "$[?(@.signedToken =~ /.*1/)]"
+            }
+        ]
+    },
+    "response": {
+        "status": 200,
+        "jsonBody": {
+            "verified": true
+        },
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}

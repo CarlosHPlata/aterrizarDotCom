@@ -1,0 +1,15 @@
+{
+    "request": {
+        "method": "GET",
+        "urlPath": "/biometric-service/v1/start"
+    },
+    "response": {
+        "status": 200,
+        "jsonBody": {
+            "authSessionToken": "token1"
+        },
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}
