@@ -5,17 +5,11 @@
     "bodyPatterns": [
       {
         "matchesJsonPath": "$.token",
-        "doesNotMatch": ".*1$"
+        "matches": ".*1$"
       }
     ]
   },
   "response": {
-    "status": 200,
-    "jsonBody": {
-      "verified": true
-    },
-    "headers": {
-      "Content-Type": "application/json"
-    }
+    "status": 406
   }
 }

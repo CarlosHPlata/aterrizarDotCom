@@ -3,8 +3,7 @@ package com.aterrizar.http.external.gateway.biometric;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import com.aterrizar.http.external.gateway.biometric.model.BiometricVerifyRequestDto;
-import com.aterrizar.service.core.model.biometric.BiometricStart;
+import com.aterrizar.http.external.gateway.biometric.model.v1.BiometricVerifyRequestDto;
 import com.aterrizar.service.external.BiometricGateway;
 
 import lombok.AllArgsConstructor;
@@ -12,20 +11,21 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class BiometricGatewayAdapter implements BiometricGateway {
-
     private final BiometricHttpClient biometricHttpClient;
 
     @Override
-    public BiometricStart start() {
-        var dto = biometricHttpClient.start();
-        return BiometricStart.builder().authSessionToken(dto.authSessionToken()).build();
+    public String startSession() {
+        var dto = biometricHttpClient.startSession();
+        return dto.authSessionToken();
     }
 
     @Override
-    public boolean verify(String signedToken) {
+    public boolean verifySession(String authSessionToken) {
         try {
-            var response = biometricHttpClient.verify(new BiometricVerifyRequestDto(signedToken));
-            return response.verified();
+            var result =
+                    biometricHttpClient.verifySession(
+                            new BiometricVerifyRequestDto(authSessionToken));
+            return result.verified();
         } catch (WebClientResponseException.NotAcceptable e) {
             return false;
         }

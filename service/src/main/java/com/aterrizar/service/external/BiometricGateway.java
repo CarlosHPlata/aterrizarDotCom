@@ -1,9 +1,7 @@
 package com.aterrizar.service.external;
 
-import com.aterrizar.service.core.model.biometric.BiometricStart;
-
 public interface BiometricGateway {
-    BiometricStart start();
+    String startSession();
 
-    boolean verify(String signedToken);
+    boolean verifySession(String authSessionToken);
 }

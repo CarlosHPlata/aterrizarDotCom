@@ -25,6 +25,10 @@ public class AgreementSignStep implements Step {
 
     @Override
     public boolean when(Context context) {
+        if (context.session().isBiometricAuthenticated()) {
+            return false;
+        }
+
         if (context.session().sessionData() != null) {
             return !context.session().sessionData().agreementSigned();
         }

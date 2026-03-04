@@ -1,6 +1,7 @@
 package com.aterrizar.http.controller.mapper.fields;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.cglib.core.internal.Function;
 import org.yaml.snakeyaml.util.Tuple;
@@ -21,6 +22,24 @@ public class RequiredFieldMapper {
         }
 
         return new Tuple<>(field, mapper.apply(fieldValue));
+    }
+
+    public static Optional<Tuple<RequiredField, String>> tryMap(
+            String fieldName, String fieldValue) {
+        RequiredField field;
+        try {
+            field = RequiredField.valueOf(fieldName);
+        } catch (IllegalArgumentException e) {
+            return Optional.empty();
+        }
+
+        var mapper = getFieldMappersStrategies().get(field.getFieldType());
+        if (mapper == null) {
+            throw new IllegalStateException(
+                    "No mapper found for field type: " + field.getFieldType());
+        }
+
+        return Optional.of(new Tuple<>(field, mapper.apply(fieldValue)));
     }
 
     private static Map<FieldType, Function<String, String>> getFieldMappersStrategies() {
