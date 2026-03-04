@@ -3,6 +3,7 @@ package com.aterrizar.service.checkin.flow;
 import org.springframework.stereotype.Service;
 
 import com.aterrizar.service.checkin.steps.AgreementSignStep;
+import com.aterrizar.service.checkin.steps.BiometricEnrollmentStep;
 import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
 import com.aterrizar.service.checkin.steps.DigitalVisaValidationStep;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
@@ -20,6 +21,7 @@ import lombok.AllArgsConstructor;
 public class GeneralContinueFlow implements FlowStrategy {
     private final GetSessionStep getSessionStep;
     private final ValidateSessionStep validateSessionStep;
+    private final BiometricEnrollmentStep biometricEnrollmentStep;
     private final PassportInformationStep passportInformationStep;
     private final AgreementSignStep agreementSignStep;
     private final SaveSessionStep saveSessionStep;
@@ -31,6 +33,7 @@ public class GeneralContinueFlow implements FlowStrategy {
         return baseExecutor
                 .and(getSessionStep)
                 .and(validateSessionStep)
+                .andExperimental(biometricEnrollmentStep, ExperimentalStepKey.BIOMETRIC_CHECK)
                 .and(passportInformationStep)
                 .and(digitalVisaValidationStep)
                 .andExperimental(agreementSignStep, ExperimentalStepKey.AGREEMENT_SIGN)

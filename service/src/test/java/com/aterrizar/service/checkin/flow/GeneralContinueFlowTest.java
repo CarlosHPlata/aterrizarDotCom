@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.aterrizar.service.checkin.steps.AgreementSignStep;
+import com.aterrizar.service.checkin.steps.BiometricEnrollmentStep;
 import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
 import com.aterrizar.service.checkin.steps.DigitalVisaValidationStep;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
@@ -29,6 +30,7 @@ import mocks.MockFlowExecutor;
 class GeneralContinueFlowTest {
     @Mock private GetSessionStep getSessionStep;
     @Mock private ValidateSessionStep validateSessionStep;
+    @Mock private BiometricEnrollmentStep biometricEnrollmentStep;
     @Mock private PassportInformationStep passportInformationStep;
     @Mock private AgreementSignStep agreementSignStep;
     @Mock private SaveSessionStep saveSessionStep;
@@ -65,6 +67,63 @@ class GeneralContinueFlowTest {
     @Test
     void shouldSkipExperimentalStepIfNotActive() {
         var context = MockContext.initializedMock(CountryCode.AD);
+        var flowExecutor = new MockFlowExecutor();
+        generalContinueFlow.flow(flowExecutor).execute(context);
+
+        var expectedSteps =
+                List.of(
+                        "GetSessionStep",
+                        "ValidateSessionStep",
+                        "PassportInformationStep",
+                        "DigitalVisaValidationStep",
+                        "CompleteCheckinStep");
+        assertEquals(expectedSteps.size(), flowExecutor.getExecutedSteps().size());
+        assertEquals(expectedSteps, flowExecutor.getExecutedSteps());
+    }
+
+    @Test
+    void shouldIncludeBiometricEnrollmentStepWhenBiometricCheckIsActive() {
+        var experimentalSteps =
+                ExperimentalData.builder()
+                        .experiments(List.of(ExperimentalStepKey.BIOMETRIC_CHECK.value()))
+                        .build();
+        var context =
+                MockContext.initializedMock(CountryCode.AD).withExperimentalData(experimentalSteps);
+
+        when(biometricEnrollmentStep.when(context)).thenReturn(true);
+
+        var flowExecutor = new MockFlowExecutor();
+        generalContinueFlow.flow(flowExecutor).execute(context);
+
+        var expectedSteps =
+                List.of(
+                        "GetSessionStep",
+                        "ValidateSessionStep",
+                        "BiometricEnrollmentStep",
+                        "PassportInformationStep",
+                        "DigitalVisaValidationStep",
+                        "CompleteCheckinStep");
+        assertEquals(expectedSteps.size(), flowExecutor.getExecutedSteps().size());
+        assertEquals(expectedSteps, flowExecutor.getExecutedSteps());
+    }
+
+    @Test
+    void shouldSkipBiometricEnrollmentStepWhenAlreadyAuthenticated() {
+        // BiometricEnrollmentStep.when() returns false when biometricAuthenticated=true.
+        // MockFlowExecutor skips experimental steps when when() is false.
+        // Non-experimental steps (Passport, DigitalVisa, Complete) are always counted.
+        var experimentalSteps =
+                ExperimentalData.builder()
+                        .experiments(
+                                List.of(
+                                        ExperimentalStepKey.BIOMETRIC_CHECK.value(),
+                                        ExperimentalStepKey.AGREEMENT_SIGN.value()))
+                        .build();
+        var context =
+                MockContext.initializedMock(CountryCode.AD)
+                        .withExperimentalData(experimentalSteps)
+                        .withSession(b -> b.biometricAuthenticated(true));
+
         var flowExecutor = new MockFlowExecutor();
         generalContinueFlow.flow(flowExecutor).execute(context);
 

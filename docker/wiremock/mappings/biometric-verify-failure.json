@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/biometric-service/v1/verify",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$.token",
+        "matches": ".*1$"
+      }
+    ]
+  },
+  "response": {
+    "status": 406
+  }
+}
