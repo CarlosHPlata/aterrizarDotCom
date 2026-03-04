@@ -1,0 +1,17 @@
+{
+    "priority": 2,
+    "request": {
+        "method": "POST",
+        "urlPath": "/biometric-service/v1/verify"
+    },
+    "response": {
+        "status": 406,
+        "jsonBody": {
+            "verified": false,
+            "message": "Biometric verification failed"
+        },
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}
