@@ -35,7 +35,7 @@ public class PaymentValidationStep implements Step {
 
     @Override
     public StepResult onExecute(Context context) {
-        // Corrección: Check flag riguroso exigido en el requerimiento
+
         String countryCode = context.countryCode().name();
         String allowedMethodsProperty =
                 environment.getProperty("feature.tax.payments." + countryCode, "");

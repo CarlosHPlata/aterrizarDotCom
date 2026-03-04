@@ -25,7 +25,6 @@ public class GeneralContinueFlow implements FlowStrategy {
     private final ValidateSessionStep validateSessionStep;
     private final PassportInformationStep passportInformationStep;
 
-    // Nuevos steps de pago
     private final PaymentMethodStep paymentMethodStep;
     private final PaymentValidationStep paymentValidationStep;
     private final TransactionFinalizationStep transactionFinalizationStep;
@@ -41,8 +40,6 @@ public class GeneralContinueFlow implements FlowStrategy {
                 .and(getSessionStep)
                 .and(validateSessionStep)
                 .and(passportInformationStep)
-
-                // Bloque de pagos inyectado en la cadena
                 .and(paymentMethodStep)
                 .and(paymentValidationStep)
                 .and(transactionFinalizationStep)

@@ -10,8 +10,6 @@ public enum RequiredField {
     AGREEMENT_SIGNED("AGREEMENT_SIGNED", "Agreement Signed", FieldType.BOOLEAN),
     FUNDS_AMOUNT_US("FUNDS_AMOUNT_US", "US Funds", FieldType.NUMBER),
     VISA_NUMBER("VISA_NUMBER", "Digital Visa Number", FieldType.TEXT),
-
-    // Nuevos campos para el feature de pagos
     PAYMENT_METHOD("PAYMENT_METHOD", "Payment Method", FieldType.TEXT),
     CARD_NUMBER("CARD_NUMBER", "Card Number", FieldType.TEXT),
     LINK_IDENTIFIER("LINK_IDENTIFIER", "Link Identifier", FieldType.TEXT),

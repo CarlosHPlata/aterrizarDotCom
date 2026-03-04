@@ -13,7 +13,7 @@ import com.aterrizar.service.payment.port.ExternalPaymentPort;
 public class PaymentIntegrationAdapter implements ExternalPaymentPort {
 
     private final PaymentClient paymentClient;
-    private final PaymentStatusClient statusClient; // Inyectamos el nuevo cliente
+    private final PaymentStatusClient statusClient;
 
     public PaymentIntegrationAdapter(
             PaymentClient paymentClient, PaymentStatusClient statusClient) {
@@ -44,8 +44,7 @@ public class PaymentIntegrationAdapter implements ExternalPaymentPort {
 
     @Override
     public String getPaymentStatus(String paymentToken) {
-        // Implementación del Mock Behavior: GET /status/{token} siempre retorna {"status":
-        // "SUCCESS"}
+        // Implementation of Mock Behavior: GET /status/{token} always returns {"status": "SUCCESS"}
         Map<String, String> response = statusClient.getPaymentStatus(paymentToken);
         return response != null ? response.get("status") : "PENDING";
     }

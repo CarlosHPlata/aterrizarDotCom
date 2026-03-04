@@ -12,7 +12,6 @@ import com.aterrizar.http.config.BaseUrl;
 @HttpExchange("/payment-service/v1")
 public interface PaymentStatusClient {
 
-    // Cumple con: GET /payment-service/v1/status/{token} always returns {"status": "SUCCESS"}
     @GetExchange("/status/{token}")
     Map<String, String> getPaymentStatus(@PathVariable("token") String token);
 }

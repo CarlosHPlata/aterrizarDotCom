@@ -38,7 +38,6 @@ public class PaymentMethodStep implements Step {
         String paymentMethod =
                 providedFields != null ? providedFields.get(RequiredField.PAYMENT_METHOD) : null;
 
-        // CORRECCIÓN: Usar StepResult.terminal() para interrumpir la cadena y pedir el dato
         if (paymentMethod == null || paymentMethod.isBlank()) {
             return StepResult.terminal(context.withRequiredField(RequiredField.PAYMENT_METHOD));
         }

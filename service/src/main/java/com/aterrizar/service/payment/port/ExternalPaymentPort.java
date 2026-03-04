@@ -9,6 +9,5 @@ public interface ExternalPaymentPort {
 
     String getGovToken(PaymentRequestDto request);
 
-    // Este es el método que usará el Step
     String getPaymentStatus(String paymentToken);
 }
