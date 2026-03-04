@@ -1,0 +1,12 @@
+{
+  "priority": 5,
+  "request": {
+    "method": "POST",
+    "urlPath": "/scanner-service/v1/validate"
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": { "status": "SUCCESS" }
+  }
+}

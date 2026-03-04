@@ -1,0 +1,11 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/scanner-service/v1/onfido/token"
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": { "token": "ON-IF-I-HAD-A-TOKEN-ID-BE-HERE-0" }
+  }
+}
