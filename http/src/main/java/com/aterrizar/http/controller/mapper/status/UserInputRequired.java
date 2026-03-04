@@ -2,6 +2,7 @@ package com.aterrizar.http.controller.mapper.status;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.http.HttpStatus;
 
@@ -23,15 +24,42 @@ public class UserInputRequired implements StatusMapperTemplate {
     }
 
     private List<CheckinResponseDataRequiredFieldsInner> inputFields(Context context) {
-        return context.checkinResponse().providedFields().stream()
-                .map(
-                        field ->
-                                CheckinResponseDataRequiredFieldsInner.builder()
-                                        .id(field.getId())
-                                        .name(field.getValue())
-                                        .type(field.getFieldType().name())
-                                        .build())
-                .collect(Collectors.toList());
+        var response = context.checkinResponse();
+        if (response == null) {
+            return List.of();
+        }
+
+        Stream<CheckinResponseDataRequiredFieldsInner> enumFields;
+        if (response.providedFields() == null) {
+            enumFields = Stream.empty();
+        } else {
+            enumFields =
+                    response.providedFields().stream()
+                            .map(
+                                    field ->
+                                            CheckinResponseDataRequiredFieldsInner.builder()
+                                                    .id(field.getId())
+                                                    .name(field.getValue())
+                                                    .type(field.getFieldType().name())
+                                                    .build());
+        }
+
+        Stream<CheckinResponseDataRequiredFieldsInner> dynamicFields;
+        if (response.inputRequiredFields() == null) {
+            dynamicFields = Stream.empty();
+        } else {
+            dynamicFields =
+                    response.inputRequiredFields().stream()
+                            .map(
+                                    field ->
+                                            CheckinResponseDataRequiredFieldsInner.builder()
+                                                    .id(field.id())
+                                                    .name(field.name())
+                                                    .type(field.fieldType().name())
+                                                    .build());
+        }
+
+        return Stream.concat(enumFields, dynamicFields).collect(Collectors.toList());
     }
 
     @Override

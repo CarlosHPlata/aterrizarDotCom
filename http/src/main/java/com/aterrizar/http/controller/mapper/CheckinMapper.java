@@ -17,12 +17,14 @@ public class CheckinMapper
         implements RequestMapperStrategy<Context, CheckinResponseData, CheckinRequestData> {
     @Override
     public Context mapRequestToContext(CheckinRequestData checkinRequestData) {
-        var fields =
+        var provided =
                 Optional.ofNullable(checkinRequestData.getProvidedFields())
-                        .orElse(Collections.emptyMap())
-                        .entrySet()
-                        .stream()
-                        .map(entry -> RequiredFieldMapper.map(entry.getKey(), entry.getValue()))
+                        .orElse(Collections.emptyMap());
+
+        var fields =
+                provided.entrySet().stream()
+                        .map(entry -> RequiredFieldMapper.tryMap(entry.getKey(), entry.getValue()))
+                        .flatMap(Optional::stream)
                         .collect(Collectors.toMap(Tuple::_1, Tuple::_2));
 
         var request =
@@ -31,6 +33,7 @@ public class CheckinMapper
                         .sessionId(checkinRequestData.getSessionId())
                         .userId(checkinRequestData.getUserId())
                         .providedFields(fields)
+                        .rawProvidedFields(provided)
                         .build();
 
         return Context.builder().checkinRequest(request).build();
