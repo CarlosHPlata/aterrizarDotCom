@@ -1,7 +1,10 @@
 package com.aterrizar.service.core.framework.strategy;
 
+import java.util.List;
+
 import com.aterrizar.service.core.framework.flow.FlowExecutor;
 import com.aterrizar.service.core.framework.flow.FlowStrategy;
+import com.aterrizar.service.core.framework.flow.interceptor.StepInterceptor;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.InitContext;
 import com.neovisionaries.i18n.CountryCode;
@@ -13,6 +16,12 @@ import com.neovisionaries.i18n.CountryCode;
  * specific behaviors for different countries.
  */
 public abstract class CheckinCountryStrategy {
+
+    private List<StepInterceptor> interceptors = List.of();
+
+    public void setInterceptors(List<StepInterceptor> interceptors) {
+        this.interceptors = interceptors != null ? interceptors : List.of();
+    }
 
     /**
      * Initializes the check-in process using the provided context.
@@ -56,7 +65,7 @@ public abstract class CheckinCountryStrategy {
      * @return the {@link FlowExecutor} for initialization
      */
     protected FlowExecutor getInitBaseExecutor() {
-        return new FlowExecutor();
+        return new FlowExecutor(interceptors);
     }
 
     /**
@@ -65,7 +74,7 @@ public abstract class CheckinCountryStrategy {
      * @return the {@link FlowExecutor} for check-in
      */
     protected FlowExecutor getContinueBaseExecutor() {
-        return new FlowExecutor();
+        return new FlowExecutor(interceptors);
     }
 
     /**

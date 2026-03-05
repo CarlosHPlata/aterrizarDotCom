@@ -3,6 +3,7 @@ package com.aterrizar.service.core.framework.flow;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.aterrizar.service.core.framework.flow.interceptor.StepInterceptor;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.ExperimentalStepKey;
 import com.aterrizar.service.core.model.session.Status;
@@ -20,9 +21,16 @@ public class FlowExecutor {
 
     protected Step lastStep;
 
+    protected List<StepInterceptor> interceptors;
+
     /** Constructs a new `FlowExecutor` with an empty list of steps. */
     public FlowExecutor() {
+        this(new ArrayList<>());
+    }
+
+    public FlowExecutor(List<StepInterceptor> interceptors) {
         this.steps = new ArrayList<>();
+        this.interceptors = interceptors != null ? interceptors : new ArrayList<>();
     }
 
     /**
@@ -77,8 +85,20 @@ public class FlowExecutor {
     public Context execute(Context context) {
         var updatedContext = context;
         for (Step step : this.steps) {
+            String stepName = step.getClass().getSimpleName();
+
+            // BEFORE
+            for (StepInterceptor interceptor : interceptors) {
+                interceptor.before(updatedContext, stepName);
+            }
+
             var stepResult = step.execute(updatedContext);
             updatedContext = stepResult.context();
+
+            // AFTER
+            for (StepInterceptor interceptor : interceptors) {
+                interceptor.after(updatedContext, stepResult, stepName);
+            }
 
             if (!stepResult.isSuccess()
                     && stepResult.isTerminal()
@@ -98,8 +118,19 @@ public class FlowExecutor {
         }
 
         if (this.lastStep != null) {
+
+            String stepName = this.lastStep.getClass().getSimpleName();
+
+            for (StepInterceptor interceptor : interceptors) {
+                interceptor.before(updatedContext, stepName);
+            }
+
             var stepResult = this.lastStep.execute(updatedContext);
             updatedContext = stepResult.context();
+
+            for (StepInterceptor interceptor : interceptors) {
+                interceptor.after(updatedContext, stepResult, stepName);
+            }
         }
         return updatedContext;
     }
