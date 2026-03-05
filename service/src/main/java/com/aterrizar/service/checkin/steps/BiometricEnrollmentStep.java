@@ -36,23 +36,23 @@ public class BiometricEnrollmentStep implements Step {
             return StepResult.terminal(updatedContext);
         }
 
-        boolean fieldProvided =
+        var providedFields =
                 Optional.ofNullable(context.checkinRequest())
                         .map(CheckinRequest::providedFields)
-                        .map(fields -> fields.containsKey(RequiredField.BIOMETRIC_VERIFIED))
-                        .orElse(false);
+                        .orElse(null);
 
-        if (!fieldProvided) {
-            return StepResult.terminal(
-                    context.withRequiredField(RequiredField.BIOMETRIC_VERIFIED));
+        if (providedFields == null
+                || !providedFields.containsKey(RequiredField.BIOMETRIC_VERIFIED)) {
+            return StepResult.terminal(context.withRequiredField(RequiredField.BIOMETRIC_VERIFIED));
         }
 
-        boolean verified = biometricGateway.verifySession(storedToken);
+        String userProvidedToken = providedFields.get(RequiredField.BIOMETRIC_VERIFIED);
+        boolean verified = biometricGateway.verifySession(userProvidedToken);
         if (verified) {
-            return StepResult.success(
-                    context.withSession(b -> b.biometricAuthenticated(true)));
+            return StepResult.success(context.withSession(b -> b.biometricAuthenticated(true)));
         }
 
-        return StepResult.failure(context, "Biometric verification failed");
+        return StepResult.success(
+            context.withSession(b -> b.biometricAuthenticated(false).biometricSessionToken(null)));
     }
 }
