@@ -1,0 +1,22 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "POST",
+    "urlPath": "/home-office/v1/eta-validation",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": {
+          "expression": "$.passportNumber",
+          "matches": ".*1$"
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 406,
+    "bodyFileName": "home-office/eta-rejected.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

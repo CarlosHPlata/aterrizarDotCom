@@ -1,0 +1,4 @@
+{
+  "error": "Invalid RFC for tax calculation",
+  "code": "TAX_VALIDATION_ERROR"
+}
