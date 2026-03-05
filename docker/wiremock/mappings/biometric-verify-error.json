@@ -1,5 +1,5 @@
 {
-    "priority": 2,
+    "priority": 10,
     "request": {
         "method": "POST",
         "urlPath": "/biometric-service/v1/verify"
