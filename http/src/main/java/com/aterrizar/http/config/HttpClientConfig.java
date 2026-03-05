@@ -14,6 +14,7 @@ import org.springframework.web.service.invoker.HttpExchangeAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 import jakarta.annotation.PostConstruct;
+import reactor.core.publisher.Mono;
 
 @Configuration
 public class HttpClientConfig {
@@ -71,6 +72,9 @@ public class HttpClientConfig {
                 WebClient.builder()
                         .baseUrl(baseUrl)
                         .clientConnector(new ReactorClientHttpConnector())
+                        .defaultStatusHandler(
+                                status -> status.value() == 406,
+                                response -> Mono.empty())
                         .build();
 
         return WebClientAdapter.create(client);

@@ -1,5 +1,6 @@
 package com.aterrizar.service.checkin.steps;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.aterrizar.service.checkin.scanner.IdScanProviderFactory;
@@ -11,6 +12,7 @@ import com.aterrizar.service.external.ScannerGateway;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class IdScanValidationStep implements Step {
@@ -31,9 +33,10 @@ public class IdScanValidationStep implements Step {
 
         String expectedPrefix = idScanProviderFactory.getExpectedPrefix(countryCode);
         String provider =
-                expectedPrefix.equals(IdScanProviderFactory.ONFIDO_PREFIX) ? "ofido" : "jumio";
+                expectedPrefix.equals(IdScanProviderFactory.ONFIDO_PREFIX) ? "onfido" : "jumio";
 
         String generatedToken = scannerGateway.generateToken(provider);
+        log.info("IdScanStep - generated token: {}", generatedToken);
 
         Context updatedContext =
                 context.withRequiredField(RequiredField.SCAN_TOKEN)

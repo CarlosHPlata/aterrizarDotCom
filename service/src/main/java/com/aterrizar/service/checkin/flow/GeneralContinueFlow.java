@@ -20,6 +20,7 @@ public class GeneralContinueFlow implements FlowStrategy {
     private final CompleteCheckinStep completeCheckinStep;
     private final DigitalVisaValidationStep digitalVisaValidationStep;
     private final IdScanValidationStep idScanValidationStep;
+    private final IdScanStep idScanStep;
 
     @Override
     public FlowExecutor flow(FlowExecutor baseExecutor) {
@@ -28,6 +29,7 @@ public class GeneralContinueFlow implements FlowStrategy {
                 .and(validateSessionStep)
                 .and(passportInformationStep)
                 .and(idScanValidationStep)
+                .and(idScanStep)
                 .and(digitalVisaValidationStep)
                 .andExperimental(agreementSignStep, ExperimentalStepKey.AGREEMENT_SIGN)
                 .and(completeCheckinStep)

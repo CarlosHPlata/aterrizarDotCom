@@ -10,10 +10,11 @@ public class IdScanProviderFactory {
     public static final String ONFIDO_PREFIX = "ON-";
     public static final String JUMIO_PREFIX = "JU-";
 
+    @Value("${feature.onfido.enabled.countries}")
     private final List<String> highSecurityCountries;
 
     public IdScanProviderFactory(
-            @Value("${feature.onfido.enabled.countries:US}") List<String> highSecurityCountries) {
+             List<String> highSecurityCountries) {
         this.highSecurityCountries = highSecurityCountries;
     }
 
