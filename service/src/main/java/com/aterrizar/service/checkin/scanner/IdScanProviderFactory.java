@@ -13,8 +13,7 @@ public class IdScanProviderFactory {
     @Value("${feature.onfido.enabled.countries}")
     private final List<String> highSecurityCountries;
 
-    public IdScanProviderFactory(
-             List<String> highSecurityCountries) {
+    public IdScanProviderFactory(List<String> highSecurityCountries) {
         this.highSecurityCountries = highSecurityCountries;
     }
 

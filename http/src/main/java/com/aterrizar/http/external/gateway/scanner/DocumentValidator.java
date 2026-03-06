@@ -1,14 +1,15 @@
 package com.aterrizar.http.external.gateway.scanner;
 
-import com.aterrizar.http.external.gateway.scanner.model.ValidateRequest;
-import com.aterrizar.service.core.model.ValidationStatus;
-import com.aterrizar.service.core.model.session.Status;
-import com.neovisionaries.i18n.CountryCode;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.aterrizar.http.external.gateway.scanner.model.ValidateRequest;
+import com.aterrizar.service.core.model.ValidationStatus;
+import com.neovisionaries.i18n.CountryCode;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -28,14 +29,21 @@ public class DocumentValidator {
 
     public ValidationStatus validate(String token, String documentId, CountryCode countryCode) {
 
-        log.info("Validating document - token: {}, documentId: {}, country: {}", token, documentId, countryCode);
+        log.info(
+                "Validating document - token: {}, documentId: {}, country: {}",
+                token,
+                documentId,
+                countryCode);
         ValidationStatus validationStatus;
 
         if (documentId.length() != REQUIRED_LENGTH) {
             validationStatus = ValidationStatus.REJECTED;
         }
 
-        String expectedPrefix = onfidoEnabledCountries.contains(countryCode.toString().toUpperCase()) ? ONFIDO_PREFIX : JUMIO_PREFIX;
+        String expectedPrefix =
+                onfidoEnabledCountries.contains(countryCode.toString().toUpperCase())
+                        ? ONFIDO_PREFIX
+                        : JUMIO_PREFIX;
 
         ValidateRequest validateRequest = new ValidateRequest(token, documentId);
         if (documentId.startsWith(expectedPrefix)) {

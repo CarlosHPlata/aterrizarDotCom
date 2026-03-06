@@ -73,8 +73,7 @@ public class HttpClientConfig {
                         .baseUrl(baseUrl)
                         .clientConnector(new ReactorClientHttpConnector())
                         .defaultStatusHandler(
-                                status -> status.value() == 406,
-                                response -> Mono.empty())
+                                status -> status.value() == 406, response -> Mono.empty())
                         .build();
 
         return WebClientAdapter.create(client);

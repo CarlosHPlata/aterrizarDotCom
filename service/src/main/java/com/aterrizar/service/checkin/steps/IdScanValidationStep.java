@@ -1,6 +1,5 @@
 package com.aterrizar.service.checkin.steps;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.aterrizar.service.checkin.scanner.IdScanProviderFactory;
@@ -11,6 +10,7 @@ import com.aterrizar.service.core.model.RequiredField;
 import com.aterrizar.service.external.ScannerGateway;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service

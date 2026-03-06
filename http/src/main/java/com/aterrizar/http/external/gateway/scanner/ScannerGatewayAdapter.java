@@ -1,11 +1,10 @@
 package com.aterrizar.http.external.gateway.scanner;
 
-import com.aterrizar.service.core.model.ValidationStatus;
-import com.neovisionaries.i18n.CountryCode;
 import org.springframework.stereotype.Service;
 
-import com.aterrizar.http.external.gateway.scanner.model.ValidateRequest;
+import com.aterrizar.service.core.model.ValidationStatus;
 import com.aterrizar.service.external.ScannerGateway;
+import com.neovisionaries.i18n.CountryCode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +20,8 @@ public class ScannerGatewayAdapter implements ScannerGateway {
     }
 
     @Override
-    public ValidationStatus validateDocument(String token, String documentId, CountryCode countryCode) {
+    public ValidationStatus validateDocument(
+            String token, String documentId, CountryCode countryCode) {
         return documentValidator.validate(token, documentId, countryCode);
     }
 }
