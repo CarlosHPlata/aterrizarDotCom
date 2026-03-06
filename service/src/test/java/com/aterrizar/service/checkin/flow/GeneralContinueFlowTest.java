@@ -29,6 +29,7 @@ class GeneralContinueFlowTest {
     @Mock private CompleteCheckinStep completeCheckinStep;
     @Mock private DigitalVisaValidationStep digitalVisaValidationStep;
     @Mock private IdScanValidationStep idScanValidationStep;
+    @Mock private IdScanStep idScanStep;
     @InjectMocks private GeneralContinueFlow generalContinueFlow;
 
     @Test
@@ -51,6 +52,7 @@ class GeneralContinueFlowTest {
                         "ValidateSessionStep",
                         "PassportInformationStep",
                         "IdScanValidationStep",
+                        "IdScanStep",
                         "DigitalVisaValidationStep",
                         "AgreementSignStep",
                         "CompleteCheckinStep");
@@ -70,6 +72,7 @@ class GeneralContinueFlowTest {
                         "ValidateSessionStep",
                         "PassportInformationStep",
                         "IdScanValidationStep",
+                        "IdScanStep",
                         "DigitalVisaValidationStep",
                         "CompleteCheckinStep");
         assertEquals(expectedSteps.size(), flowExecutor.getExecutedSteps().size());
