@@ -75,6 +75,10 @@ public class FlowExecutor {
      * @return the updated `Context` after processing all applicable steps
      */
     public Context execute(Context context) {
+        return executeWithResult(context).context();
+    }
+
+    public StepResult executeWithResult(Context context) {
         var updatedContext = context;
         for (Step step : this.steps) {
             var stepResult = step.execute(updatedContext);
@@ -89,11 +93,11 @@ public class FlowExecutor {
                                 .withCheckinResponse(
                                         responseBuilder ->
                                                 responseBuilder.errorMessage(stepResult.message()));
-                break;
+                return StepResult.terminal(updatedContext);
             }
 
             if (stepResult.isTerminal()) {
-                break;
+                return StepResult.terminal(updatedContext);
             }
         }
 
@@ -101,6 +105,6 @@ public class FlowExecutor {
             var stepResult = this.lastStep.execute(updatedContext);
             updatedContext = stepResult.context();
         }
-        return updatedContext;
+        return StepResult.success(updatedContext);
     }
 }
