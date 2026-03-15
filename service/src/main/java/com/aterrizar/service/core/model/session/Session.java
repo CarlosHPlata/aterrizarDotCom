@@ -14,11 +14,16 @@ public record Session(
         UserInformation userInformation,
         ExperimentalData experimentalData,
         boolean biometricAuthenticated,
+        boolean biometricFailed,
         @Nullable String biometricSessionToken)
         implements Serializable {
 
     public boolean isBiometricAuthenticated() {
         return biometricAuthenticated;
+    }
+    
+     public boolean isBiometricFailed() {
+        return biometricFailed;
     }
 
     public Session withStatus(Status status) {
