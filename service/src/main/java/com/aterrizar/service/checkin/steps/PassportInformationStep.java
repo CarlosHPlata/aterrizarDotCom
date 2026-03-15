@@ -27,7 +27,7 @@ public class PassportInformationStep implements Step {
     }
 
     @Override
-    public boolean when(Context context) {
+    public boolean when(Context context) {      
         if (context.session().isBiometricAuthenticated()) {
             return false;
         }

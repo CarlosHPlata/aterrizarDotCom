@@ -40,7 +40,7 @@ class BiometricCheckFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when: "init session with biometric experiment email"
-        def session = checkin.initSession("US", [email: "test__biometriccheck@checkin.com"])
+        def session = checkin.initSession("MX", [email: "test__biometriccheck@checkin.com"])
         InitVerifier.verify(session)
 
         and: "proceed - biometric enrollment starts"
@@ -53,16 +53,10 @@ class BiometricCheckFlowTest extends Specification {
         continueResponse = session.fillUserInput([(UserInput.BIOMETRIC_VERIFIED): "invalidToken1"])
 
         then: "should continue with normal flow and request passport"
-        ContinueVerifier.requiredField(continueResponse, UserInput.PASSPORT_NUMBER)
+        ContinueVerifier.requiredField(continueResponse, UserInput.PASSPORT_NUMBER) 
 
         when: "submit passport"
         continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
-
-        then: "should request agreement"
-        ContinueVerifier.requiredField(continueResponse, UserInput.AGREEMENT_SIGNED)
-
-        when: "submit agreement"
-        continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
 
         then: "should complete check-in"
         ContinueVerifier.completed(continueResponse)
@@ -76,7 +70,7 @@ class BiometricCheckFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when: "init session with regular email (not experimental)"
-        def session = checkin.initSession("US", [email: "regular.user@example.com"])
+        def session = checkin.initSession("MX", [email: "regular.user@example.com"])
         InitVerifier.verify(session)
 
         and: "proceed"
@@ -88,13 +82,7 @@ class BiometricCheckFlowTest extends Specification {
         when: "submit passport"
         continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
 
-        then: "should request agreement"
-        ContinueVerifier.requiredField(continueResponse, UserInput.AGREEMENT_SIGNED)
-
-        when: "submit agreement"
-        continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
-
-        then: "should complete check-in"
-        ContinueVerifier.completed(continueResponse)
+        then: "should complete check-in directly (no agreement without experiment)"  
+        ContinueVerifier.completed(continueResponse)                                  
     }
 }

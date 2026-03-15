@@ -4,8 +4,10 @@
     "urlPath": "/biometric-service/v1/verify",
     "bodyPatterns": [
       {
-        "matchesJsonPath": "$.token",
-        "matches": ".*1$"
+        "matchesJsonPath": {
+          "expression": "$.token",
+          "matches": ".*1$"
+        }
       }
     ]
   },

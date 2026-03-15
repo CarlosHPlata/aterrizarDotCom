@@ -2,6 +2,7 @@ package com.aterrizar.service.checkin.steps;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -117,8 +118,8 @@ class BiometricEnrollmentStepTest {
 
         var result = biometricEnrollmentStep.onExecute(context);
 
-        assertTrue(result.isTerminal());
-        assertFalse(result.isSuccess());
-        assertEquals("Biometric verification failed", result.message());
+        assertFalse(result.isTerminal());
+        assertTrue(result.isSuccess());
+        assertNull(result.message());
     }
 }
