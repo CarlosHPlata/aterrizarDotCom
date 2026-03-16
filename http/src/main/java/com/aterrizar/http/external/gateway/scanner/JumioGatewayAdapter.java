@@ -1,8 +1,8 @@
 package com.aterrizar.http.external.gateway.scanner;
 
-import com.aterrizar.http.external.gateway.scanner.model.ValidateRequest;
 import org.springframework.stereotype.Service;
 
+import com.aterrizar.http.external.gateway.scanner.model.ValidateRequest;
 import com.aterrizar.service.external.scanner.ScanValidationStatus;
 import com.aterrizar.service.external.scanner.ScannerGateway;
 

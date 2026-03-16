@@ -7,14 +7,14 @@ import static org.mockito.Mockito.when;
 
 import java.util.Map;
 
-import com.aterrizar.service.checkin.scanner.IdScanProviderFactory;
-import com.aterrizar.service.checkin.steps.DocumentValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.aterrizar.service.checkin.scanner.DocumentValidator;
+import com.aterrizar.service.checkin.scanner.IdScanProviderFactory;
 import com.aterrizar.service.core.model.RequiredField;
 import com.aterrizar.service.external.scanner.ScanValidationStatus;
 import com.aterrizar.service.external.scanner.ScannerGateway;
@@ -40,26 +40,31 @@ class IdScanStepTest {
 
     @Test
     void shouldExecuteWhenScanTokenExistsAndRetriesBelowMax() {
-        var context = MockContext.initializedMock(CountryCode.US)
-                .withUserInformation(builder -> builder.scanToken("ON-TOKEN123").idScanRetries(0));
+        var context =
+                MockContext.initializedMock(CountryCode.US)
+                        .withUserInformation(
+                                builder -> builder.scanToken("ON-TOKEN123").idScanRetries(0));
 
         assertTrue(idScanStep.when(context));
     }
 
     @Test
     void shouldNotExecuteWhenNoScanTokenInSession() {
-        var context = MockContext.initializedMock(CountryCode.US)
-                .withUserInformation(builder -> builder.scanToken(null));
+        var context =
+                MockContext.initializedMock(CountryCode.US)
+                        .withUserInformation(builder -> builder.scanToken(null));
 
         assertFalse(idScanStep.when(context));
     }
 
     @Test
     void shouldNotExecuteWhenRetriesReachMax() {
-        var context = MockContext.initializedMock(CountryCode.US)
-                .withUserInformation(builder -> builder
-                        .scanToken("ON-TOKEN123")
-                        .idScanRetries(IdScanStep.MAX_RETRIES));
+        var context =
+                MockContext.initializedMock(CountryCode.US)
+                        .withUserInformation(
+                                builder ->
+                                        builder.scanToken("ON-TOKEN123")
+                                                .idScanRetries(IdScanStep.MAX_RETRIES));
 
         assertFalse(idScanStep.when(context));
     }
@@ -68,10 +73,15 @@ class IdScanStepTest {
 
     @Test
     void shouldReturnFailureWhenTokenIsMissingFromRequest() {
-        var context = MockContext.initializedMock(CountryCode.US)
-                .withUserInformation(builder -> builder.scanToken("ON-TOKEN123"))
-                .withCheckinRequest(builder -> builder.providedFields(
-                        Map.of(RequiredField.DOCUMENT_ID, "ON-DOC1234567")));
+        var context =
+                MockContext.initializedMock(CountryCode.US)
+                        .withUserInformation(builder -> builder.scanToken("ON-TOKEN123"))
+                        .withCheckinRequest(
+                                builder ->
+                                        builder.providedFields(
+                                                Map.of(
+                                                        RequiredField.DOCUMENT_ID,
+                                                        "ON-DOC1234567")));
 
         var result = idScanStep.onExecute(context);
 
@@ -82,10 +92,13 @@ class IdScanStepTest {
 
     @Test
     void shouldReturnFailureWhenDocumentIdIsMissingFromRequest() {
-        var context = MockContext.initializedMock(CountryCode.US)
-                .withUserInformation(builder -> builder.scanToken("ON-TOKEN123"))
-                .withCheckinRequest(builder -> builder.providedFields(
-                        Map.of(RequiredField.SCAN_TOKEN, "ON-TOKEN123")));
+        var context =
+                MockContext.initializedMock(CountryCode.US)
+                        .withUserInformation(builder -> builder.scanToken("ON-TOKEN123"))
+                        .withCheckinRequest(
+                                builder ->
+                                        builder.providedFields(
+                                                Map.of(RequiredField.SCAN_TOKEN, "ON-TOKEN123")));
 
         var result = idScanStep.onExecute(context);
 
@@ -103,11 +116,15 @@ class IdScanStepTest {
         when(documentValidator.validate(scannerGateway, token, documentId))
                 .thenReturn(ScanValidationStatus.SUCCESS);
 
-        var context = MockContext.initializedMock(CountryCode.US)
-                .withUserInformation(builder -> builder.scanToken(token).idScanRetries(1))
-                .withCheckinRequest(builder -> builder.providedFields(Map.of(
-                        RequiredField.SCAN_TOKEN, token,
-                        RequiredField.DOCUMENT_ID, documentId)));
+        var context =
+                MockContext.initializedMock(CountryCode.US)
+                        .withUserInformation(builder -> builder.scanToken(token).idScanRetries(1))
+                        .withCheckinRequest(
+                                builder ->
+                                        builder.providedFields(
+                                                Map.of(
+                                                        RequiredField.SCAN_TOKEN, token,
+                                                        RequiredField.DOCUMENT_ID, documentId)));
 
         var result = idScanStep.onExecute(context);
 
@@ -125,11 +142,15 @@ class IdScanStepTest {
         when(documentValidator.validate(scannerGateway, token, documentId))
                 .thenReturn(ScanValidationStatus.PENDING);
 
-        var context = MockContext.initializedMock(CountryCode.US)
-                .withUserInformation(builder -> builder.scanToken(token).idScanRetries(1))
-                .withCheckinRequest(builder -> builder.providedFields(Map.of(
-                        RequiredField.SCAN_TOKEN, token,
-                        RequiredField.DOCUMENT_ID, documentId)));
+        var context =
+                MockContext.initializedMock(CountryCode.US)
+                        .withUserInformation(builder -> builder.scanToken(token).idScanRetries(1))
+                        .withCheckinRequest(
+                                builder ->
+                                        builder.providedFields(
+                                                Map.of(
+                                                        RequiredField.SCAN_TOKEN, token,
+                                                        RequiredField.DOCUMENT_ID, documentId)));
 
         var result = idScanStep.onExecute(context);
 
@@ -147,11 +168,15 @@ class IdScanStepTest {
         when(documentValidator.validate(scannerGateway, token, documentId))
                 .thenReturn(ScanValidationStatus.REJECTED);
 
-        var context = MockContext.initializedMock(CountryCode.US)
-                .withUserInformation(builder -> builder.scanToken(token))
-                .withCheckinRequest(builder -> builder.providedFields(Map.of(
-                        RequiredField.SCAN_TOKEN, token,
-                        RequiredField.DOCUMENT_ID, documentId)));
+        var context =
+                MockContext.initializedMock(CountryCode.US)
+                        .withUserInformation(builder -> builder.scanToken(token))
+                        .withCheckinRequest(
+                                builder ->
+                                        builder.providedFields(
+                                                Map.of(
+                                                        RequiredField.SCAN_TOKEN, token,
+                                                        RequiredField.DOCUMENT_ID, documentId)));
 
         var result = idScanStep.onExecute(context);
 

@@ -53,4 +53,3 @@ class IdScanProviderFactoryTest {
         assertSame(jumioGateway, provider);
     }
 }
-

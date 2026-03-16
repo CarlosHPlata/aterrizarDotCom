@@ -1,25 +1,22 @@
 package com.aterrizar.service.checkin.steps;
 
-import com.aterrizar.service.checkin.scanner.IdScanProviderFactory;
-import com.aterrizar.service.core.model.request.CheckinRequest;
-import com.aterrizar.service.core.model.session.UserInformation;
-import com.aterrizar.service.external.scanner.ScanValidationStatus;
-import com.aterrizar.service.external.scanner.ScannerGateway;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import com.aterrizar.service.checkin.scanner.DocumentValidator;
+import com.aterrizar.service.checkin.scanner.IdScanProviderFactory;
 import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.RequiredField;
-import com.aterrizar.service.checkin.steps.DocumentValidator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
+import com.aterrizar.service.core.model.request.CheckinRequest;
+import com.aterrizar.service.core.model.session.UserInformation;
+import com.aterrizar.service.external.scanner.ScanValidationStatus;
+import com.aterrizar.service.external.scanner.ScannerGateway;
 
 import lombok.AllArgsConstructor;
 
-@Slf4j
 @Service
 @AllArgsConstructor
 public class IdScanStep implements Step {
@@ -71,17 +68,17 @@ public class IdScanStep implements Step {
 
         return switch (status) {
             case SUCCESS -> {
-                var updatedContext = context.withUserInformation(builder -> builder
-                        .documentId(documentId)
-                        .idScanRetries(0));
+                var updatedContext =
+                        context.withUserInformation(
+                                builder -> builder.documentId(documentId).idScanRetries(0));
                 yield StepResult.success(updatedContext);
             }
             case PENDING -> {
                 int retries = userInfo.resolvedRetries() + 1;
-                var updatedContext = context
-                        .withUserInformation(builder -> builder.idScanRetries(retries))
-                        .withRequiredField(RequiredField.SCAN_TOKEN)
-                        .withRequiredField(RequiredField.DOCUMENT_ID);
+                var updatedContext =
+                        context.withUserInformation(builder -> builder.idScanRetries(retries))
+                                .withRequiredField(RequiredField.SCAN_TOKEN)
+                                .withRequiredField(RequiredField.DOCUMENT_ID);
                 yield StepResult.terminal(updatedContext);
             }
             case REJECTED -> StepResult.failure(context, "406: document verification rejected.");

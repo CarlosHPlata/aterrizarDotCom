@@ -15,8 +15,7 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "feature.onfido")
 public class OnfidoConfig implements OnfidoFeature {
     /**
-     * List of country codes that require Onfido (high-security) identity verification.
-     * Default: US
+     * List of country codes that require Onfido (high-security) identity verification. Default: US
      */
     private List<String> enabledCountries;
 
