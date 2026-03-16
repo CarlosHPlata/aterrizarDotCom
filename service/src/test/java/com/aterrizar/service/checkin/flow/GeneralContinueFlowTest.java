@@ -11,13 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.aterrizar.service.checkin.steps.AgreementSignStep;
-import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
-import com.aterrizar.service.checkin.steps.DigitalVisaValidationStep;
-import com.aterrizar.service.checkin.steps.GetSessionStep;
-import com.aterrizar.service.checkin.steps.PassportInformationStep;
-import com.aterrizar.service.checkin.steps.SaveSessionStep;
-import com.aterrizar.service.checkin.steps.ValidateSessionStep;
+import com.aterrizar.service.checkin.steps.*;
 import com.aterrizar.service.core.model.ExperimentalStepKey;
 import com.aterrizar.service.core.model.session.ExperimentalData;
 import com.neovisionaries.i18n.CountryCode;
@@ -30,6 +24,7 @@ class GeneralContinueFlowTest {
     @Mock private GetSessionStep getSessionStep;
     @Mock private ValidateSessionStep validateSessionStep;
     @Mock private PassportInformationStep passportInformationStep;
+    @Mock private EtaValidationStep etaValidationStep;
     @Mock private AgreementSignStep agreementSignStep;
     @Mock private SaveSessionStep saveSessionStep;
     @Mock private CompleteCheckinStep completeCheckinStep;
@@ -55,6 +50,7 @@ class GeneralContinueFlowTest {
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
+                        "EtaValidationStep",
                         "DigitalVisaValidationStep",
                         "AgreementSignStep",
                         "CompleteCheckinStep");
@@ -73,6 +69,7 @@ class GeneralContinueFlowTest {
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
+                        "EtaValidationStep",
                         "DigitalVisaValidationStep",
                         "CompleteCheckinStep");
         assertEquals(expectedSteps.size(), flowExecutor.getExecutedSteps().size());

@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.aterrizar.service.checkin.steps.AgreementSignStep;
 import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
+import com.aterrizar.service.checkin.steps.EtaValidationStep;
 import com.aterrizar.service.checkin.steps.FundsCheckStep;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
@@ -28,6 +29,7 @@ public class VeContinueFlowTest {
     @Mock private ValidateSessionStep validateSessionStep;
     @Mock private FundsCheckStep fundsCheckStep;
     @Mock private PassportInformationStep passportInformationStep;
+    @Mock private EtaValidationStep etaValidationStep;
     @Mock private AgreementSignStep agreementSignStep;
     @Mock private SaveSessionStep saveSessionStep;
     @Mock private CompleteCheckinStep completeCheckinStep;
@@ -40,13 +42,14 @@ public class VeContinueFlowTest {
         var flowExecutor = new MockFlowExecutor();
         veContinueFlow.flow(flowExecutor).execute(context);
 
-        assertEquals(6, flowExecutor.getExecutedSteps().size());
+        assertEquals(7, flowExecutor.getExecutedSteps().size());
         assertEquals(
                 List.of(
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "FundsCheckStep",
                         "PassportInformationStep",
+                        "EtaValidationStep",
                         "AgreementSignStep",
                         "CompleteCheckinStep"),
                 flowExecutor.getExecutedSteps());

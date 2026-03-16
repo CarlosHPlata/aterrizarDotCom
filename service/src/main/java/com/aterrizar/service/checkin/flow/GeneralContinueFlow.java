@@ -2,13 +2,7 @@ package com.aterrizar.service.checkin.flow;
 
 import org.springframework.stereotype.Service;
 
-import com.aterrizar.service.checkin.steps.AgreementSignStep;
-import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
-import com.aterrizar.service.checkin.steps.DigitalVisaValidationStep;
-import com.aterrizar.service.checkin.steps.GetSessionStep;
-import com.aterrizar.service.checkin.steps.PassportInformationStep;
-import com.aterrizar.service.checkin.steps.SaveSessionStep;
-import com.aterrizar.service.checkin.steps.ValidateSessionStep;
+import com.aterrizar.service.checkin.steps.*;
 import com.aterrizar.service.core.framework.flow.FlowExecutor;
 import com.aterrizar.service.core.framework.flow.FlowStrategy;
 import com.aterrizar.service.core.model.ExperimentalStepKey;
@@ -25,6 +19,7 @@ public class GeneralContinueFlow implements FlowStrategy {
     private final SaveSessionStep saveSessionStep;
     private final CompleteCheckinStep completeCheckinStep;
     private final DigitalVisaValidationStep digitalVisaValidationStep;
+    private final EtaValidationStep etaValidationStep;
 
     @Override
     public FlowExecutor flow(FlowExecutor baseExecutor) {
@@ -32,6 +27,7 @@ public class GeneralContinueFlow implements FlowStrategy {
                 .and(getSessionStep)
                 .and(validateSessionStep)
                 .and(passportInformationStep)
+                .and(etaValidationStep)
                 .and(digitalVisaValidationStep)
                 .andExperimental(agreementSignStep, ExperimentalStepKey.AGREEMENT_SIGN)
                 .and(completeCheckinStep)
