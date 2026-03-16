@@ -1,7 +1,10 @@
 package com.aterrizar.service.checkin.steps;
 
-import com.aterrizar.service.core.model.ValidationStatus;
-import com.aterrizar.service.external.ScannerGateway;
+import com.aterrizar.service.checkin.scanner.IdScanProviderFactory;
+import com.aterrizar.service.core.model.request.CheckinRequest;
+import com.aterrizar.service.core.model.session.UserInformation;
+import com.aterrizar.service.external.scanner.ScanValidationStatus;
+import com.aterrizar.service.external.scanner.ScannerGateway;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +12,9 @@ import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.RequiredField;
+import com.aterrizar.service.checkin.steps.DocumentValidator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import lombok.AllArgsConstructor;
@@ -18,41 +23,59 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class IdScanStep implements Step {
-    private static final int MAX_RETRIES = 3;
-    private final ScannerGateway scanner;
+    static final int MAX_RETRIES = 3;
+
+    private final IdScanProviderFactory providerFactory;
+    private final DocumentValidator documentValidator;
+
+    @Override
+    public boolean when(Context context) {
+        var userInfo = Optional.ofNullable(context.session().userInformation());
+
+        boolean hasScanToken = userInfo.map(UserInformation::scanToken).isPresent();
+        int retries = userInfo.map(UserInformation::resolvedRetries).orElse(0);
+
+        return hasScanToken && retries < MAX_RETRIES;
+    }
 
     @Override
     public StepResult onExecute(Context context) {
-        var sessionData = context.session().sessionData();
         var request = context.checkinRequest();
+        var userInfo = context.session().userInformation();
 
-        var scanToken = request.providedFields().get(RequiredField.SCAN_TOKEN);
-        var documentId = request.providedFields().get(RequiredField.DOCUMENT_ID);
+        String token = getField(request, RequiredField.SCAN_TOKEN);
+        String documentId = getField(request, RequiredField.DOCUMENT_ID);
 
-        if (sessionData.scanRetryCount() >= MAX_RETRIES-1) {
-            return StepResult.success(context);
+        if (token == null || documentId == null) {
+            return StepResult.failure(context, "400: scan token and document ID are required.");
         }
 
-        if (scanToken == null || documentId == null) {
-            return StepResult.failure(context, "Token and document ID are required");
+        String countryCode = context.countryCode().getAlpha2();
+        ScannerGateway provider = providerFactory.getProvider(countryCode);
+
+        ScanValidationStatus status = documentValidator.validate(provider, token, documentId);
+
+        return switch (status) {
+            case SUCCESS -> {
+                var updatedContext = context.withUserInformation(builder -> builder
+                        .documentId(documentId)
+                        .idScanRetries(0));
+                yield StepResult.success(updatedContext);
+            }
+            case PENDING -> {
+                int retries = userInfo.resolvedRetries() + 1;
+                var updatedContext = context.withUserInformation(builder -> builder
+                        .idScanRetries(retries));
+                yield StepResult.terminal(updatedContext);
+            }
+            case REJECTED -> StepResult.failure(context, "406: document verification rejected.");
+        };
+    }
+
+    private String getField(CheckinRequest request, RequiredField field) {
+        if (request == null || request.providedFields() == null) {
+            return null;
         }
-
-        var status = scanner.validateDocument(scanToken, documentId, sessionData.countryCode());
-
-        Map<ValidationStatus, Function<Context, StepResult>> handlers = Map.of(
-                ValidationStatus.SUCCESS, ctx ->
-                        StepResult.success(ctx.withSessionData(s -> s.scanToken(null).scanRetryCount(-1))),
-
-                ValidationStatus.PENDING, ctx ->
-                        StepResult.terminal(ctx
-                                .withSessionData(s -> s.scanRetryCount(sessionData.scanRetryCount() + 1))
-                                .withRequiredField(RequiredField.SCAN_TOKEN)
-                                .withRequiredField(RequiredField.DOCUMENT_ID)),
-
-                ValidationStatus.REJECTED, ctx ->
-                        StepResult.failure(ctx, "Document rejected")
-        );
-
-        return handlers.get(status).apply(context);
+        return request.providedFields().get(field);
     }
 }

@@ -4,12 +4,11 @@
     "method": "POST",
     "urlPath": "/scanner-service/v1/validate",
     "bodyPatterns": [
+
       {
-        "matchesJsonPath": {
-          "expression": "$.token",
-          "matches": ".*0"
-        }
+        "matchesJsonPath": "$.token[?(@=~ /.*0$/)]"
       }
+
     ]
   },
   "response": {
