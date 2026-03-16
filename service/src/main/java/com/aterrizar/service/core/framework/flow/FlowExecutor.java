@@ -84,8 +84,8 @@ public class FlowExecutor {
      * Executes the chain of responsibility using the provided `Context`.
      *
      * <p>Each `Step` in the chain processes the `Context`. Interceptors are notified before and
-     * after each step execution. The flow terminates early if a `Step` returns a terminal result
-     * or if specific conditions are met (e.g., failure with a message).
+     * after each step execution. The flow terminates early if a `Step` returns a terminal result or
+     * if specific conditions are met (e.g., failure with a message).
      *
      * @param context the initial `Context` to be processed
      * @return the updated `Context` after processing all applicable steps
