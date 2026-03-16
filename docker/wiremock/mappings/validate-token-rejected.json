@@ -4,9 +4,7 @@
     "method": "POST",
     "urlPath": "/scanner-service/v1/validate",
     "bodyPatterns": [
-      {
-        "matchesJsonPath": "$.token[?(@=~ /.*2$/)]"
-      }
+      { "matches": ".*\"token\"\\s*:\\s*\"[^\"]*2\".*" }
     ]
   },
   "response": {

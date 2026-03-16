@@ -30,12 +30,26 @@ public class IdScanStep implements Step {
 
     @Override
     public boolean when(Context context) {
+        return Optional.ofNullable(context.session().userInformation())
+                .map(UserInformation::scanToken)
+                .isPresent();
+    }
+
+    @Override
+    public StepResult execute(Context context) {
         var userInfo = Optional.ofNullable(context.session().userInformation());
-
         boolean hasScanToken = userInfo.map(UserInformation::scanToken).isPresent();
-        int retries = userInfo.map(UserInformation::resolvedRetries).orElse(0);
 
-        return hasScanToken && retries < MAX_RETRIES;
+        if (!hasScanToken) {
+            return StepResult.success(context);
+        }
+
+        int retries = userInfo.map(UserInformation::resolvedRetries).orElse(0);
+        if (retries >= MAX_RETRIES) {
+            return StepResult.failure(context, "406: maximum retry attempts reached.");
+        }
+
+        return onExecute(context);
     }
 
     @Override
@@ -64,8 +78,10 @@ public class IdScanStep implements Step {
             }
             case PENDING -> {
                 int retries = userInfo.resolvedRetries() + 1;
-                var updatedContext = context.withUserInformation(builder -> builder
-                        .idScanRetries(retries));
+                var updatedContext = context
+                        .withUserInformation(builder -> builder.idScanRetries(retries))
+                        .withRequiredField(RequiredField.SCAN_TOKEN)
+                        .withRequiredField(RequiredField.DOCUMENT_ID);
                 yield StepResult.terminal(updatedContext);
             }
             case REJECTED -> StepResult.failure(context, "406: document verification rejected.");

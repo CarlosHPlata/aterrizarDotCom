@@ -5,9 +5,7 @@
     "urlPath": "/scanner-service/v1/validate",
     "bodyPatterns": [
 
-      {
-        "matchesJsonPath": "$.token[?(@=~ /.*0$/)]"
-      }
+      { "matches": ".*\"token\"\\s*:\\s*\"[^\"]*0\".*" }
 
     ]
   },
