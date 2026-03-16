@@ -21,8 +21,8 @@ public record Session(
     public boolean isBiometricAuthenticated() {
         return biometricAuthenticated;
     }
-    
-     public boolean isBiometricFailed() {
+
+    public boolean isBiometricFailed() {
         return biometricFailed;
     }
 

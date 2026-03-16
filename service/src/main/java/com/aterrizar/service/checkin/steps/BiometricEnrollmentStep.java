@@ -22,8 +22,7 @@ public class BiometricEnrollmentStep implements Step {
     @Override
     public boolean when(Context context) {
         return !context.session().isBiometricAuthenticated()
-            && !context.session().isBiometricFailed();
-            
+                && !context.session().isBiometricFailed();
     }
 
     @Override
@@ -54,9 +53,11 @@ public class BiometricEnrollmentStep implements Step {
             return StepResult.success(context.withSession(b -> b.biometricAuthenticated(true)));
         }
 
-        return StepResult.success(context.withSession(b -> b
-        .biometricAuthenticated(false)
-        .biometricFailed(true)
-        .biometricSessionToken(null)));
+        return StepResult.success(
+                context.withSession(
+                        b ->
+                                b.biometricAuthenticated(false)
+                                        .biometricFailed(true)
+                                        .biometricSessionToken(null)));
     }
 }
