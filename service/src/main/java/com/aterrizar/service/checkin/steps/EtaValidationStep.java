@@ -18,6 +18,10 @@ public class EtaValidationStep implements Step {
 
     private static final String STATUS_PENDING = "Pending";
     private static final String STATUS_REJECTED = "Rejected";
+    private static final String ETA_VALIDATION_REJECTION_MESSAGE =
+            "ETA validation rejected by Home Office";
+    private static final String ETA_VALIDATION_STEP_FAILURE_MESSAGE =
+            "Fallo técnico en validación ETA: ";
 
     private final EtaFeature etaFeature;
     private final HomeOfficeGateway homeOfficeGateway;
@@ -37,7 +41,7 @@ public class EtaValidationStep implements Step {
             String status = homeOfficeGateway.validateEta(passportNumber, destinationCode);
 
             if (STATUS_REJECTED.equalsIgnoreCase(status)) {
-                return StepResult.failure(context, "ETA validation rejected by Home Office");
+                return StepResult.failure(context, ETA_VALIDATION_REJECTION_MESSAGE);
             }
 
             if (STATUS_PENDING.equalsIgnoreCase(status)) {
@@ -48,7 +52,7 @@ public class EtaValidationStep implements Step {
 
         } catch (Exception e) {
             return StepResult.failure(
-                    context, "Fallo técnico en validación ETA: " + e.getMessage());
+                    context, ETA_VALIDATION_STEP_FAILURE_MESSAGE + e.getMessage());
         }
     }
 
