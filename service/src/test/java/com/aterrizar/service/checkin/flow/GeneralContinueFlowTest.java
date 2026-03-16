@@ -51,9 +51,9 @@ class GeneralContinueFlowTest {
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
+                        "DigitalVisaValidationStep",
                         "IdScanValidationStep",
                         "IdScanStep",
-                        "DigitalVisaValidationStep",
                         "AgreementSignStep",
                         "CompleteCheckinStep");
         assertEquals(expectedSteps.size(), flowExecutor.getExecutedSteps().size());
@@ -71,9 +71,9 @@ class GeneralContinueFlowTest {
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
+                        "DigitalVisaValidationStep",
                         "IdScanValidationStep",
                         "IdScanStep",
-                        "DigitalVisaValidationStep",
                         "CompleteCheckinStep");
         assertEquals(expectedSteps.size(), flowExecutor.getExecutedSteps().size());
         assertEquals(expectedSteps, flowExecutor.getExecutedSteps());

@@ -66,7 +66,11 @@ class IdScanStepTest {
                                         builder.scanToken("ON-TOKEN123")
                                                 .idScanRetries(IdScanStep.MAX_RETRIES));
 
-        assertFalse(idScanStep.when(context));
+        var result = idScanStep.execute(context);
+
+        assertFalse(result.isSuccess());
+        assertTrue(result.isTerminal());
+        assertTrue(result.message().contains("406"));
     }
 
     // --- onExecute() ---
