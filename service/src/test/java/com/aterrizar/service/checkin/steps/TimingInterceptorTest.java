@@ -1,6 +1,6 @@
 package com.aterrizar.service.checkin.steps;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,16 +28,15 @@ class TimingInterceptorTest {
     }
 
     @Test
-    void shouldExecuteBeforeAndAfterWithoutErrors() {
+    void shouldExecuteBeforeAndAfterWithoutThrowingException() {
 
         when(stepResult.isSuccess()).thenReturn(true);
         when(stepResult.isTerminal()).thenReturn(false);
 
-        interceptor.before(context, "TestStep");
-
-        interceptor.after(context, stepResult, "TestStep");
-
-        // Si llega aquí sin excepción, el interceptor funciona
-        assertTrue(true);
+        assertDoesNotThrow(
+                () -> {
+                    interceptor.before(context, "TestStep");
+                    interceptor.after(context, stepResult, "TestStep");
+                });
     }
 }
