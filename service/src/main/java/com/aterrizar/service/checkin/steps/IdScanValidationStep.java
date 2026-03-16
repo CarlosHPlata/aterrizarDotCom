@@ -1,5 +1,7 @@
 package com.aterrizar.service.checkin.steps;
 
+import com.aterrizar.service.core.model.session.UserInformation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.aterrizar.service.checkin.scanner.IdScanProviderFactory;
@@ -7,40 +9,44 @@ import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.RequiredField;
-import com.aterrizar.service.external.ScannerGateway;
+import com.aterrizar.service.external.scanner.ScannerGateway;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class IdScanValidationStep implements Step {
 
-    private final IdScanProviderFactory idScanProviderFactory;
-    private final ScannerGateway scannerGateway;
+    private final IdScanProviderFactory providerFactory;
 
     @Override
     public boolean when(Context context) {
-        return context.checkinRequest() == null
-                || !context.checkinRequest().providedFields().containsKey(RequiredField.SCAN_TOKEN);
+        var userInfo = Optional.ofNullable(context.session().userInformation());
+
+        boolean hasDocument = userInfo.map(UserInformation::documentId).isPresent();
+        boolean hasScanToken = userInfo.map(UserInformation::scanToken).isPresent();
+        boolean hasRetries = userInfo
+                .map(UserInformation::idScanRetries)
+                .filter(r -> r > 0)
+                .isPresent();
+
+        return !hasDocument && !hasScanToken && !hasRetries;
     }
 
     @Override
     public StepResult onExecute(Context context) {
 
         String countryCode = context.countryCode().getAlpha2();
+        ScannerGateway provider = providerFactory.getProvider(countryCode);
+        String token = provider.getToken();
 
-        String expectedPrefix = idScanProviderFactory.getExpectedPrefix(countryCode);
-        String provider =
-                expectedPrefix.equals(IdScanProviderFactory.ONFIDO_PREFIX) ? "onfido" : "jumio";
-
-        String generatedToken = scannerGateway.generateToken(provider);
-        log.info("IdScanStep - generated token: {}", generatedToken);
-
-        Context updatedContext =
-                context.withRequiredField(RequiredField.SCAN_TOKEN)
-                        .withRequiredField(RequiredField.DOCUMENT_ID);
+        var updatedContext = context
+                .withUserInformation(builder -> builder.scanToken(token))
+                .withRequiredField(RequiredField.SCAN_TOKEN)
+                .withRequiredField(RequiredField.DOCUMENT_ID);
 
         return StepResult.terminal(updatedContext);
     }

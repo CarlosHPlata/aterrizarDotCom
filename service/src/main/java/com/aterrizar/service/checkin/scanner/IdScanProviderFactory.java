@@ -1,26 +1,47 @@
 package com.aterrizar.service.checkin.scanner;
 
-import java.util.List;
+import com.aterrizar.service.checkin.feature.OnfidoFeature;
+import com.aterrizar.service.external.scanner.ScannerGateway;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-@Component
+/**
+ * Factory that resolves the correct {@link ScannerGateway} implementation based on the
+ * passenger's country code.
+ *
+ * <p>Routing rules:
+ * <ul>
+ *   <li>Countries listed in {@code feature.onfido.enabled.countries} → Onfido (high-security)</li>
+ *   <li>All other countries → Jumio (standard)</li>
+ * </ul>
+ */
+@Service
 public class IdScanProviderFactory {
-    public static final String ONFIDO_PREFIX = "ON-";
-    public static final String JUMIO_PREFIX = "JU-";
 
-    @Value("${feature.onfido.enabled.countries}")
-    private final List<String> highSecurityCountries;
+    private final OnfidoFeature onfidoFeature;
+    private final ScannerGateway onfidoGateway;
+    private final ScannerGateway jumioGateway;
 
-    public IdScanProviderFactory(List<String> highSecurityCountries) {
-        this.highSecurityCountries = highSecurityCountries;
+    public IdScanProviderFactory(
+            OnfidoFeature onfidoFeature,
+            @Qualifier("onfidoGatewayAdapter") ScannerGateway onfidoGateway,
+            @Qualifier("jumioGatewayAdapter") ScannerGateway jumioGateway) {
+        this.onfidoFeature = onfidoFeature;
+        this.onfidoGateway = onfidoGateway;
+        this.jumioGateway = jumioGateway;
     }
 
-    public String getExpectedPrefix(String countryCode) {
-        if (countryCode != null && highSecurityCountries.contains(countryCode.toUpperCase())) {
-            return ONFIDO_PREFIX;
+    /**
+     * Returns the appropriate {@link ScannerGateway} for the given country.
+     *
+     * @param countryCode ISO 3166-1 alpha-2 country code
+     * @return the selected provider gateway
+     */
+    public ScannerGateway getProvider(String countryCode) {
+        if (onfidoFeature.isCountryAvailable(countryCode)) {
+            return onfidoGateway;
         }
-        return JUMIO_PREFIX;
+        return jumioGateway;
     }
 }

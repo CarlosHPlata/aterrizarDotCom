@@ -28,9 +28,9 @@ public class GeneralContinueFlow implements FlowStrategy {
                 .and(getSessionStep)
                 .and(validateSessionStep)
                 .and(passportInformationStep)
+                .and(digitalVisaValidationStep)
                 .and(idScanValidationStep)
                 .and(idScanStep)
-                .and(digitalVisaValidationStep)
                 .andExperimental(agreementSignStep, ExperimentalStepKey.AGREEMENT_SIGN)
                 .and(completeCheckinStep)
                 .andFinally(saveSessionStep);

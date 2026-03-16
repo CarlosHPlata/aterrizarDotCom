@@ -1,6 +1,5 @@
 package com.aterrizar.http.external.gateway.scanner;
 
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
@@ -13,11 +12,11 @@ import com.aterrizar.http.external.gateway.scanner.model.ValidateResponse;
 
 @BaseUrl("${http.client.scanner.base.url}")
 @HttpExchange(value = "v1/", accept = "application/json", contentType = "application/json")
-interface ScannerHttpClient {
+interface OnfidoHttpClient {
 
-    @GetExchange("{provider}/token")
-    TokenResponse getToken(@PathVariable("provider") String provider);
+    @GetExchange("onfido/token")
+    TokenResponse getToken();
 
     @PostExchange("validate")
-    ValidateResponse validateDocument(@RequestBody ValidateRequest request);
+    ValidateResponse validate(@RequestBody ValidateRequest request);
 }
