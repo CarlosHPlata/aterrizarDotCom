@@ -1,13 +1,17 @@
 package com.aterrizar.service.checkin.steps;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.function.Consumer;
-
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -18,59 +22,41 @@ import com.aterrizar.service.checkin.feature.EtaFeature;
 import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.session.Session;
-import com.aterrizar.service.core.model.session.SessionData;
 import com.aterrizar.service.core.model.session.UserInformation;
-import com.aterrizar.service.external.homeoffice.EtaRequest;
-import com.aterrizar.service.external.homeoffice.EtaResponse;
-import com.aterrizar.service.external.homeoffice.HomeOfficeHttpClient;
+import com.aterrizar.service.external.HomeOfficeGateway;
 import com.neovisionaries.i18n.CountryCode;
 
 @ExtendWith(MockitoExtension.class)
 class EtaValidationStepTest {
 
-    @Mock private HomeOfficeHttpClient homeOfficeHttpClient;
-
+    @Mock private HomeOfficeGateway homeOfficeGateway;
     @Mock private Context context;
-
     @Mock private Session session;
-
-    @Mock private SessionData sessionData;
-
     @Mock private UserInformation userInformation;
-
     @Mock private EtaFeature etaFeature;
 
     private EtaValidationStep etaValidationStep;
 
     @BeforeEach
     void setUp() {
-        etaValidationStep = new EtaValidationStep(etaFeature, homeOfficeHttpClient);
+        etaValidationStep = new EtaValidationStep(etaFeature, homeOfficeGateway);
 
-        when(etaFeature.normalizeDestinationCode(any())).thenAnswer(i -> i.getArgument(0));
-
-        when(context.session()).thenReturn(session);
-        when(session.userInformation()).thenReturn(userInformation);
+        lenient().when(etaFeature.isCountryAvailable(anyString())).thenReturn(true);
+        lenient().when(context.session()).thenReturn(session);
+        lenient().when(session.userInformation()).thenReturn(userInformation);
     }
 
     @ParameterizedTest(name = "ETA Rejected")
     @EnumSource(
             value = CountryCode.class,
             names = {"GB", "CH", "SE"})
-    void shouldThrowExceptionWhenApiReturnsRejected(CountryCode countryCode) {
+    void shouldReturnFailureWhenApiReturnsRejected(CountryCode countryCode) {
         when(context.countryCode()).thenReturn(countryCode);
         when(userInformation.passportNumber()).thenReturn("MEX9876541");
+        when(homeOfficeGateway.validateEta(anyString(), anyString())).thenReturn("Rejected");
 
-        when(homeOfficeHttpClient.validateEta(any(EtaRequest.class)))
-                .thenReturn(new EtaResponse("Rejected"));
-
-        IllegalStateException exception =
-                assertThrows(
-                        IllegalStateException.class,
-                        () -> {
-                            etaValidationStep.onExecute(context);
-                        });
-
-        assertEquals("ETA validation rejected by Home Office", exception.getMessage());
+        StepResult result = etaValidationStep.onExecute(context);
+        assertFalse(result.isSuccess());
     }
 
     @ParameterizedTest(name = "ETA Pending")
@@ -80,16 +66,14 @@ class EtaValidationStepTest {
     void shouldMarkSessionAsPendingWhenApiReturnsPending(CountryCode countryCode) {
         when(context.countryCode()).thenReturn(countryCode);
         when(userInformation.passportNumber()).thenReturn("MEX9876542");
+        when(homeOfficeGateway.validateEta(anyString(), anyString())).thenReturn("Pending");
 
-        when(homeOfficeHttpClient.validateEta(any(EtaRequest.class)))
-                .thenReturn(new EtaResponse("Pending"));
-
-        when(context.withSessionData(any(Consumer.class))).thenReturn(context);
+        when(context.withSessionData(any())).thenReturn(context);
 
         StepResult result = etaValidationStep.onExecute(context);
 
         assertTrue(result.isSuccess());
-        verify(context).withSessionData(any(Consumer.class));
+        verify(context).withSessionData(any());
     }
 
     @ParameterizedTest(name = "ETA Accepted")
@@ -99,15 +83,22 @@ class EtaValidationStepTest {
     void shouldNotMarkManualReviewWhenApiReturnsAccepted(CountryCode countryCode) {
         when(context.countryCode()).thenReturn(countryCode);
         when(userInformation.passportNumber()).thenReturn("MEX9876540");
-
-        when(homeOfficeHttpClient.validateEta(any(EtaRequest.class)))
-                .thenReturn(new EtaResponse("Accepted"));
-
-        when(context.withSessionData(any(Consumer.class))).thenReturn(context);
+        when(homeOfficeGateway.validateEta(anyString(), anyString())).thenReturn("Accepted");
 
         StepResult result = etaValidationStep.onExecute(context);
 
         assertTrue(result.isSuccess());
-        verify(context).withSessionData(any(Consumer.class));
+        verify(context, never()).withSessionData(any());
+    }
+
+    @Test
+    void shouldSkipValidationForNonEnabledCountries() {
+        when(context.countryCode()).thenReturn(CountryCode.US);
+        when(etaFeature.isCountryAvailable("US")).thenReturn(false);
+
+        boolean shouldExecute = etaValidationStep.when(context);
+
+        assertFalse(shouldExecute);
+        verifyNoInteractions(homeOfficeGateway);
     }
 }

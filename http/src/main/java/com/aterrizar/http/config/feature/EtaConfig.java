@@ -17,21 +17,10 @@ public class EtaConfig implements EtaFeature {
 
     @Override
     public boolean isCountryAvailable(String countryCode) {
-        if (countryCode == null || countryCode.trim().isEmpty()) return false;
-        if (enabledCountries != null && enabledCountries.contains(countryCode)) return true;
-        return "GB".equals(countryCode)
-                && enabledCountries != null
-                && enabledCountries.contains("UK");
-    }
-
-    @Override
-    public String normalizeDestinationCode(String countryCode) {
-        if ("GB".equals(countryCode)
-                && enabledCountries != null
-                && enabledCountries.contains("UK")) {
-            return "UK";
+        if (countryCode == null || countryCode.trim().isEmpty()) {
+            return false;
         }
-        return countryCode;
+        return enabledCountries != null && enabledCountries.contains(countryCode);
     }
 
     public List<String> getEnabledCountries() {

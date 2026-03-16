@@ -8,9 +8,7 @@ import com.aterrizar.service.checkin.feature.EtaFeature;
 import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
-import com.aterrizar.service.external.homeoffice.EtaRequest;
-import com.aterrizar.service.external.homeoffice.EtaResponse;
-import com.aterrizar.service.external.homeoffice.HomeOfficeHttpClient;
+import com.aterrizar.service.external.HomeOfficeGateway;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,62 +16,55 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EtaValidationStep implements Step {
 
+    private static final String STATUS_PENDING = "Pending";
+    private static final String STATUS_REJECTED = "Rejected";
+
     private final EtaFeature etaFeature;
-    private final HomeOfficeHttpClient homeOfficeHttpClient;
+    private final HomeOfficeGateway homeOfficeGateway;
 
     @Override
     public boolean when(Context context) {
-        var session = context.session();
-        var userInfo = session.userInformation();
-
-        if (context.countryCode() == null) {
-            return false;
-        }
-
-        String countryCode = context.countryCode().name();
-
-        boolean isCountryEnabled = etaFeature.isCountryAvailable(countryCode);
-
-        boolean hasPassport =
-                Optional.ofNullable(userInfo).map(info -> info.passportNumber()).isPresent();
-
-        return isCountryEnabled && hasPassport;
+        return isCountryEnabled(context) && hasPassport(context);
     }
 
     @Override
     public StepResult onExecute(Context context) {
-        var session = context.session();
-        var userInfo = session.userInformation();
-
+        var userInfo = context.session().userInformation();
         String passportNumber = userInfo.passportNumber();
         String destinationCode = context.countryCode().name();
 
-        destinationCode = etaFeature.normalizeDestinationCode(destinationCode);
-
         try {
-            EtaResponse response =
-                    homeOfficeHttpClient.validateEta(
-                            new EtaRequest(passportNumber, destinationCode));
+            String status = homeOfficeGateway.validateEta(passportNumber, destinationCode);
 
-            if ("Pending".equalsIgnoreCase(response.status())) {
-                return StepResult.success(markManualReview(context, true));
+            if (STATUS_REJECTED.equalsIgnoreCase(status)) {
+                return StepResult.failure(context, "ETA validation rejected by Home Office");
             }
 
-            if ("Rejected".equalsIgnoreCase(response.status())) {
-                throw new IllegalStateException("ETA validation rejected by Home Office");
+            if (STATUS_PENDING.equalsIgnoreCase(status)) {
+                return StepResult.success(markManualReviewRequired(context));
             }
 
-            return StepResult.success(markManualReview(context, false));
+            return StepResult.success(context);
 
-        } catch (IllegalStateException e) {
-            throw e;
         } catch (Exception e) {
-            throw new IllegalStateException(
-                    "Fallo técnico en sesión [" + session.sessionId() + "]: " + e.getMessage(), e);
+            return StepResult.failure(
+                    context, "Fallo técnico en validación ETA: " + e.getMessage());
         }
     }
 
-    private Context markManualReview(Context context, boolean isRequired) {
-        return context.withSessionData(builder -> builder.etaManualReviewRequired(isRequired));
+    private boolean isCountryEnabled(Context context) {
+        return Optional.ofNullable(context.countryCode())
+                .map(code -> etaFeature.isCountryAvailable(code.name()))
+                .orElse(false);
+    }
+
+    private boolean hasPassport(Context context) {
+        return Optional.ofNullable(context.session().userInformation())
+                .map(info -> info.passportNumber() != null)
+                .orElse(false);
+    }
+
+    private Context markManualReviewRequired(Context context) {
+        return context.withSessionData(builder -> builder.etaManualReviewRequired(true));
     }
 }
