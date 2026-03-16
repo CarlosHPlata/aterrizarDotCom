@@ -1,19 +1,20 @@
-package com.aterrizar.service.checkin.steps;
-
-import com.aterrizar.service.external.scanner.ScannerGateway;
-import com.aterrizar.service.external.scanner.ScanValidationStatus;
+package com.aterrizar.service.checkin.scanner;
 
 import org.springframework.stereotype.Service;
 
+import com.aterrizar.service.external.scanner.ScanValidationStatus;
+import com.aterrizar.service.external.scanner.ScannerGateway;
+
 /**
- * Validates a document ID against provider-specific rules and delegates status
- * resolution to the appropriate {@link ScannerGateway}.
+ * Validates a document ID against provider-specific rules and delegates status resolution to the
+ * appropriate {@link ScannerGateway}.
  *
  * <p>Rules:
+ *
  * <ul>
- *   <li>Document IDs must be exactly 12 characters.</li>
- *   <li>Onfido documents must start with {@code ON-}.</li>
- *   <li>Jumio documents must start with {@code JU-}.</li>
+ *   <li>Document IDs must be exactly 12 characters.
+ *   <li>Onfido documents must start with {@code ON-}.
+ *   <li>Jumio documents must start with {@code JU-}.
  * </ul>
  */
 @Service
@@ -26,8 +27,8 @@ public class DocumentValidator {
     /**
      * Validates the document ID format and delegates to the gateway for status resolution.
      *
-     * @param gateway    the provider gateway resolved by {@link IdScanProviderFactory}
-     * @param token      the scan token previously issued to the frontend
+     * @param gateway the provider gateway resolved by
+     * @param token the scan token previously issued to the frontend
      * @param documentId the document ID sent back by the frontend
      * @return the validation status from the provider
      * @throws IllegalArgumentException if the document ID is invalid
@@ -47,7 +48,8 @@ public class DocumentValidator {
         if (!documentId.startsWith(expectedPrefix)) {
             throw new IllegalArgumentException(
                     "Document ID prefix does not match the assigned provider. "
-                            + "Expected prefix: " + expectedPrefix);
+                            + "Expected prefix: "
+                            + expectedPrefix);
         }
     }
 }

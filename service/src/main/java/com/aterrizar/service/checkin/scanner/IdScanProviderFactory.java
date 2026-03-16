@@ -1,19 +1,20 @@
 package com.aterrizar.service.checkin.scanner;
 
-import com.aterrizar.service.checkin.feature.OnfidoFeature;
-import com.aterrizar.service.external.scanner.ScannerGateway;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.aterrizar.service.checkin.feature.OnfidoFeature;
+import com.aterrizar.service.external.scanner.ScannerGateway;
+
 /**
- * Factory that resolves the correct {@link ScannerGateway} implementation based on the
- * passenger's country code.
+ * Factory that resolves the correct {@link ScannerGateway} implementation based on the passenger's
+ * country code.
  *
  * <p>Routing rules:
+ *
  * <ul>
- *   <li>Countries listed in {@code feature.onfido.enabled.countries} → Onfido (high-security)</li>
- *   <li>All other countries → Jumio (standard)</li>
+ *   <li>Countries listed in {@code feature.onfido.enabled.countries} → Onfido (high-security)
+ *   <li>All other countries → Jumio (standard)
  * </ul>
  */
 @Service
