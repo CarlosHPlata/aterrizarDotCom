@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/scanner-service/v1/jumio/token"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "token": "JU-{{randomValue length=10 type='ALPHANUMERIC'}}"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformers": [
+      "response-template"
+    ]
+  }
+}

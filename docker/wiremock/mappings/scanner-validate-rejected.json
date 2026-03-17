@@ -1,0 +1,27 @@
+{
+  "priority": 2,
+  "request": {
+    "method": "POST",
+    "urlPath": "/scanner-service/v1/validate",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": {
+          "expression": "$.token",
+          "matches": ".*2$"
+        }
+      },
+      {
+        "matchesJsonPath": "$.documentId"
+      }
+    ]
+  },
+  "response": {
+    "status": 406,
+    "jsonBody": {
+      "status": "REJECTED"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -17,7 +17,7 @@ public class PassportInformationStep implements Step {
     public StepResult onExecute(Context context) {
         var optionalRequest = Optional.ofNullable(context.checkinRequest());
 
-        if (isFieldFilled(optionalRequest)) {
+        if (optionalRequest.isPresent() && isFieldFilled(optionalRequest.get())) {
             var updatedContext = capturePassportNumber(context);
             return StepResult.success(updatedContext);
         }
@@ -51,10 +51,8 @@ public class PassportInformationStep implements Step {
                                         "Passport number is missing in the request."));
     }
 
-    private static boolean isFieldFilled(Optional<CheckinRequest> optionalRequest) {
-        return optionalRequest.isPresent()
-                && optionalRequest.get().providedFields().get(RequiredField.PASSPORT_NUMBER)
-                        != null;
+    private static boolean isFieldFilled(CheckinRequest optionalRequest) {
+        return optionalRequest.providedFields().get(RequiredField.PASSPORT_NUMBER) != null;
     }
 
     private Context requestPassportNumber(Context context) {
