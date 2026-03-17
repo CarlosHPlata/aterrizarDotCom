@@ -5,14 +5,14 @@ import org.springframework.stereotype.Component;
 import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
-import com.aterrizar.service.payment.port.ExternalPaymentPort;
+import com.aterrizar.service.external.PaymentGateway;
 
 @Component
 public class TransactionFinalizationStep implements Step {
 
-    private final ExternalPaymentPort externalPaymentPort;
+    private final PaymentGateway externalPaymentPort;
 
-    public TransactionFinalizationStep(ExternalPaymentPort externalPaymentPort) {
+    public TransactionFinalizationStep(PaymentGateway externalPaymentPort) {
         this.externalPaymentPort = externalPaymentPort;
     }
 
@@ -26,12 +26,10 @@ public class TransactionFinalizationStep implements Step {
     public StepResult onExecute(Context context) {
         String token = context.session().sessionData().paymentToken();
 
-        // Using the Port to comply with the Mock Behavior: GET /payment-service/v1/status/{token}
         String status = externalPaymentPort.getPaymentStatus(token);
-        boolean isSuccess = "SUCCESS".equalsIgnoreCase(status);
+        boolean isSuccess = PaymentGateway.PAYMENT_SUCCESS_STATUS.equalsIgnoreCase(status);
 
         if (!isSuccess) {
-            // Returning terminal to pause the flow and allow Polling
             return StepResult.terminal(context);
         }
 

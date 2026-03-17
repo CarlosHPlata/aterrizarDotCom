@@ -1,10 +1,10 @@
-package com.aterrizar.service.payment.adapter.impl;
+package com.aterrizar.http.external.gateway.payment.adapter.impl;
 
 import org.springframework.stereotype.Component;
 
-import com.aterrizar.service.payment.adapter.PaymentAdapter;
-import com.aterrizar.service.payment.model.PaymentRequestDto;
-import com.aterrizar.service.payment.port.ExternalPaymentPort;
+import com.aterrizar.http.external.gateway.payment.adapter.PaymentAdapter;
+import com.aterrizar.http.external.gateway.payment.port.ExternalPaymentPort;
+import com.aterrizar.service.core.model.PaymentRequestDto;
 
 @Component
 public class GovPaymentAdapter implements PaymentAdapter {

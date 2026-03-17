@@ -1,8 +1,6 @@
-package com.aterrizar.service.payment.model;
+package com.aterrizar.service.core.model;
 
 import java.util.Map;
-
-import com.aterrizar.service.core.model.RequiredField;
 
 public record PaymentRequestDto(
         String paymentMethod, String cardNumber, String linkIdentifier, String curpNumber) {

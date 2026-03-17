@@ -1,22 +1,20 @@
-package com.aterrizar.service.payment.factory.impl;
+package com.aterrizar.http.external.gateway.payment.factory;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.aterrizar.service.payment.adapter.PaymentAdapter;
-import com.aterrizar.service.payment.factory.PaymentAdapterFactory;
+import com.aterrizar.http.external.gateway.payment.adapter.PaymentAdapter;
 
 @Component
-public class PaymentAdapterFactoryImpl implements PaymentAdapterFactory {
+public class PaymentAdapterFactory {
 
     private final List<PaymentAdapter> adapters;
 
-    public PaymentAdapterFactoryImpl(List<PaymentAdapter> adapters) {
+    public PaymentAdapterFactory(List<PaymentAdapter> adapters) {
         this.adapters = adapters;
     }
 
-    @Override
     public PaymentAdapter getAdapter(String paymentMethod) {
         return adapters.stream()
                 .filter(adapter -> adapter.supports(paymentMethod))

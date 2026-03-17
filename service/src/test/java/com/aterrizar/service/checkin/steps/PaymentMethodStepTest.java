@@ -3,12 +3,13 @@ package com.aterrizar.service.checkin.steps;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.env.Environment;
 
+import com.aterrizar.service.checkin.feature.PaymentFeature;
 import com.aterrizar.service.core.model.RequiredField;
 import com.neovisionaries.i18n.CountryCode;
 
@@ -17,17 +18,17 @@ import mocks.MockContext;
 class PaymentMethodStepTest {
 
     private PaymentMethodStep paymentMethodStep;
-    private Environment environment;
+    private PaymentFeature paymentFeature;
 
     @BeforeEach
     void setUp() {
-        environment = mock(Environment.class);
-        paymentMethodStep = new PaymentMethodStep(environment);
+        paymentFeature = mock(PaymentFeature.class);
+        paymentMethodStep = new PaymentMethodStep(paymentFeature);
     }
 
     @Test
-    void shouldExecuteWhenPropertyExistsForCountry() {
-        when(environment.containsProperty("feature.tax.payments.US")).thenReturn(true);
+    void shouldExecuteWhenMethodsAreConfiguredForCountry() {
+        when(paymentFeature.getAllowedMethods("US")).thenReturn(List.of("3DS", "WIRE"));
         var context = MockContext.initializedMock(CountryCode.US);
 
         assertTrue(paymentMethodStep.when(context));
@@ -35,7 +36,7 @@ class PaymentMethodStepTest {
 
     @Test
     void shouldRequestPaymentMethodWhenMissing() {
-        when(environment.getProperty("feature.tax.payments.MX")).thenReturn("3DS,WIRE");
+        when(paymentFeature.getAllowedMethods("MX")).thenReturn(List.of("3DS", "WIRE"));
         var context = MockContext.initializedMock(CountryCode.MX);
 
         var result = paymentMethodStep.onExecute(context);
@@ -50,7 +51,7 @@ class PaymentMethodStepTest {
 
     @Test
     void shouldReturnFailureWhenMethodIsNotAllowed() {
-        when(environment.getProperty("feature.tax.payments.MX")).thenReturn("3DS,WIRE");
+        when(paymentFeature.getAllowedMethods("MX")).thenReturn(List.of("3DS", "WIRE"));
         var context =
                 MockContext.initializedMock(CountryCode.MX)
                         .withCheckinRequest(

@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 import com.aterrizar.http.external.gateway.PaymentClient;
 import com.aterrizar.http.external.gateway.PaymentStatusClient;
-import com.aterrizar.service.payment.model.PaymentRequestDto;
-import com.aterrizar.service.payment.port.ExternalPaymentPort;
+import com.aterrizar.http.external.gateway.payment.port.ExternalPaymentPort;
+import com.aterrizar.service.core.model.PaymentRequestDto;
 
 @Component
 public class PaymentIntegrationAdapter implements ExternalPaymentPort {

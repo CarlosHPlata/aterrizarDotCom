@@ -1,13 +1,14 @@
-package com.aterrizar.service.payment.port;
+package com.aterrizar.http.external.gateway.payment.port;
 
-import com.aterrizar.service.payment.model.PaymentRequestDto;
+import com.aterrizar.service.core.model.PaymentRequestDto;
 
 public interface ExternalPaymentPort {
-    String get3dsToken(PaymentRequestDto request);
 
     String getWireToken(PaymentRequestDto request);
 
     String getGovToken(PaymentRequestDto request);
 
     String getPaymentStatus(String paymentToken);
+
+    String get3dsToken(PaymentRequestDto request);
 }

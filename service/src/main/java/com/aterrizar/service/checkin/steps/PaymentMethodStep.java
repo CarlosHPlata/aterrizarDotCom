@@ -1,12 +1,11 @@
 package com.aterrizar.service.checkin.steps;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import com.aterrizar.service.checkin.feature.PaymentFeature;
 import com.aterrizar.service.core.framework.flow.Step;
 import com.aterrizar.service.core.framework.flow.StepResult;
 import com.aterrizar.service.core.model.Context;
@@ -15,24 +14,23 @@ import com.aterrizar.service.core.model.RequiredField;
 @Component
 public class PaymentMethodStep implements Step {
 
-    private final Environment environment;
+    private final PaymentFeature paymentFeature;
 
-    public PaymentMethodStep(Environment environment) {
-        this.environment = environment;
+    public PaymentMethodStep(PaymentFeature paymentFeature) {
+        this.paymentFeature = paymentFeature;
     }
 
     @Override
     public boolean when(Context context) {
         String countryCode = context.countryCode().name();
-        return environment.containsProperty("feature.tax.payments." + countryCode);
+        return !paymentFeature.getAllowedMethods(countryCode).isEmpty();
     }
 
     @Override
     public StepResult onExecute(Context context) {
         String countryCode = context.countryCode().name();
-        String allowedMethodsProperty =
-                environment.getProperty("feature.tax.payments." + countryCode);
-        List<String> allowedMethods = Arrays.asList(allowedMethodsProperty.split(","));
+
+        List<String> allowedMethods = paymentFeature.getAllowedMethods(countryCode);
 
         Map<RequiredField, String> providedFields = context.checkinRequest().providedFields();
         String paymentMethod =
