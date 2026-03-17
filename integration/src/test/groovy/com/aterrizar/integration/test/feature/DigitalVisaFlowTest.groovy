@@ -14,7 +14,7 @@ class DigitalVisaFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when: "Initialize session with flight to visa-required country"
-        def session = checkin.initSession("MX", [flightCode])
+        def session = checkin.initSession("AD", [flightCode])
         InitVerifier.verify(session)
 
         and: "Continue with passport but no visa"
@@ -35,7 +35,7 @@ class DigitalVisaFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when: "Initialize session"
-        def session = checkin.initSession("MX", [flightCode])
+        def session = checkin.initSession("AD", [flightCode])
         InitVerifier.verify(session)
 
         and: "Fill passport"
@@ -59,7 +59,7 @@ class DigitalVisaFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when:
-        def session = checkin.initSession("MX", ["USJFKGBLHR"])
+        def session = checkin.initSession("AD", ["USJFKGBLHR"])
         InitVerifier.verify(session)
 
         and:
@@ -74,7 +74,7 @@ class DigitalVisaFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when: "Mixed flights: UK + India"
-        def session = checkin.initSession("MX", ["USJFKGBLHR", "GBLHRINDEL"])
+        def session = checkin.initSession("AD", ["USJFKGBLHR", "GBLHRINDEL"])
         InitVerifier.verify(session)
 
         and:
@@ -89,7 +89,7 @@ class DigitalVisaFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when: "Flights to both India and Australia"
-        def session = checkin.initSession("MX", ["USJFKINDEL", "INDELAUSYD"])
+        def session = checkin.initSession("AD", ["USJFKINDEL", "INDELAUSYD"])
         InitVerifier.verify(session)
 
         and: "Fill all required information at once"

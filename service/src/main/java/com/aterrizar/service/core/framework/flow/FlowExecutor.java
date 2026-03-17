@@ -3,6 +3,7 @@ package com.aterrizar.service.core.framework.flow;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.aterrizar.service.core.framework.flow.interceptor.StepInterceptor;
 import com.aterrizar.service.core.model.Context;
 import com.aterrizar.service.core.model.ExperimentalStepKey;
 import com.aterrizar.service.core.model.session.Status;
@@ -15,14 +16,28 @@ import com.aterrizar.service.core.model.session.Status;
  * whether the flow should continue or terminate.
  */
 public class FlowExecutor {
+
     /** A list of `Step` objects that define the chain of responsibility. */
     protected List<Step> steps;
 
     protected Step lastStep;
 
+    /** A list of interceptors that are notified before and after each step execution. */
+    protected List<StepInterceptor> interceptors;
+
     /** Constructs a new `FlowExecutor` with an empty list of steps. */
     public FlowExecutor() {
+        this(new ArrayList<>());
+    }
+
+    /**
+     * Constructs a new `FlowExecutor` with a predefined list of interceptors.
+     *
+     * @param interceptors the interceptors that will observe the execution of each step
+     */
+    public FlowExecutor(List<StepInterceptor> interceptors) {
         this.steps = new ArrayList<>();
+        this.interceptors = interceptors != null ? interceptors : new ArrayList<>();
     }
 
     /**
@@ -68,27 +83,39 @@ public class FlowExecutor {
     /**
      * Executes the chain of responsibility using the provided `Context`.
      *
-     * <p>Each `Step` in the chain processes the `Context`. The flow terminates early if a `Step`
-     * returns a terminal result or if specific conditions are met (e.g., failure with a message).
+     * <p>Each `Step` in the chain processes the `Context`. Interceptors are notified before and
+     * after each step execution. The flow terminates early if a `Step` returns a terminal result or
+     * if specific conditions are met (e.g., failure with a message).
      *
      * @param context the initial `Context` to be processed
      * @return the updated `Context` after processing all applicable steps
      */
     public Context execute(Context context) {
+
         var updatedContext = context;
+
         for (Step step : this.steps) {
+
+            String stepName = step.getClass().getSimpleName();
+
+            notifyBefore(updatedContext, stepName);
+
             var stepResult = step.execute(updatedContext);
             updatedContext = stepResult.context();
+
+            notifyAfter(updatedContext, stepResult, stepName);
 
             if (!stepResult.isSuccess()
                     && stepResult.isTerminal()
                     && stepResult.message() != null) {
+
                 updatedContext =
                         updatedContext
                                 .withStatus(Status.REJECTED)
                                 .withCheckinResponse(
                                         responseBuilder ->
                                                 responseBuilder.errorMessage(stepResult.message()));
+
                 break;
             }
 
@@ -98,9 +125,42 @@ public class FlowExecutor {
         }
 
         if (this.lastStep != null) {
+
+            String stepName = this.lastStep.getClass().getSimpleName();
+
+            notifyBefore(updatedContext, stepName);
+
             var stepResult = this.lastStep.execute(updatedContext);
             updatedContext = stepResult.context();
+
+            notifyAfter(updatedContext, stepResult, stepName);
         }
+
         return updatedContext;
+    }
+
+    /**
+     * Notifies all registered interceptors before a step is executed.
+     *
+     * @param context the current execution context
+     * @param stepName the name of the step that will be executed
+     */
+    private void notifyBefore(Context context, String stepName) {
+        for (StepInterceptor interceptor : interceptors) {
+            interceptor.before(context, stepName);
+        }
+    }
+
+    /**
+     * Notifies all registered interceptors after a step has been executed.
+     *
+     * @param context the current execution context
+     * @param result the result produced by the executed step
+     * @param stepName the name of the step that was executed
+     */
+    private void notifyAfter(Context context, StepResult result, String stepName) {
+        for (StepInterceptor interceptor : interceptors) {
+            interceptor.after(context, result, stepName);
+        }
     }
 }

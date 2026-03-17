@@ -5,11 +5,11 @@
   },
   "response": {
     "status": 200,
-    "jsonBody": {
-      "status": "SUCCESS"
-    },
     "headers": {
       "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "status": "SUCCESS"
     }
   }
 }

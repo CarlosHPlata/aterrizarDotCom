@@ -13,7 +13,7 @@ class ContinueFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when:
-        def session = checkin.initSession("MX")
+        def session = checkin.initSession("AD")
         InitVerifier.verify(session)
 
         and:
@@ -30,7 +30,7 @@ class ContinueFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when:
-        def session = checkin.initSession("MX")
+        def session = checkin.initSession("AD")
         InitVerifier.verify(session)
 
         and: "continue without filling anything"
@@ -51,7 +51,7 @@ class ContinueFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when:
-        def session = checkin.initSession("MX")
+        def session = checkin.initSession("AD")
         InitVerifier.verify(session)
 
         and: "continue but filling passport"
@@ -67,7 +67,7 @@ class ContinueFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when:
-        def session = checkin.initSession("MX")
+        def session = checkin.initSession("AD")
         InitVerifier.verify(session)
 
         and: "continue without filling anything"
@@ -86,7 +86,7 @@ class ContinueFlowTest extends Specification {
         def checkin = Checkin.create()
 
         when:
-        def session = checkin.initSession("MX", [email: "test__agreementdrop@checkin.com"])
+        def session = checkin.initSession("AD", [email: "test__agreementdrop@checkin.com"])
         InitVerifier.verify(session)
 
         and:

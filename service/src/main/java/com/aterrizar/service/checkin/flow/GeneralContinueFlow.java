@@ -8,7 +8,10 @@ import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
 import com.aterrizar.service.checkin.steps.DigitalVisaValidationStep;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
+import com.aterrizar.service.checkin.steps.PaymentMethodStep;
+import com.aterrizar.service.checkin.steps.PaymentValidationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
+import com.aterrizar.service.checkin.steps.TransactionFinalizationStep;
 import com.aterrizar.service.checkin.steps.ValidateSessionStep;
 import com.aterrizar.service.core.framework.flow.FlowExecutor;
 import com.aterrizar.service.core.framework.flow.FlowStrategy;
@@ -23,10 +26,15 @@ public class GeneralContinueFlow implements FlowStrategy {
     private final ValidateSessionStep validateSessionStep;
     private final BiometricEnrollmentStep biometricEnrollmentStep;
     private final PassportInformationStep passportInformationStep;
+
+    private final PaymentMethodStep paymentMethodStep;
+    private final PaymentValidationStep paymentValidationStep;
+    private final TransactionFinalizationStep transactionFinalizationStep;
+
+    private final DigitalVisaValidationStep digitalVisaValidationStep;
     private final AgreementSignStep agreementSignStep;
     private final SaveSessionStep saveSessionStep;
     private final CompleteCheckinStep completeCheckinStep;
-    private final DigitalVisaValidationStep digitalVisaValidationStep;
 
     @Override
     public FlowExecutor flow(FlowExecutor baseExecutor) {
@@ -35,6 +43,9 @@ public class GeneralContinueFlow implements FlowStrategy {
                 .and(validateSessionStep)
                 .andExperimental(biometricEnrollmentStep, ExperimentalStepKey.BIOMETRIC_CHECK)
                 .and(passportInformationStep)
+                .and(paymentMethodStep)
+                .and(paymentValidationStep)
+                .and(transactionFinalizationStep)
                 .and(digitalVisaValidationStep)
                 .andExperimental(agreementSignStep, ExperimentalStepKey.AGREEMENT_SIGN)
                 .and(completeCheckinStep)

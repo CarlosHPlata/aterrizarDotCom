@@ -8,8 +8,10 @@ enum UserInput {
     VISA_NUMBER("VISA_NUMBER", "Digital Visa Number"),
     FUNDS_AMOUNT_US("FUNDS_AMOUNT_US", "Funds Amount (US)"),
     BIOMETRIC_VERIFIED("BIOMETRIC_VERIFIED", "Biometric Verified")
-    //BIOMETRIC_VERIFIED("BIOMETRIC_VERIFIED", "Biometric Verification")
-
+    PAYMENT_METHOD("PAYMENT_METHOD", "Payment Method"),
+    CARD_NUMBER("CARD_NUMBER", "Card Number"),
+    LINK_IDENTIFIER("LINK_IDENTIFIER", "Link Identifier"),
+    CURP_NUMBER("CURP_NUMBER", "Curp Number")
 
     private final String value
     private final String id

@@ -17,7 +17,10 @@ import com.aterrizar.service.checkin.steps.CompleteCheckinStep;
 import com.aterrizar.service.checkin.steps.DigitalVisaValidationStep;
 import com.aterrizar.service.checkin.steps.GetSessionStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
+import com.aterrizar.service.checkin.steps.PaymentMethodStep;
+import com.aterrizar.service.checkin.steps.PaymentValidationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
+import com.aterrizar.service.checkin.steps.TransactionFinalizationStep;
 import com.aterrizar.service.checkin.steps.ValidateSessionStep;
 import com.aterrizar.service.core.model.ExperimentalStepKey;
 import com.aterrizar.service.core.model.session.ExperimentalData;
@@ -32,6 +35,11 @@ class GeneralContinueFlowTest {
     @Mock private ValidateSessionStep validateSessionStep;
     @Mock private BiometricEnrollmentStep biometricEnrollmentStep;
     @Mock private PassportInformationStep passportInformationStep;
+
+    @Mock private PaymentMethodStep paymentMethodStep;
+    @Mock private PaymentValidationStep paymentValidationStep;
+    @Mock private TransactionFinalizationStep transactionFinalizationStep;
+
     @Mock private AgreementSignStep agreementSignStep;
     @Mock private SaveSessionStep saveSessionStep;
     @Mock private CompleteCheckinStep completeCheckinStep;
@@ -57,6 +65,9 @@ class GeneralContinueFlowTest {
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
+                        "PaymentMethodStep",
+                        "PaymentValidationStep",
+                        "TransactionFinalizationStep",
                         "DigitalVisaValidationStep",
                         "AgreementSignStep",
                         "CompleteCheckinStep");
@@ -75,6 +86,9 @@ class GeneralContinueFlowTest {
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
+                        "PaymentMethodStep",
+                        "PaymentValidationStep",
+                        "TransactionFinalizationStep",
                         "DigitalVisaValidationStep",
                         "CompleteCheckinStep");
         assertEquals(expectedSteps.size(), flowExecutor.getExecutedSteps().size());

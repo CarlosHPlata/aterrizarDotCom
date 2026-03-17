@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/payment-service/v1/gov/token"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "paymentToken": "GOV-{{randomValue length=15 type='ALPHANUMERIC'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}
