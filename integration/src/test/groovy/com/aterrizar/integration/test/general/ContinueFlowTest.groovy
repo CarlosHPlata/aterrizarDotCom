@@ -42,6 +42,12 @@ class ContinueFlowTest extends Specification {
         and: "fill passport"
         continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
 
+        and: "fill scanner"
+        continueResponse = session.fillUserInput([
+                (UserInput.SCAN_TOKEN): "JU-TOKEN001",
+                (UserInput.DOCUMENT_ID): "JU-DOC123456"
+        ])
+
         then: "be able to continue"
         ContinueVerifier.completed(continueResponse)
     }
@@ -57,12 +63,17 @@ class ContinueFlowTest extends Specification {
         and: "continue but filling passport"
         def continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
 
+        and: "fill scanner"
+        continueResponse = session.fillUserInput([
+                (UserInput.SCAN_TOKEN): "JU-TOKEN001",
+                (UserInput.DOCUMENT_ID): "JU-DOC123456"
+        ])
+
         then: "be able to continue"
         ContinueVerifier.completed(continueResponse)
     }
 
     def "should complete the entire flow"() {
-
         setup:
         def checkin = Checkin.create()
 
@@ -77,6 +88,12 @@ class ContinueFlowTest extends Specification {
         and: "fill passport"
         continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
 
+        and: "fill scanner"
+        continueResponse = session.fillUserInput([
+                (UserInput.SCAN_TOKEN): "JU-TOKEN001",
+                (UserInput.DOCUMENT_ID): "JU-DOC123456"
+        ])
+
         then: "be completed"
         ContinueVerifier.completed(continueResponse)
     }
@@ -89,17 +106,25 @@ class ContinueFlowTest extends Specification {
         def session = checkin.initSession("MX", [email: "test__agreementdrop@checkin.com"])
         InitVerifier.verify(session)
 
-        and:
+        and: "Fill passport"
         def continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
+
+        and:
+        ContinueVerifier.requiredField(continueResponse, UserInput.SCAN_TOKEN)
+
+        and: "Fill scanner"
+        continueResponse = session.fillUserInput([
+                (UserInput.SCAN_TOKEN): "JU-TOKEN001",
+                (UserInput.DOCUMENT_ID): "JU-DOC123456"
+        ])
 
         and:
         ContinueVerifier.requiredField(continueResponse, UserInput.AGREEMENT_SIGNED)
 
-        and:
+        and: "Fill agreement"
         continueResponse = session.fillUserInput([(UserInput.AGREEMENT_SIGNED): "true"])
 
-        then:
+        then: "Should complete"
         ContinueVerifier.completed(continueResponse)
     }
-
 }

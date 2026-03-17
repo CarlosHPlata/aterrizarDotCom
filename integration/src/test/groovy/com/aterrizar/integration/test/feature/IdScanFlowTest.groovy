@@ -125,9 +125,9 @@ class IdScanFlowTest extends Specification {
             exception = e
         }
 
-        then: "Should return 406"
+        then: "Should return 400 (Bad Request) on validation failure"
         exception != null
-        exception.statusCode.value() == 406
+        exception.statusCode.value() == 400
     }
 
     def "should use Onfido provider for US and require ON- prefixed document ID"() {

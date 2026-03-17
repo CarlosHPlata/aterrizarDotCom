@@ -70,7 +70,10 @@ public class IdScanStep implements Step {
             case SUCCESS -> {
                 var updatedContext =
                         context.withUserInformation(
-                                builder -> builder.documentId(documentId).idScanRetries(0));
+                                builder ->
+                                        builder.documentId(documentId)
+                                                .scanToken(null)
+                                                .idScanRetries(0));
                 yield StepResult.success(updatedContext);
             }
             case PENDING -> {

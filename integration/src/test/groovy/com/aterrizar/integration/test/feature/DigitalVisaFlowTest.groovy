@@ -45,6 +45,12 @@ class DigitalVisaFlowTest extends Specification {
         and: "Fill visa and complete"
         continueResponse = session.fillUserInput([(UserInput.VISA_NUMBER): "VISA123456"])
 
+        and: "Fill scanner"
+        continueResponse = session.fillUserInput([
+                (UserInput.SCAN_TOKEN) : "JU-TOKEN001",
+                (UserInput.DOCUMENT_ID): "JU-DOC123456"
+        ])
+
         then: "Should complete"
         ContinueVerifier.completed(continueResponse)
 
@@ -62,8 +68,14 @@ class DigitalVisaFlowTest extends Specification {
         def session = checkin.initSession("MX", ["USJFKGBLHR"])
         InitVerifier.verify(session)
 
-        and:
+        and: "Fill passport"
         def continueResponse = session.fillUserInput([(UserInput.PASSPORT_NUMBER): "A12345678"])
+
+        and: "Fill scanner"
+        continueResponse = session.fillUserInput([
+                (UserInput.SCAN_TOKEN) : "JU-TOKEN001",
+                (UserInput.DOCUMENT_ID): "JU-DOC123456"
+        ])
 
         then:
         ContinueVerifier.completed(continueResponse)
@@ -92,10 +104,21 @@ class DigitalVisaFlowTest extends Specification {
         def session = checkin.initSession("MX", ["USJFKINDEL", "INDELAUSYD"])
         InitVerifier.verify(session)
 
-        and: "Fill all required information at once"
+        and: "Fill passport first to trigger visa request"
         def continueResponse = session.fillUserInput([
-                (UserInput.PASSPORT_NUMBER): "A12345678",
-                (UserInput.VISA_NUMBER): "MULTIVISA123",
+                (UserInput.PASSPORT_NUMBER): "A12345678"
+        ])
+        ContinueVerifier.requiredField(continueResponse, UserInput.VISA_NUMBER)
+
+        and: "Fill visa"
+        continueResponse = session.fillUserInput([
+                (UserInput.VISA_NUMBER): "MULTIVISA123"
+        ])
+
+        and: "Fill scanner and agreement at once"
+        continueResponse = session.fillUserInput([
+                (UserInput.SCAN_TOKEN) : "JU-TOKEN001",
+                (UserInput.DOCUMENT_ID): "JU-DOC123456",
                 (UserInput.AGREEMENT_SIGNED): "true"
         ])
 

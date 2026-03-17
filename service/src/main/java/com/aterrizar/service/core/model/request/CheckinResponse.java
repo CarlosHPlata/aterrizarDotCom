@@ -15,6 +15,7 @@ import lombok.Getter;
 public class CheckinResponse {
     private Set<RequiredField> providedFields;
     @Nullable private String errorMessage;
+    @Nullable private String scanToken;
 
     public CheckinResponse addProvidedField(RequiredField field) {
         if (providedFields == null) {

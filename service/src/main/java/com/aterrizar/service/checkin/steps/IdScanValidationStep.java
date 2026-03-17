@@ -44,7 +44,8 @@ public class IdScanValidationStep implements Step {
         var updatedContext =
                 context.withUserInformation(builder -> builder.scanToken(token))
                         .withRequiredField(RequiredField.SCAN_TOKEN)
-                        .withRequiredField(RequiredField.DOCUMENT_ID);
+                        .withRequiredField(RequiredField.DOCUMENT_ID)
+                        .withCheckinResponse(response -> response.scanToken(token));
 
         return StepResult.terminal(updatedContext);
     }

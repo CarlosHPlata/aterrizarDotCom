@@ -14,6 +14,12 @@ public class UserInputRequired implements StatusMapperTemplate {
     @Override
     public CheckinResponseData build(
             Context context, CheckinResponseData.CheckinResponseDataBuilder builder) {
+
+        var coreResponse = context.checkinResponse();
+        if (coreResponse != null && coreResponse.scanToken() != null) {
+            builder.scanToken(coreResponse.scanToken());
+        }
+
         return builder.inputRequiredFields(inputFields(context)).build();
     }
 

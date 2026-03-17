@@ -6,7 +6,9 @@ enum UserInput {
     EMAIL("EMAIL", "Email"),
     AGREEMENT_SIGNED("AGREEMENT_SIGNED", "Agreement Signed"),
     VISA_NUMBER("VISA_NUMBER", "Digital Visa Number"),
-    FUNDS_AMOUNT_US("FUNDS_AMOUNT_US", "Funds Amount (US)")
+    FUNDS_AMOUNT_US("FUNDS_AMOUNT_US", "Funds Amount (US)"),
+    SCAN_TOKEN("SCAN_TOKEN", "Scan Token"),
+    DOCUMENT_ID("DOCUMENT_ID", "Document ID");
 
     private final String value
     private final String id
