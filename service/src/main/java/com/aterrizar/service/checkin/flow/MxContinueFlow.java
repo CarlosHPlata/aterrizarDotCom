@@ -13,6 +13,9 @@ import com.aterrizar.service.checkin.steps.TaxAgreementStep;
 import com.aterrizar.service.checkin.steps.TaxCalculationStep;
 import com.aterrizar.service.checkin.steps.TransactionFinalizationStep;
 import com.aterrizar.service.checkin.steps.ValidateSessionStep;
+import com.aterrizar.service.checkin.steps.PaymentMethodStep;
+import com.aterrizar.service.checkin.steps.PaymentValidationStep;
+import com.aterrizar.service.checkin.steps.TransactionFinalizationStep;
 import com.aterrizar.service.core.framework.flow.FlowExecutor;
 import com.aterrizar.service.core.framework.flow.FlowStrategy;
 
