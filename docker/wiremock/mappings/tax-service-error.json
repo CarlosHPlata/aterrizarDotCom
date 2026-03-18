@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/tax-service/v1/calculate",
+    "queryParameters": {
+      "rfc": {
+        "matches": ".*1$"
+      }
+    }
+  },
+  "response": {
+    "status": 406,
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
