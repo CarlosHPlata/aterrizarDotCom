@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/payment-service/v1/wire/token"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "paymentToken": "WIRE-{{randomValue length=12 type='ALPHANUMERIC'}}"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformers": [
+      "response-template"
+    ]
+  }
+}

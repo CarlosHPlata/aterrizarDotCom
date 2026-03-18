@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/biometric-service/v1/start"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "biometric-service/start-success.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

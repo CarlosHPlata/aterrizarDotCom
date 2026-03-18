@@ -1,0 +1,22 @@
+{
+  "priority": 10,
+  "request": {
+    "method": "POST",
+    "urlPath": "/biometric-service/v1/verify",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": {
+          "expression": "$.authSessionToken",
+          "doesNotMatch": ".*verify$"
+        }
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "biometric-service/verify-success.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

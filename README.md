@@ -169,10 +169,15 @@ To see the service in action immediately:
 4. Use the following sample payload to initialize a session:
    ```json
    {
-     "flightNumber": "USJFKGBLHF",
-     "passengerName": "John Doe",
-     "countryCode": "US"
-   }
+        "country": "US",
+        "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "passengers": 2,
+        "email": "example@example.com",
+        "flightNumbers": [
+            "USJFKGBLHF",
+            "GBLHRMXMID"
+        ]
+    }
    ```
 5. You should receive a `200 OK` with a `sessionId`. Congratulations, your first check-in flow has started!
 

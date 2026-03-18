@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.aterrizar.service.core.framework.flow.interceptor.StepInterceptor;
 import com.aterrizar.service.core.framework.strategy.CheckinCountryStrategy;
 import com.neovisionaries.i18n.CountryCode;
 
@@ -20,6 +21,7 @@ import com.neovisionaries.i18n.CountryCode;
 @Component
 public class CheckinStrategyFactory {
     private final List<CheckinCountryStrategy> strategies;
+    private final List<StepInterceptor> interceptors;
 
     private Map<CountryCode, CheckinCountryStrategy> strategyRegistry;
 
@@ -28,8 +30,19 @@ public class CheckinStrategyFactory {
      *
      * @param strategies the list of {@link CheckinCountryStrategy} instances to manage
      */
-    public CheckinStrategyFactory(@Autowired List<CheckinCountryStrategy> strategies) {
+    @Autowired
+    public CheckinStrategyFactory(
+            List<CheckinCountryStrategy> strategies, List<StepInterceptor> interceptors) {
+
         this.strategies = strategies;
+        this.interceptors = interceptors != null ? interceptors : List.of();
+        init();
+    }
+
+    // Constructor para tests
+    public CheckinStrategyFactory(List<CheckinCountryStrategy> strategies) {
+        this.strategies = strategies;
+        this.interceptors = List.of();
         init();
     }
 
@@ -71,7 +84,13 @@ public class CheckinStrategyFactory {
      *     strategy if none is found
      */
     public CheckinCountryStrategy getService(CountryCode countryCode) {
-        return strategyRegistry.getOrDefault(
-                countryCode, strategyRegistry.get(CountryCode.UNDEFINED));
+
+        CheckinCountryStrategy strategy =
+                strategyRegistry.getOrDefault(
+                        countryCode, strategyRegistry.get(CountryCode.UNDEFINED));
+
+        strategy.setInterceptors(interceptors);
+
+        return strategy;
     }
 }

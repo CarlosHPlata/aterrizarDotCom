@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/payment-service/v1/3ds/token"
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": {
+      "paymentToken": "3DS-{{randomValue length=10 type='ALPHANUMERIC'}}"
+    },
+    "transformers": ["response-template"]
+  }
+}

@@ -12,11 +12,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class GeneralContinueFlow implements FlowStrategy {
-    private final GetSessionStep getSessionStep;
-    private final ValidateSessionStep validateSessionStep;
-    private final PassportInformationStep passportInformationStep;
     private final AgreementSignStep agreementSignStep;
-    private final SaveSessionStep saveSessionStep;
     private final CompleteCheckinStep completeCheckinStep;
     private final DigitalVisaValidationStep digitalVisaValidationStep;
     private final IdScanValidationStep idScanValidationStep;
@@ -28,6 +24,9 @@ public class GeneralContinueFlow implements FlowStrategy {
                 .and(getSessionStep)
                 .and(validateSessionStep)
                 .and(passportInformationStep)
+                .and(paymentMethodStep)
+                .and(paymentValidationStep)
+                .and(transactionFinalizationStep)
                 .and(digitalVisaValidationStep)
                 .and(idScanValidationStep)
                 .and(idScanStep)

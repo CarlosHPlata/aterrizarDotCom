@@ -1,0 +1,27 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "POST",
+    "urlPath": "/scanner-service/v1/validate",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": {
+          "expression": "$.token",
+          "matches": ".*0$"
+        }
+      },
+      {
+        "matchesJsonPath": "$.documentId"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "status": "PENDING"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

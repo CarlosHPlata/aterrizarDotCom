@@ -18,7 +18,10 @@ import com.aterrizar.service.checkin.steps.GetSessionStep;
 import com.aterrizar.service.checkin.steps.IdScanStep;
 import com.aterrizar.service.checkin.steps.IdScanValidationStep;
 import com.aterrizar.service.checkin.steps.PassportInformationStep;
+import com.aterrizar.service.checkin.steps.PaymentMethodStep;
+import com.aterrizar.service.checkin.steps.PaymentValidationStep;
 import com.aterrizar.service.checkin.steps.SaveSessionStep;
+import com.aterrizar.service.checkin.steps.TransactionFinalizationStep;
 import com.aterrizar.service.checkin.steps.ValidateSessionStep;
 import com.aterrizar.service.core.model.ExperimentalStepKey;
 import com.aterrizar.service.core.model.session.ExperimentalData;
@@ -32,6 +35,11 @@ class GeneralContinueFlowTest {
     @Mock private GetSessionStep getSessionStep;
     @Mock private ValidateSessionStep validateSessionStep;
     @Mock private PassportInformationStep passportInformationStep;
+
+    @Mock private PaymentMethodStep paymentMethodStep;
+    @Mock private PaymentValidationStep paymentValidationStep;
+    @Mock private TransactionFinalizationStep transactionFinalizationStep;
+
     @Mock private AgreementSignStep agreementSignStep;
     @Mock private SaveSessionStep saveSessionStep;
     @Mock private CompleteCheckinStep completeCheckinStep;
@@ -59,6 +67,9 @@ class GeneralContinueFlowTest {
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
+                        "PaymentMethodStep",
+                        "PaymentValidationStep",
+                        "TransactionFinalizationStep",
                         "DigitalVisaValidationStep",
                         "IdScanValidationStep",
                         "IdScanStep",
@@ -79,6 +90,9 @@ class GeneralContinueFlowTest {
                         "GetSessionStep",
                         "ValidateSessionStep",
                         "PassportInformationStep",
+                        "PaymentMethodStep",
+                        "PaymentValidationStep",
+                        "TransactionFinalizationStep",
                         "DigitalVisaValidationStep",
                         "IdScanValidationStep",
                         "IdScanStep",

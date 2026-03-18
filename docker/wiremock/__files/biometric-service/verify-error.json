@@ -1,0 +1,5 @@
+{
+  "verified": false,
+  "error": "Biometric verification failed",
+  "code": "BIOMETRIC_FAILED"
+}
