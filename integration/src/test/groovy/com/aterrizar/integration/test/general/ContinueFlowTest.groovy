@@ -52,6 +52,7 @@ class ContinueFlowTest extends Specification {
 
         when:
         def session = checkin.initSession("AD")
+
         InitVerifier.verify(session)
 
         and: "continue but filling passport"

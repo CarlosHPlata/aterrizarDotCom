@@ -7,6 +7,8 @@ enum UserInput {
     AGREEMENT_SIGNED("AGREEMENT_SIGNED", "Agreement Signed"),
     VISA_NUMBER("VISA_NUMBER", "Digital Visa Number"),
     FUNDS_AMOUNT_US("FUNDS_AMOUNT_US", "Funds Amount (US)"),
+    RFC("RFC", "RFC Number"),
+    DIGITAL_SIGN("DIGITAL_SIGN", "Digital Sign"),
     PAYMENT_METHOD("PAYMENT_METHOD", "Payment Method"),
     CARD_NUMBER("CARD_NUMBER", "Card Number"),
     LINK_IDENTIFIER("LINK_IDENTIFIER", "Link Identifier"),
