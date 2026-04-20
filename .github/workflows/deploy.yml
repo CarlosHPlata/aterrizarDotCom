@@ -1,0 +1,50 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push-to-artifactory:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup VPN
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          audience: ${{ secrets.TS_OAUTH_AUDIENCE }}
+          tags: tag:ci
+
+      - name: Set Up Docker buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker
+
+      - name: Configure insecure Docker registry
+        run: |
+          sudo bash -c 'cat << EOF > /etc/docker/daemon.json
+          {
+            "insecure-registries": ["gateway.tail9a6ddb.ts.net:5000"]
+          }
+          EOF'
+          sudo systemctl restart docker
+
+      - name: Login to registry
+        run: echo "${{ secrets.REGISTRY_PASS }}" | docker login gateway.tail9a6ddb.ts.net:5000 -u ${{ secrets.REGISTRY_USER }} --password-stdin
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: gateway.tail9a6ddb.ts.net:5000/aterrizar:latest
+          provenance: false
