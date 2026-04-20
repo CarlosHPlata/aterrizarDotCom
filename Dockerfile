@@ -21,10 +21,9 @@ COPY integration ./integration
 
 RUN ./gradlew --no-daemon :http:bootJar -x test
 
-RUN mkdir -p /workspace/extracted \
-    && cp http/build/libs/*.jar /workspace/app.jar \
-    && cd /workspace/extracted \
-    && java -Djarmode=tools -jar /workspace/app.jar extract --layers --launcher
+RUN cp http/build/libs/*.jar /workspace/app.jar \
+    && java -Djarmode=tools -jar /workspace/app.jar extract \
+        --layers --launcher --destination /workspace/extracted
 
 # ---------- Runtime stage ----------
 FROM eclipse-temurin:24-jre AS runtime
