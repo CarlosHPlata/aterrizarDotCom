@@ -4,7 +4,7 @@
     "urlPath": "/experimentation/api/v1",
     "queryParameters": {
       "mail": {
-        "matches": "([A-Za-z]+)@([A-Za-z]+).com"
+        "doesNotMatch": ".*__([A-Za-z]+)@checkin\\.com" 
       }
     }
   },

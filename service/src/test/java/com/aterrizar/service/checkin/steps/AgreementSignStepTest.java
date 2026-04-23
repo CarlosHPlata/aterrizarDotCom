@@ -50,6 +50,16 @@ class AgreementSignStepTest {
     }
 
     @Test
+    void shouldNotExecuteWhenBiometricAuthenticated() {
+        var context =
+                MockContext.initializedMock(CountryCode.AD)
+                        .withSession(b -> b.biometricAuthenticated(true));
+
+        var result = agreementSignStep.when(context);
+        assertFalse(result);
+    }
+
+    @Test
     void shouldRequestAgreementSignedFieldWhenNotProvided() {
         var context =
                 MockContext.initializedMock(CountryCode.US)

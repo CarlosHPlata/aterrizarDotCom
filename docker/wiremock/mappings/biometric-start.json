@@ -5,7 +5,10 @@
   },
   "response": {
     "status": 200,
-    "bodyFileName": "biometric-service/start-success.json",
+    "jsonBody": {
+      "authSessionToken": "biometric_session_token_ok",
+      "requiredField": "biometric_session_token_ok_verified"
+    },
     "headers": {
       "Content-Type": "application/json"
     }

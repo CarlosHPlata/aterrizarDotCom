@@ -18,4 +18,5 @@ public class CheckinRequest {
     private final UUID userId;
     private final CountryCode countryCode;
     @Builder.Default private Map<RequiredField, String> providedFields = new HashMap<>();
+    @Builder.Default private Map<String, String> rawProvidedFields = new HashMap<>();
 }

@@ -10,6 +10,7 @@ public enum RequiredField {
     AGREEMENT_SIGNED("AGREEMENT_SIGNED", "Agreement Signed", FieldType.BOOLEAN),
     FUNDS_AMOUNT_US("FUNDS_AMOUNT_US", "US Funds", FieldType.NUMBER),
     VISA_NUMBER("VISA_NUMBER", "Digital Visa Number", FieldType.TEXT),
+    BIOMETRIC_VERIFIED("BIOMETRIC_VERIFIED", "Biometric Verified", FieldType.TEXT),
     RFC("RFC", "RFC Number", FieldType.TEXT),
     DIGITAL_SIGN("DIGITAL_SIGN", "Digital Sign", FieldType.BOOLEAN),
     PAYMENT_METHOD("PAYMENT_METHOD", "Payment Method", FieldType.TEXT),

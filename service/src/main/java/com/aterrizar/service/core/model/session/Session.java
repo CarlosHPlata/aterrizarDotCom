@@ -3,6 +3,7 @@ package com.aterrizar.service.core.model.session;
 import java.io.Serializable;
 import java.util.UUID;
 
+import jakarta.annotation.Nullable;
 import lombok.Builder;
 
 @Builder(toBuilder = true)
@@ -11,8 +12,20 @@ public record Session(
         SessionData sessionData,
         Status status,
         UserInformation userInformation,
-        ExperimentalData experimentalData)
+        ExperimentalData experimentalData,
+        boolean biometricAuthenticated,
+        boolean biometricFailed,
+        @Nullable String biometricSessionToken)
         implements Serializable {
+
+    public boolean isBiometricAuthenticated() {
+        return biometricAuthenticated;
+    }
+
+    public boolean isBiometricFailed() {
+        return biometricFailed;
+    }
+
     public Session withStatus(Status status) {
         return this.toBuilder().status(status).build();
     }
