@@ -46,7 +46,7 @@ EXPOSE 8080
 
 ENV JAVA_OPTS="" \
     SERVER_PORT=8080 \
-    SPRING_PROFILES_ACTIVE=""
+    SPRING_PROFILES_ACTIVE="prod"
 
 ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS org.springframework.boot.loader.launch.JarLauncher"]
 

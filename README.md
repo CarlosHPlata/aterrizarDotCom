@@ -153,11 +153,22 @@ http://localhost:8080/aterrizar/swagger-ui/index.html
 docker-compose up -d
 ```
 
-4. **Run the Application**  
-   After building, start the application with the next command (or run it through IDE through `ServiceApplication` class):
+4. **Run the Application (Dev Mode)**  
+   The application loads a Spring profile to decide which `application-<profile>.properties` file to apply. The base `application.properties` selects the active profile from the `SPRING_PROFILES_ACTIVE` env var and defaults to `dev` when unset, so running locally out of the box uses `application-dev.properties`:
 ```bash
 ./gradlew bootRun
 ```
+
+   To make the profile explicit (or to run a different one):
+```bash
+SPRING_PROFILES_ACTIVE=dev ./gradlew bootRun
+# or
+./gradlew bootRun --args='--spring.profiles.active=dev'
+```
+
+   Any property can be overridden at runtime via env vars using Spring Boot's relaxed binding (e.g. `SPRING_DATA_REDIS_HOST=redis.local`, `HTTP_CLIENT_AVIATOR_BASE_URL=...`).
+
+   When running from the Docker image, the profile defaults to `prod`; pass `-e SPRING_PROFILES_ACTIVE=dev` to switch.
 
 ### Quick Start "First Flight"
 
