@@ -1,0 +1,53 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+
+jobs:
+  github-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # create the release
+
+    steps:
+    - name: "checkout code"
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 0   # full history and tags: the changelog reads commits since the previous release
+
+    - name: "Build changelog"
+      # No pipe into tee: steps run without pipefail, so a failing script would pass unnoticed.
+      run: |
+        bash scripts/changelog.sh "$GITHUB_REF_NAME" > release-notes.md
+        cat release-notes.md
+
+    - name: Set up JDK 24
+      uses: actions/setup-java@v4
+      with:
+        java-version: '24'
+        distribution: 'temurin'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
+    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+    # Bundles http/src/main/resources/openapi/openapi.yaml (external $refs inlined) into
+    # http/build/openapi/openapi.yml, with info.version set to the tag (v1.2.0 -> 1.2.0).
+    - name: "Generate OpenAPI spec"
+      run: ./gradlew :http:openApiBundle -PapiVersion="${GITHUB_REF_NAME#v}"
+
+    - name: "Release openapi def"
+      uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+      with:
+        body_path: release-notes.md
+        files: http/build/openapi/openapi.yml
+        fail_on_unmatched_files: true

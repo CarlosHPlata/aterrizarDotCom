@@ -93,3 +93,28 @@ sourceSets {
     }
 }
 compileJava.dependsOn tasks.openApiGenerate
+// Bundles the design-first spec into a single file (external $refs inlined) for
+// the GitHub release. The version comes from the release tag:
+//   ./gradlew :http:openApiBundle -PapiVersion=1.2.0   ->  http/build/openapi/openapi.yml
+tasks.register('openApiBundle', org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+    generatorName = "openapi-yaml"
+    inputSpec = "$rootDir/http/src/main/resources/openapi/openapi.yaml"
+    outputDir = "$buildDir/openapi"
+    additionalProperties = ["outputFile": "openapi.yml"]
+    skipValidateSpec = false
+    // Declared as an input so a different -PapiVersion reruns the task instead of being UP-TO-DATE.
+    inputs.property('apiVersion', project.findProperty('apiVersion') ?: '')
+
+    doLast {
+        def apiVersion = project.findProperty('apiVersion')
+        if (apiVersion) {
+            def spec = file("$buildDir/openapi/openapi.yml")
+            // Only the "version" directly under "info"; schemas can have their own "version" fields.
+            def bundled = spec.text.replaceFirst(/(?m)^(info:\n(?:  .*\n)*?  version:[ \t]*).*$/, '$1' + apiVersion)
+            if (bundled == spec.text) {
+                throw new GradleException("info.version not found in ${spec}: could not set version ${apiVersion}")
+            }
+            spec.text = bundled
+        }
+    }
+}
